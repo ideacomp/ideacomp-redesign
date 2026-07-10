@@ -1,0 +1,31 @@
+{
+    "name": "Ideacomp - Custom Software Development",
+    "short_name": "Ideacomp",
+    "description": "Custom software, AI & machine learning, cybersecurity, and cloud/DevOps engineering from Prague, Czech Republic.",
+    "start_url": "/",
+    "display": "standalone",
+    "background_color": "#24252b",
+    "theme_color": "#24252b",
+    "orientation": "portrait-primary",
+    "scope": "/",
+    "lang": "en",
+    "categories": [
+        "business",
+        "productivity",
+        "technology"
+    ],
+    "icons": [
+        {
+            "src": "/logo.png",
+            "sizes": "192x192",
+            "type": "image/png",
+            "purpose": "any maskable"
+        },
+        {
+            "src": "/logo.png",
+            "sizes": "512x512",
+            "type": "image/png",
+            "purpose": "any maskable"
+        }
+    ]
+}
