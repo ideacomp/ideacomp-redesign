@@ -2,15 +2,18 @@
 
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
-import { motion } from "motion/react";
+import { motion, useReducedMotion } from "motion/react";
 import { capabilities, processSteps, content } from "@/lib/sitemap";
 import Header from "@/components/header";
 import Footer from "@/components/footer";
 import HeroBackdrop from "@/components/hero";
+import TextType from "@/components/text-type";
 import { Reveal } from "@/components/reveal";
 import { IndustriesGrid } from "@/components/industries-grid";
 import { CtaSection } from "@/components/cta-section";
+import { ProcessTimeline } from "@/components/process-timeline";
 import { Button } from "@/components/ui/button";
+import { useLocale } from "@/lib/i18n/locale-context";
 
 const heroItem = {
 	hidden: { opacity: 0, y: 24 },
@@ -18,6 +21,9 @@ const heroItem = {
 };
 
 const Home = () => {
+	const { dict } = useLocale();
+	const shouldReduceMotion = useReducedMotion();
+
 	return (
 		<div className="min-h-screen bg-background">
 			<Header />
@@ -37,7 +43,19 @@ const Home = () => {
 						variants={heroItem}
 						transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
 					>
-						Driven by Ideas
+						{shouldReduceMotion ? (
+							"Driven by Ideas"
+						) : (
+							<TextType
+								as="span"
+								text="Driven by Ideas"
+								typingSpeed={80}
+								initialDelay={400}
+								loop={false}
+								showCursor
+								cursorCharacter="|"
+							/>
+						)}
 					</motion.h1>
 					<motion.p
 						className="mt-8 max-w-2xl text-lg leading-relaxed text-foreground/70 sm:text-xl"
@@ -57,12 +75,12 @@ const Home = () => {
 					>
 						<Button asChild variant="signal" size="lg">
 							<Link href={content.hero.ctaPrimary.href}>
-								{content.hero.ctaPrimary.text}
+								{dict.common.seeOurSolutions}
 								<ArrowRight size={18} aria-hidden="true" />
 							</Link>
 						</Button>
 						<Button asChild variant="outline" size="lg">
-							<Link href={content.hero.ctaSecondary.href}>{content.hero.ctaSecondary.text}</Link>
+							<Link href={content.hero.ctaSecondary.href}>{dict.common.getInTouch}</Link>
 						</Button>
 					</motion.div>
 				</div>
@@ -86,9 +104,9 @@ const Home = () => {
 					<div className="flex flex-col">
 						{capabilities.map((capability, i) => (
 							<Reveal key={capability.title} delay={i * 0.08}>
-								<div className="flex items-start gap-6 border-t border-border py-8 first:border-t-0 lg:first:border-t">
+								<div className="group flex items-start gap-6 border-t border-border py-8 first:border-t-0 lg:first:border-t">
 									<capability.icon
-										className="mt-1 size-7 shrink-0 text-signal"
+										className="mt-1 size-7 shrink-0 text-signal transition-transform motion-safe:duration-300 motion-safe:group-hover:scale-110"
 										aria-hidden="true"
 									/>
 									<div>
@@ -118,21 +136,7 @@ const Home = () => {
 						</p>
 					</Reveal>
 
-					<div className="mt-16 grid gap-x-8 gap-y-12 sm:grid-cols-2 lg:grid-cols-4">
-						{processSteps.map((step, i) => (
-							<Reveal key={step.step} delay={i * 0.08}>
-								<div className="border-t border-border pt-6">
-									<span className="font-mono text-sm text-signal">{step.step}</span>
-									<h3 className="mt-3 font-display text-xl font-semibold tracking-[-0.01em] text-foreground">
-										{step.title}
-									</h3>
-									<p className="mt-2 text-sm leading-relaxed text-foreground/60">
-										{step.description}
-									</p>
-								</div>
-							</Reveal>
-						))}
-					</div>
+					<ProcessTimeline steps={processSteps} />
 				</div>
 			</section>
 
@@ -144,7 +148,7 @@ const Home = () => {
 			<CtaSection
 				title={content.home.finalCta.title}
 				subtitle={content.home.finalCta.subtitle}
-				ctaText={content.home.finalCta.cta.text}
+				ctaText={dict.common.startConversation}
 				ctaHref={content.home.finalCta.cta.href}
 			/>
 

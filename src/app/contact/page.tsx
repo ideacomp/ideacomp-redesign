@@ -1,19 +1,22 @@
 "use client";
 
-import { Mail, Clock, MapPin, ArrowRight, Loader2 } from "lucide-react";
+import { Mail, Clock, MapPin, Phone, ArrowRight, Loader2, ChevronDown } from "lucide-react";
 import { useState } from "react";
 import emailjs from "@emailjs/browser";
 import Header from "@/components/header";
 import Footer from "@/components/footer";
 import HeroBackdrop from "@/components/hero";
+import { Reveal } from "@/components/reveal";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
-import { content } from "@/lib/sitemap";
+import { content, faqs } from "@/lib/sitemap";
+import { useLocale } from "@/lib/i18n/locale-context";
 
 const Contact = () => {
+	const { dict } = useLocale();
 	const [formData, setFormData] = useState({
 		name: "",
 		email: "",
@@ -111,6 +114,35 @@ const Contact = () => {
 				</div>
 			</section>
 
+			{/* FAQ */}
+			<section className="px-4 pt-20 sm:px-6 lg:px-8" aria-labelledby="faq-heading">
+				<div className="mx-auto max-w-3xl">
+					<Reveal>
+						<h2 id="faq-heading" className="font-display text-3xl font-semibold tracking-[-0.02em] text-foreground sm:text-4xl">
+							{dict.faq.heading}
+						</h2>
+						<p className="mt-3 text-base text-muted-foreground">{dict.faq.subtitle}</p>
+					</Reveal>
+
+					<div className="mt-8 divide-y divide-border">
+						{faqs.map((item, i) => (
+							<Reveal key={item.question} delay={i * 0.04}>
+								<details className="group py-5">
+									<summary className="flex cursor-pointer list-none items-center justify-between gap-4 text-left font-medium text-foreground [&::-webkit-details-marker]:hidden">
+										{item.question}
+										<ChevronDown
+											className="size-4 shrink-0 text-signal transition-transform duration-300 group-open:rotate-180"
+											aria-hidden="true"
+										/>
+									</summary>
+									<p className="mt-3 text-sm leading-relaxed text-muted-foreground">{item.answer}</p>
+								</details>
+							</Reveal>
+						))}
+					</div>
+				</div>
+			</section>
+
 			{/* Contact */}
 			<section className="px-4 py-20 sm:px-6 lg:px-8" aria-labelledby="form-heading">
 				<div className="mx-auto grid max-w-5xl gap-12 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.6fr)]">
@@ -124,6 +156,12 @@ const Contact = () => {
 								<Mail size={18} className="mt-0.5 shrink-0 text-signal" aria-hidden="true" />
 								info@ideacomp.cz
 							</a>
+							{content.contact.phone && (
+								<a href={`tel:${content.contact.phone}`} className="flex items-start gap-3 hover:text-foreground">
+									<Phone size={18} className="mt-0.5 shrink-0 text-signal" aria-hidden="true" />
+									{content.contact.phone}
+								</a>
+							)}
 							<p className="flex items-start gap-3">
 								<MapPin size={18} className="mt-0.5 shrink-0 text-signal" aria-hidden="true" />
 								Prague, Czech Republic
@@ -142,7 +180,7 @@ const Contact = () => {
 					{/* Form */}
 					<Card>
 						<CardHeader>
-							<CardTitle className="text-2xl">Tell Us About Your Project</CardTitle>
+							<CardTitle className="text-2xl">{dict.contactForm.heading}</CardTitle>
 						</CardHeader>
 						<CardContent className="space-y-6">
 							{showSuccessMessage && (
@@ -150,8 +188,7 @@ const Contact = () => {
 									role="status"
 									className="rounded-lg border border-signal/30 bg-signal/10 p-4 text-sm text-foreground"
 								>
-									Message sent successfully. We&apos;ll get back to you within
-									one business day.
+									{dict.contactForm.successMessage}
 								</div>
 							)}
 
@@ -160,54 +197,53 @@ const Contact = () => {
 									role="alert"
 									className="rounded-lg border border-destructive/30 bg-destructive/10 p-4 text-sm text-foreground"
 								>
-									Failed to send message. Please try again or email us
-									directly at info@ideacomp.cz.
+									{dict.contactForm.errorMessage}
 								</div>
 							)}
 
 							<form onSubmit={handleSubmit} className="space-y-6">
 								<div className="grid grid-cols-1 gap-6 md:grid-cols-2">
 									<div className="space-y-2">
-										<Label htmlFor="name">Name *</Label>
+										<Label htmlFor="name">{dict.contactForm.name}</Label>
 										<Input
 											id="name"
 											name="name"
 											type="text"
 											value={formData.name}
 											onChange={handleInputChange}
-											placeholder="Your full name"
+											placeholder={dict.contactForm.namePlaceholder}
 											required
 										/>
 									</div>
 									<div className="space-y-2">
-										<Label htmlFor="email">Email *</Label>
+										<Label htmlFor="email">{dict.contactForm.email}</Label>
 										<Input
 											id="email"
 											name="email"
 											type="email"
 											value={formData.email}
 											onChange={handleInputChange}
-											placeholder="your@email.com"
+											placeholder={dict.contactForm.emailPlaceholder}
 											required
 										/>
 									</div>
 								</div>
 
 								<div className="space-y-2">
-									<Label htmlFor="company">Company/Organization</Label>
+									<Label htmlFor="company">{dict.contactForm.company}</Label>
 									<Input
 										id="company"
 										name="company"
 										type="text"
 										value={formData.company}
 										onChange={handleInputChange}
-										placeholder="Your company name (optional)"
+										placeholder={dict.contactForm.companyPlaceholder}
 									/>
 								</div>
 
 								<div className="grid grid-cols-1 gap-6 md:grid-cols-2">
 									<div className="space-y-2">
-										<Label htmlFor="projectType">Project Type *</Label>
+										<Label htmlFor="projectType">{dict.contactForm.projectType}</Label>
 										<select
 											id="projectType"
 											name="projectType"
@@ -216,18 +252,18 @@ const Contact = () => {
 											className="w-full rounded-md border border-input bg-transparent px-3 py-2 text-sm text-foreground shadow-xs outline-none focus-visible:ring-[3px] focus-visible:ring-ring/50"
 											required
 										>
-											<option value="">Select project type</option>
-											<option value="web-app">Web Application</option>
-											<option value="mobile-app">Mobile App</option>
-											<option value="ai-ml">AI/ML Solution</option>
-											<option value="cybersecurity">Cybersecurity</option>
-											<option value="cloud-devops">Cloud/DevOps</option>
-											<option value="outsourcing">Outsourcing / Team Augmentation</option>
-											<option value="other">Other</option>
+											<option value="">{dict.contactForm.projectTypeOptions.placeholder}</option>
+											<option value="web-app">{dict.contactForm.projectTypeOptions.webApp}</option>
+											<option value="mobile-app">{dict.contactForm.projectTypeOptions.mobileApp}</option>
+											<option value="ai-ml">{dict.contactForm.projectTypeOptions.aiMl}</option>
+											<option value="cybersecurity">{dict.contactForm.projectTypeOptions.cybersecurity}</option>
+											<option value="cloud-devops">{dict.contactForm.projectTypeOptions.cloudDevops}</option>
+											<option value="outsourcing">{dict.contactForm.projectTypeOptions.outsourcing}</option>
+											<option value="other">{dict.contactForm.projectTypeOptions.other}</option>
 										</select>
 									</div>
 									<div className="space-y-2">
-										<Label htmlFor="budget">Budget Range</Label>
+										<Label htmlFor="budget">{dict.contactForm.budget}</Label>
 										<select
 											id="budget"
 											name="budget"
@@ -235,26 +271,26 @@ const Contact = () => {
 											onChange={handleInputChange}
 											className="w-full rounded-md border border-input bg-transparent px-3 py-2 text-sm text-foreground shadow-xs outline-none focus-visible:ring-[3px] focus-visible:ring-ring/50"
 										>
-											<option value="">Select budget range</option>
-											<option value="under-10k">Under $10,000</option>
-											<option value="10k-25k">$10,000 - $25,000</option>
-											<option value="25k-50k">$25,000 - $50,000</option>
-											<option value="50k-100k">$50,000 - $100,000</option>
-											<option value="100k-plus">$100,000+</option>
-											<option value="discuss">Let&apos;s discuss</option>
+											<option value="">{dict.contactForm.budgetOptions.placeholder}</option>
+											<option value="under-10k">{dict.contactForm.budgetOptions.under10k}</option>
+											<option value="10k-25k">{dict.contactForm.budgetOptions.range10to25}</option>
+											<option value="25k-50k">{dict.contactForm.budgetOptions.range25to50}</option>
+											<option value="50k-100k">{dict.contactForm.budgetOptions.range50to100}</option>
+											<option value="100k-plus">{dict.contactForm.budgetOptions.over100}</option>
+											<option value="discuss">{dict.contactForm.budgetOptions.discuss}</option>
 										</select>
 									</div>
 								</div>
 
 								<div className="space-y-2">
-									<Label htmlFor="message">Project Details *</Label>
+									<Label htmlFor="message">{dict.contactForm.projectDetails}</Label>
 									<Textarea
 										id="message"
 										name="message"
 										value={formData.message}
 										onChange={handleInputChange}
 										rows={5}
-										placeholder="Tell us about your project goals, timeline, and any specific requirements..."
+										placeholder={dict.contactForm.projectDetailsPlaceholder}
 										required
 									/>
 								</div>
@@ -267,18 +303,18 @@ const Contact = () => {
 									className="w-full"
 									aria-label={
 										isSubmitting
-											? "Sending your message, please wait"
-											: "Send your message to Ideacomp"
+											? dict.contactForm.submitAriaSending
+											: dict.contactForm.submitAriaIdle
 									}
 								>
 									{isSubmitting ? (
 										<>
 											<Loader2 className="animate-spin" size={18} aria-hidden="true" />
-											Sending Message...
+											{dict.contactForm.submitSending}
 										</>
 									) : (
 										<>
-											Send Message
+											{dict.contactForm.submitIdle}
 											<ArrowRight size={18} aria-hidden="true" />
 										</>
 									)}

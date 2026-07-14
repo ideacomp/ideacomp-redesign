@@ -1,10 +1,16 @@
+"use client";
+
 import Link from "next/link";
 import Image from "next/image";
-import { Clock, Mail, Github } from "lucide-react";
-import { navigation, socialLinks } from "@/lib/sitemap";
+import { Clock, Mail, Phone } from "lucide-react";
+import { navigation, legalLinks, socialLinks, content } from "@/lib/sitemap";
+import { ManageCookiePreferences } from "@/components/cookie-consent";
+import { useLocale } from "@/lib/i18n/locale-context";
+import { LanguageSwitcher } from "@/components/language-switcher";
 
 const Footer = () => {
 	const currentYear = new Date().getFullYear();
+	const { dict } = useLocale();
 
 	return (
 		<footer className="dark border-t border-border bg-background">
@@ -25,6 +31,11 @@ const Footer = () => {
 							<a href="mailto:info@ideacomp.cz" className="flex items-center gap-2 hover:text-foreground">
 								<Mail size={15} className="text-signal" aria-hidden="true" /> info@ideacomp.cz
 							</a>
+							{content.contact.phone && (
+								<a href={`tel:${content.contact.phone}`} className="flex items-center gap-2 hover:text-foreground">
+									<Phone size={15} className="text-signal" aria-hidden="true" /> {content.contact.phone}
+								</a>
+							)}
 							<p className="flex items-center gap-2">
 								<Clock size={15} className="text-signal" aria-hidden="true" /> Mon&ndash;Fri, 09:00&ndash;17:00 (UTC+1) &middot; Prague, CZ
 							</p>
@@ -33,13 +44,13 @@ const Footer = () => {
 
 					<div className="md:col-span-3">
 						<h3 className="font-display text-sm font-semibold uppercase tracking-wide text-foreground">
-							Navigation
+							{dict.footer.navigationHeading}
 						</h3>
 						<ul className="mt-4 space-y-2">
 							{navigation.map((item) => (
-								<li key={item.name}>
+								<li key={item.key}>
 									<Link href={item.href} className="text-sm text-foreground/60 transition-colors hover:text-signal">
-										{item.name}
+										{dict.nav[item.key]}
 									</Link>
 								</li>
 							))}
@@ -48,7 +59,7 @@ const Footer = () => {
 
 					<div className="md:col-span-3">
 						<h3 className="font-display text-sm font-semibold uppercase tracking-wide text-foreground">
-							Elsewhere
+							{dict.footer.elsewhereHeading}
 						</h3>
 						<ul className="mt-4 space-y-2">
 							{socialLinks.map((link) => (
@@ -59,18 +70,29 @@ const Footer = () => {
 										rel="noopener noreferrer"
 										className="flex items-center gap-2 text-sm text-foreground/60 transition-colors hover:text-signal"
 									>
-										<Github size={15} aria-hidden="true" /> {link.name}
+										<link.icon size={15} aria-hidden="true" /> {link.name}
 									</a>
 								</li>
 							))}
 						</ul>
+						<div className="mt-6">
+							<LanguageSwitcher />
+						</div>
 					</div>
 				</div>
 
-				<div className="mt-12 border-t border-border pt-8">
-					<p className="text-center text-xs text-foreground/40">
-						&copy; {currentYear} Ideacomp s.r.o. All rights reserved.
+				<div className="mt-12 flex flex-col items-center gap-3 border-t border-border pt-8 sm:flex-row sm:justify-between">
+					<p className="text-xs text-foreground/40">
+						&copy; {currentYear} Ideacomp s.r.o. {dict.footer.allRightsReserved}
 					</p>
+					<div className="flex items-center gap-4 text-xs text-foreground/40">
+						{legalLinks.map((link) => (
+							<Link key={link.key} href={link.href} className="hover:text-foreground">
+								{dict.footer.legal[link.key]}
+							</Link>
+						))}
+						<ManageCookiePreferences className="hover:text-foreground" />
+					</div>
 				</div>
 			</div>
 		</footer>

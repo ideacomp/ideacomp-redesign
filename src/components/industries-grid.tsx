@@ -22,8 +22,11 @@ export function IndustriesGrid({ title, subtitle }: { title: string; subtitle: s
 				>
 					{industries.map((industry, i) => (
 						<Reveal key={industry.name} delay={i * 0.05}>
-							<div role="listitem" className="border-t border-border pt-5">
-								<industry.icon className="size-6 text-signal" aria-hidden="true" />
+							<div role="listitem" className="group border-t border-border pt-5">
+								<industry.icon
+									className="size-6 text-signal transition-transform motion-safe:duration-300 motion-safe:group-hover:scale-110"
+									aria-hidden="true"
+								/>
 								<h3 className="mt-3 font-semibold text-foreground">{industry.name}</h3>
 								<p className="mt-1 text-sm leading-relaxed text-muted-foreground">
 									{industry.description}

@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import { CheckCircle } from "lucide-react";
 import { solutionsData, content } from "@/lib/sitemap";
 import Header from "@/components/header";
@@ -8,9 +9,11 @@ import HeroBackdrop from "@/components/hero";
 import { Reveal } from "@/components/reveal";
 import { IndustriesGrid } from "@/components/industries-grid";
 import { CtaSection } from "@/components/cta-section";
-import { SchematicDiagram } from "@/components/schematic-diagram";
+import { useLocale } from "@/lib/i18n/locale-context";
 
 const Solutions = () => {
+	const { dict } = useLocale();
+
 	return (
 		<div className="min-h-screen bg-background">
 			<Header />
@@ -59,13 +62,23 @@ const Solutions = () => {
 					>
 						<div className="mx-auto grid max-w-6xl items-center gap-12 lg:grid-cols-2">
 							<Reveal className={reversed ? "lg:order-2" : undefined}>
-								<div className="rounded-lg border border-border bg-card p-6">
-									<SchematicDiagram kind={solution.diagram} />
+								<div className="group relative isolate aspect-[4/3] overflow-hidden rounded-lg border border-border transition-colors motion-safe:duration-300 hover:border-signal/40">
+									<Image
+										src={solution.image.src}
+										alt={solution.image.alt}
+										fill
+										sizes="(min-width: 1024px) 50vw, 100vw"
+										className="object-cover grayscale-[0.25] contrast-110 transition-transform motion-safe:duration-500 motion-safe:group-hover:scale-105"
+									/>
+									<div className="absolute inset-0 bg-signal/20 mix-blend-color" aria-hidden="true" />
 								</div>
 							</Reveal>
 
-							<Reveal className={reversed ? "lg:order-1" : undefined}>
-								<solution.icon className="size-8 text-signal" aria-hidden="true" />
+							<Reveal className={(reversed ? "lg:order-1 " : "") + "group"}>
+								<solution.icon
+									className="size-8 text-signal transition-transform motion-safe:duration-300 motion-safe:group-hover:scale-110"
+									aria-hidden="true"
+								/>
 								<h2
 									id={`${solution.slug}-heading`}
 									className="mt-4 font-display text-3xl font-semibold tracking-[-0.02em] text-foreground sm:text-4xl"
@@ -77,10 +90,10 @@ const Solutions = () => {
 								</p>
 								<ul className="mt-6 space-y-3">
 									{solution.features.map((feature) => (
-										<li key={feature.name} className="flex gap-3">
+										<li key={feature.name} className="group flex gap-3">
 											<CheckCircle
 												size={18}
-												className="mt-0.5 shrink-0 text-signal"
+												className="mt-0.5 shrink-0 text-signal transition-transform motion-safe:duration-300 motion-safe:group-hover:scale-110"
 												aria-hidden="true"
 											/>
 											<span className="text-sm leading-relaxed text-foreground/80">
@@ -104,7 +117,7 @@ const Solutions = () => {
 			<CtaSection
 				title={content.solutions.finalCta.title}
 				subtitle={content.solutions.finalCta.subtitle}
-				ctaText={content.solutions.finalCta.cta.text}
+				ctaText={dict.common.getInTouch}
 				ctaHref={content.solutions.finalCta.cta.href}
 			/>
 

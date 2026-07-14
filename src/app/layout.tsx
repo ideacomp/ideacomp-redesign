@@ -1,10 +1,16 @@
 import type { Metadata } from "next";
-import Script from "next/script";
+import { cookies } from "next/headers";
 import { Big_Shoulders, Public_Sans, Spline_Sans_Mono } from "next/font/google";
 import "./globals.css";
 import StructuredData from "@/components/structured-data";
 import GoogleAnalytics from "@/components/google-analytics";
+import EngageTrackScript from "@/components/engagetrack-script";
+import { ConsentGate } from "@/components/consent-gate";
+import { CookieConsentBanner } from "@/components/cookie-consent";
 import { MotionProvider } from "@/components/motion-provider";
+import { LocaleProvider } from "@/lib/i18n/locale-context";
+import { LOCALE_COOKIE } from "@/lib/i18n/constants";
+import type { Locale } from "@/lib/i18n/dictionaries";
 
 const bigShoulders = Big_Shoulders({
 	subsets: ["latin"],
@@ -132,14 +138,17 @@ export const metadata: Metadata = {
 	}
 };
 
-export default function RootLayout({
+export default async function RootLayout({
 	children,
 }: Readonly<{
 	children: React.ReactNode;
 }>) {
+	const cookieStore = await cookies();
+	const initialLocale: Locale = cookieStore.get(LOCALE_COOKIE)?.value === "cs" ? "cs" : "en";
+
 	return (
 		<html
-			lang="en"
+			lang={initialLocale}
 			className={`${bigShoulders.variable} ${publicSans.variable} ${splineSansMono.variable}`}
 		>
 			<head>
@@ -173,17 +182,17 @@ export default function RootLayout({
 				<meta name="theme-color" content="#24252b" />
 				<meta name="msapplication-TileColor" content="#24252b" />
 				<meta name="color-scheme" content="light" />
-				  <Script
-			          data-site-id="1k5cqZeUhBPsYOzs"
-			          data-domain="ideacomp.cz"
-			          src="https://cdn.engagetrack.net/sdk.js"
-			          strategy="afterInteractive"
-			        />
 			</head>
 			<body className="font-sans antialiased">
-				<GoogleAnalytics/>
+				<ConsentGate>
+					<GoogleAnalytics />
+					<EngageTrackScript />
+				</ConsentGate>
 				<StructuredData />
-				<MotionProvider>{children}</MotionProvider>
+				<LocaleProvider initialLocale={initialLocale}>
+					<MotionProvider>{children}</MotionProvider>
+					<CookieConsentBanner />
+				</LocaleProvider>
 			</body>
 		</html>
 	);

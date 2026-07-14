@@ -1,7 +1,10 @@
+"use client";
+
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
 import { Reveal } from "@/components/reveal";
 import { Button } from "@/components/ui/button";
+import { useLocale } from "@/lib/i18n/locale-context";
 
 export function CtaSection({
 	title,
@@ -11,9 +14,12 @@ export function CtaSection({
 }: {
 	title: string;
 	subtitle: string;
-	ctaText: string;
+	/** Defaults to the localized "Get in Touch" string when omitted. */
+	ctaText?: string;
 	ctaHref: string;
 }) {
+	const { dict } = useLocale();
+
 	return (
 		<section className="dark bg-background px-4 py-28 sm:px-6 lg:px-8" aria-labelledby="cta-heading">
 			<Reveal className="mx-auto max-w-3xl text-center">
@@ -24,7 +30,7 @@ export function CtaSection({
 				<div className="mt-10 flex justify-center">
 					<Button asChild variant="signal" size="lg">
 						<Link href={ctaHref}>
-							{ctaText}
+							{ctaText ?? dict.common.getInTouch}
 							<ArrowRight size={18} aria-hidden="true" />
 						</Link>
 					</Button>
