@@ -58,7 +58,7 @@ const Header = () => {
 						<button
 							onClick={() => setIsMenuOpen(!isMenuOpen)}
 							className="flex size-11 items-center justify-center rounded-md text-foreground/80 hover:text-foreground focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring"
-							aria-label={isMenuOpen ? "Close navigation menu" : "Open navigation menu"}
+							aria-label={isMenuOpen ? dict.common.closeMenu : dict.common.openMenu}
 							aria-expanded={isMenuOpen}
 						>
 							{isMenuOpen ? <X size={24} aria-hidden="true" /> : <Menu size={24} aria-hidden="true" />}

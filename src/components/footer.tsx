@@ -10,7 +10,8 @@ import { LanguageSwitcher } from "@/components/language-switcher";
 
 const Footer = () => {
 	const currentYear = new Date().getFullYear();
-	const { dict } = useLocale();
+	const { dict, locale } = useLocale();
+	const pageContent = content[locale];
 
 	return (
 		<footer className="dark border-t border-border bg-background">
@@ -24,20 +25,19 @@ const Footer = () => {
 							</span>
 						</div>
 						<p className="max-w-sm text-sm leading-relaxed text-foreground/60">
-							Driven by Ideas. We engineer software, AI, and infrastructure for
-							organizations that can&apos;t afford to gamble on a vendor.
+							{dict.footer.tagline}
 						</p>
 						<div className="mt-6 flex flex-col gap-2 text-sm text-foreground/60">
 							<a href="mailto:info@ideacomp.cz" className="flex items-center gap-2 hover:text-foreground">
 								<Mail size={15} className="text-signal" aria-hidden="true" /> info@ideacomp.cz
 							</a>
-							{content.contact.phone && (
-								<a href={`tel:${content.contact.phone}`} className="flex items-center gap-2 hover:text-foreground">
-									<Phone size={15} className="text-signal" aria-hidden="true" /> {content.contact.phone}
+							{pageContent.contact.phone && (
+								<a href={`tel:${pageContent.contact.phone}`} className="flex items-center gap-2 hover:text-foreground">
+									<Phone size={15} className="text-signal" aria-hidden="true" /> {pageContent.contact.phone}
 								</a>
 							)}
 							<p className="flex items-center gap-2">
-								<Clock size={15} className="text-signal" aria-hidden="true" /> Mon&ndash;Fri, 09:00&ndash;17:00 (UTC+1) &middot; Prague, CZ
+								<Clock size={15} className="text-signal" aria-hidden="true" /> {dict.contactInfo.officeHoursFooter}
 							</p>
 						</div>
 					</div>

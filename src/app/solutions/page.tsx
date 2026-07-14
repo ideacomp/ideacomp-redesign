@@ -12,7 +12,9 @@ import { CtaSection } from "@/components/cta-section";
 import { useLocale } from "@/lib/i18n/locale-context";
 
 const Solutions = () => {
-	const { dict } = useLocale();
+	const { dict, locale } = useLocale();
+	const pageContent = content[locale];
+	const solutions = solutionsData[locale];
 
 	return (
 		<div className="min-h-screen bg-background">
@@ -29,14 +31,14 @@ const Solutions = () => {
 						id="hero-heading"
 						className="font-display text-[clamp(2.75rem,8vw,5rem)] font-semibold leading-[0.95] tracking-[-0.03em] text-foreground"
 					>
-						{content.solutions.hero.title}
+						{pageContent.solutions.hero.title}
 					</h1>
 					<p className="mt-6 max-w-2xl text-lg leading-relaxed text-foreground/70 sm:text-xl">
-						{content.solutions.hero.subtitle}
+						{pageContent.solutions.hero.subtitle}
 					</p>
 
-					<nav aria-label="Jump to a solution" className="mt-10 flex flex-wrap gap-2">
-						{solutionsData.map((solution) => (
+					<nav aria-label={dict.common.jumpToSolutionLabel} className="mt-10 flex flex-wrap gap-2">
+						{solutions.map((solution) => (
 							<a
 								key={solution.slug}
 								href={`#${solution.slug}`}
@@ -50,7 +52,7 @@ const Solutions = () => {
 			</section>
 
 			{/* Solutions — alternating spec-sheet bands */}
-			{solutionsData.map((solution, index) => {
+			{solutions.map((solution, index) => {
 				const isDark = index % 2 === 1;
 				const reversed = index % 2 === 1;
 				return (
@@ -110,15 +112,15 @@ const Solutions = () => {
 			})}
 
 			<IndustriesGrid
-				title={content.solutions.industries.title}
-				subtitle={content.solutions.industries.subtitle}
+				title={pageContent.solutions.industries.title}
+				subtitle={pageContent.solutions.industries.subtitle}
 			/>
 
 			<CtaSection
-				title={content.solutions.finalCta.title}
-				subtitle={content.solutions.finalCta.subtitle}
+				title={pageContent.solutions.finalCta.title}
+				subtitle={pageContent.solutions.finalCta.subtitle}
 				ctaText={dict.common.getInTouch}
-				ctaHref={content.solutions.finalCta.cta.href}
+				ctaHref={pageContent.solutions.finalCta.cta.href}
 			/>
 
 			<Footer />

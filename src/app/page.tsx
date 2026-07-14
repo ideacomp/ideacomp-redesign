@@ -21,8 +21,9 @@ const heroItem = {
 };
 
 const Home = () => {
-	const { dict } = useLocale();
+	const { dict, locale } = useLocale();
 	const shouldReduceMotion = useReducedMotion();
+	const pageContent = content[locale];
 
 	return (
 		<div className="min-h-screen bg-background">
@@ -44,11 +45,11 @@ const Home = () => {
 						transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
 					>
 						{shouldReduceMotion ? (
-							"Driven by Ideas"
+							pageContent.hero.title
 						) : (
 							<TextType
 								as="span"
-								text="Driven by Ideas"
+								text={pageContent.hero.title}
 								typingSpeed={80}
 								initialDelay={400}
 								loop={false}
@@ -64,7 +65,7 @@ const Home = () => {
 						variants={heroItem}
 						transition={{ duration: 0.7, delay: 0.12, ease: [0.16, 1, 0.3, 1] }}
 					>
-						{content.hero.subtitle}
+						{pageContent.hero.subtitle}
 					</motion.p>
 					<motion.div
 						className="mt-10 flex flex-col gap-4 sm:flex-row"
@@ -74,13 +75,13 @@ const Home = () => {
 						transition={{ duration: 0.7, delay: 0.22, ease: [0.16, 1, 0.3, 1] }}
 					>
 						<Button asChild variant="signal" size="lg">
-							<Link href={content.hero.ctaPrimary.href}>
+							<Link href={pageContent.hero.ctaPrimary.href}>
 								{dict.common.seeOurSolutions}
 								<ArrowRight size={18} aria-hidden="true" />
 							</Link>
 						</Button>
 						<Button asChild variant="outline" size="lg">
-							<Link href={content.hero.ctaSecondary.href}>{dict.common.getInTouch}</Link>
+							<Link href={pageContent.hero.ctaSecondary.href}>{dict.common.getInTouch}</Link>
 						</Button>
 					</motion.div>
 				</div>
@@ -94,30 +95,38 @@ const Home = () => {
 							id="capabilities-heading"
 							className="font-display text-4xl font-semibold tracking-[-0.02em] text-foreground sm:text-5xl"
 						>
-							{content.home.capabilities.title}
+							{pageContent.home.capabilities.title}
 						</h2>
 						<p className="mt-4 max-w-sm text-base leading-relaxed text-muted-foreground">
-							{content.home.capabilities.subtitle}
+							{pageContent.home.capabilities.subtitle}
 						</p>
 					</Reveal>
 
 					<div className="flex flex-col">
-						{capabilities.map((capability, i) => (
+						{capabilities[locale].map((capability, i) => (
 							<Reveal key={capability.title} delay={i * 0.08}>
-								<div className="group flex items-start gap-6 border-t border-border py-8 first:border-t-0 lg:first:border-t">
+								<Link
+									href={`/solutions#${capability.slug}`}
+									className="group flex items-start gap-6 border-t border-border py-8 transition-colors first:border-t-0 hover:border-signal/40 lg:first:border-t"
+								>
 									<capability.icon
 										className="mt-1 size-7 shrink-0 text-signal transition-transform motion-safe:duration-300 motion-safe:group-hover:scale-110"
 										aria-hidden="true"
 									/>
 									<div>
-										<h3 className="font-display text-xl font-semibold tracking-[-0.01em] text-foreground">
+										<h3 className="flex items-center gap-2 font-display text-xl font-semibold tracking-[-0.01em] text-foreground transition-colors motion-safe:duration-300 group-hover:text-signal">
 											{capability.title}
+											<ArrowRight
+												size={16}
+												className="shrink-0 transition-transform motion-safe:duration-300 group-hover:translate-x-1"
+												aria-hidden="true"
+											/>
 										</h3>
 										<p className="mt-2 max-w-xl leading-relaxed text-muted-foreground">
 											{capability.description}
 										</p>
 									</div>
-								</div>
+								</Link>
 							</Reveal>
 						))}
 					</div>
@@ -129,27 +138,27 @@ const Home = () => {
 				<div className="mx-auto max-w-6xl">
 					<Reveal className="max-w-2xl">
 						<h2 id="process-heading" className="font-display text-4xl font-semibold tracking-[-0.02em] text-foreground sm:text-5xl">
-							{content.home.process.title}
+							{pageContent.home.process.title}
 						</h2>
 						<p className="mt-4 text-lg leading-relaxed text-foreground/70">
-							{content.home.process.subtitle}
+							{pageContent.home.process.subtitle}
 						</p>
 					</Reveal>
 
-					<ProcessTimeline steps={processSteps} />
+					<ProcessTimeline steps={processSteps[locale]} />
 				</div>
 			</section>
 
 			<IndustriesGrid
-				title={content.home.industries.title}
-				subtitle={content.home.industries.subtitle}
+				title={pageContent.home.industries.title}
+				subtitle={pageContent.home.industries.subtitle}
 			/>
 
 			<CtaSection
-				title={content.home.finalCta.title}
-				subtitle={content.home.finalCta.subtitle}
+				title={pageContent.home.finalCta.title}
+				subtitle={pageContent.home.finalCta.subtitle}
 				ctaText={dict.common.startConversation}
-				ctaHref={content.home.finalCta.cta.href}
+				ctaHref={pageContent.home.finalCta.cta.href}
 			/>
 
 			<Footer />

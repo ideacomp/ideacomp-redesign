@@ -2,6 +2,7 @@
 
 import { Mail, Clock, MapPin, Phone, ArrowRight, Loader2, ChevronDown } from "lucide-react";
 import { useState } from "react";
+import { AnimatePresence, motion, useReducedMotion } from "motion/react";
 import emailjs from "@emailjs/browser";
 import Header from "@/components/header";
 import Footer from "@/components/footer";
@@ -16,7 +17,14 @@ import { content, faqs } from "@/lib/sitemap";
 import { useLocale } from "@/lib/i18n/locale-context";
 
 const Contact = () => {
-	const { dict } = useLocale();
+	const { dict, locale } = useLocale();
+	const pageContent = content[locale];
+	const shouldReduceMotion = useReducedMotion();
+	const [openFaqs, setOpenFaqs] = useState<Record<number, boolean>>({});
+
+	const toggleFaq = (index: number) => {
+		setOpenFaqs((prev) => ({ ...prev, [index]: !prev[index] }));
+	};
 	const [formData, setFormData] = useState({
 		name: "",
 		email: "",
@@ -106,10 +114,10 @@ const Contact = () => {
 						id="hero-heading"
 						className="font-display text-[clamp(2.5rem,7vw,4.5rem)] font-semibold leading-[0.95] tracking-[-0.03em] text-foreground"
 					>
-						{content.contact.hero.title}
+						{pageContent.contact.hero.title}
 					</h1>
 					<p className="mt-6 max-w-2xl text-lg leading-relaxed text-foreground/70 sm:text-xl">
-						{content.contact.hero.subtitle}
+						{pageContent.contact.hero.subtitle}
 					</p>
 				</div>
 			</section>
@@ -125,20 +133,47 @@ const Contact = () => {
 					</Reveal>
 
 					<div className="mt-8 divide-y divide-border">
-						{faqs.map((item, i) => (
-							<Reveal key={item.question} delay={i * 0.04}>
-								<details className="group py-5">
-									<summary className="flex cursor-pointer list-none items-center justify-between gap-4 text-left font-medium text-foreground [&::-webkit-details-marker]:hidden">
-										{item.question}
-										<ChevronDown
-											className="size-4 shrink-0 text-signal transition-transform duration-300 group-open:rotate-180"
-											aria-hidden="true"
-										/>
-									</summary>
-									<p className="mt-3 text-sm leading-relaxed text-muted-foreground">{item.answer}</p>
-								</details>
-							</Reveal>
-						))}
+						{faqs[locale].map((item, i) => {
+							const isOpen = !!openFaqs[i];
+							return (
+								<Reveal key={item.question} delay={i * 0.04}>
+									<div className="py-5">
+										<button
+											type="button"
+											onClick={() => toggleFaq(i)}
+											aria-expanded={isOpen}
+											aria-controls={`faq-answer-${i}`}
+											className="flex w-full cursor-pointer items-center justify-between gap-4 text-left font-medium text-foreground"
+										>
+											{item.question}
+											<ChevronDown
+												className={`size-4 shrink-0 text-signal transition-transform duration-300 ${
+													isOpen ? "rotate-180" : ""
+												}`}
+												aria-hidden="true"
+											/>
+										</button>
+										<AnimatePresence initial={false}>
+											{isOpen && (
+												<motion.div
+													id={`faq-answer-${i}`}
+													key="content"
+													initial={shouldReduceMotion ? false : { height: 0, opacity: 0 }}
+													animate={{ height: "auto", opacity: 1 }}
+													exit={shouldReduceMotion ? undefined : { height: 0, opacity: 0 }}
+													transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
+													className="overflow-hidden"
+												>
+													<p className="mt-3 text-sm leading-relaxed text-muted-foreground">
+														{item.answer}
+													</p>
+												</motion.div>
+											)}
+										</AnimatePresence>
+									</div>
+								</Reveal>
+							);
+						})}
 					</div>
 				</div>
 			</section>
@@ -156,24 +191,23 @@ const Contact = () => {
 								<Mail size={18} className="mt-0.5 shrink-0 text-signal" aria-hidden="true" />
 								info@ideacomp.cz
 							</a>
-							{content.contact.phone && (
-								<a href={`tel:${content.contact.phone}`} className="flex items-start gap-3 hover:text-foreground">
+							{pageContent.contact.phone && (
+								<a href={`tel:${pageContent.contact.phone}`} className="flex items-start gap-3 hover:text-foreground">
 									<Phone size={18} className="mt-0.5 shrink-0 text-signal" aria-hidden="true" />
-									{content.contact.phone}
+									{pageContent.contact.phone}
 								</a>
 							)}
 							<p className="flex items-start gap-3">
 								<MapPin size={18} className="mt-0.5 shrink-0 text-signal" aria-hidden="true" />
-								Prague, Czech Republic
+								{dict.contactInfo.address}
 							</p>
 							<p className="flex items-start gap-3">
 								<Clock size={18} className="mt-0.5 shrink-0 text-signal" aria-hidden="true" />
-								Mon&ndash;Fri, 09:00&ndash;17:00 (UTC+1)
+								{dict.contactInfo.officeHours}
 							</p>
 						</div>
 						<p className="mt-8 max-w-sm text-sm leading-relaxed text-muted-foreground">
-							We read every submission personally. Expect a reply within one
-							business day with a straight answer on scope, timeline, and fit.
+							{dict.contactInfo.replyNote}
 						</p>
 					</div>
 

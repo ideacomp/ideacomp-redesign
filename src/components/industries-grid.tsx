@@ -1,7 +1,9 @@
 import { industries } from "@/lib/sitemap";
 import { Reveal } from "@/components/reveal";
+import { useLocale } from "@/lib/i18n/locale-context";
 
 export function IndustriesGrid({ title, subtitle }: { title: string; subtitle: string }) {
+	const { locale } = useLocale();
 	return (
 		<section className="px-4 py-24 sm:px-6 lg:px-8" aria-labelledby="industries-heading">
 			<div className="mx-auto max-w-6xl">
@@ -20,7 +22,7 @@ export function IndustriesGrid({ title, subtitle }: { title: string; subtitle: s
 					style={{ gridTemplateColumns: "repeat(auto-fit, minmax(240px, 1fr))" }}
 					role="list"
 				>
-					{industries.map((industry, i) => (
+					{industries[locale].map((industry, i) => (
 						<Reveal key={industry.name} delay={i * 0.05}>
 							<div role="listitem" className="group border-t border-border pt-5">
 								<industry.icon

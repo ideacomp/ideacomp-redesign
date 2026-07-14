@@ -23,7 +23,7 @@ export function CookieConsentBanner() {
 		<div
 			role="dialog"
 			aria-live="polite"
-			aria-label="Cookie consent"
+			aria-label={dict.common.cookieConsentLabel}
 			className="dark fixed inset-x-0 bottom-0 z-50 border-t border-border bg-background/98 backdrop-blur-md"
 		>
 			<div className="mx-auto flex max-w-6xl flex-col gap-4 px-4 py-5 sm:flex-row sm:items-center sm:justify-between sm:px-6 lg:px-8">
