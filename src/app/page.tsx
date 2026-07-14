@@ -30,7 +30,7 @@ const Home = () => {
 
 			{/* Hero */}
 			<section
-				className="dark relative flex min-h-[640px] items-center overflow-hidden bg-background px-4 pt-32 pb-24 sm:px-6 lg:px-8"
+				className="dark relative flex min-h-[85vh] items-center overflow-hidden bg-background px-4 pt-32 pb-24 sm:px-6 lg:px-8"
 				aria-labelledby="hero-heading"
 			>
 				<HeroBackdrop />

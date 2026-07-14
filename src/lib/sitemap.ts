@@ -162,8 +162,8 @@ export const solutionsData: Solution[] = [
 			},
 		],
 		image: {
-			src: "https://images.unsplash.com/photo-1759210358926-4673cc44d35f?auto=format&fit=crop&w=1200&q=80",
-			alt: "",
+			src: "/ai-solution.jpg",
+			alt: "Illustration of an automation workflow connecting a form trigger, data filter, CRM update, and notification steps",
 		},
 	},
 	{
@@ -193,8 +193,8 @@ export const solutionsData: Solution[] = [
 			},
 		],
 		image: {
-			src: "https://images.unsplash.com/photo-1562408590-e32931084e23?auto=format&fit=crop&w=1200&q=80",
-			alt: "",
+			src: "/cybersecurity-solution.jpg",
+			alt: "Illustration of a security operations dashboard showing alert counts and a recent security events log",
 		},
 	},
 	{
@@ -224,8 +224,8 @@ export const solutionsData: Solution[] = [
 			},
 		],
 		image: {
-			src: "https://images.unsplash.com/photo-1742072594003-abf6ca86e154?auto=format&fit=crop&w=1200&q=80",
-			alt: "",
+			src: "/web-solutions.jpg",
+			alt: "Illustration of a responsive marketing website displayed across desktop, tablet, and mobile screens",
 		},
 	},
 	{
@@ -255,8 +255,8 @@ export const solutionsData: Solution[] = [
 			},
 		],
 		image: {
-			src: "https://images.unsplash.com/photo-1644088379091-d574269d422f?auto=format&fit=crop&w=1200&q=80",
-			alt: "",
+			src: "/outsourcing-solution.jpg",
+			alt: "Illustration of a support ticket queue alongside a ticket detail and resolution panel",
 		},
 	},
 	{
@@ -286,8 +286,8 @@ export const solutionsData: Solution[] = [
 			},
 		],
 		image: {
-			src: "https://images.unsplash.com/photo-1758682663558-1a617d4d6c2a?auto=format&fit=crop&w=1200&q=80",
-			alt: "",
+			src: "/mobile-solution.jpg",
+			alt: "Illustration of a mobile app design tool showing two connected phone screen mockups",
 		},
 	},
 	{
@@ -317,8 +317,8 @@ export const solutionsData: Solution[] = [
 			},
 		],
 		image: {
-			src: "https://images.unsplash.com/photo-1695668548342-c0c1ad479aee?auto=format&fit=crop&w=1200&q=80",
-			alt: "",
+			src: "/cloud-solution.jpg",
+			alt: "Illustration of a cloud infrastructure dashboard showing server, database, storage, and cost panels",
 		},
 	},
 ];

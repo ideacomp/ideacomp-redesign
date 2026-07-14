@@ -62,7 +62,7 @@ const Solutions = () => {
 					>
 						<div className="mx-auto grid max-w-6xl items-center gap-12 lg:grid-cols-2">
 							<Reveal className={reversed ? "lg:order-2" : undefined}>
-								<div className="group relative isolate aspect-[4/3] overflow-hidden rounded-lg border border-border transition-colors motion-safe:duration-300 hover:border-signal/40">
+								<div className="group relative isolate aspect-[3/2] overflow-hidden rounded-lg border border-border transition-colors motion-safe:duration-300 hover:border-signal/40">
 									<Image
 										src={solution.image.src}
 										alt={solution.image.alt}
