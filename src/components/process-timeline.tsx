@@ -59,9 +59,7 @@ function TimelineStep({ step }: { step: ProcessStep }) {
 			>
 				{step.step}
 			</span>
-			<h3 className="mt-3 font-display text-xl font-semibold tracking-[-0.01em] text-foreground">
-				{step.title}
-			</h3>
+			<h3 className="eyebrow-heading mt-3 text-foreground">{step.title}</h3>
 			<p className="mt-2 max-w-xl text-sm leading-relaxed text-foreground/60">{step.description}</p>
 		</motion.div>
 	);

@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { cookies } from "next/headers";
-import { Big_Shoulders, Public_Sans, Spline_Sans_Mono } from "next/font/google";
+import { Big_Shoulders, Poppins, Public_Sans, Spline_Sans_Mono } from "next/font/google";
 import "./globals.css";
 import StructuredData from "@/components/structured-data";
 import GoogleAnalytics from "@/components/google-analytics";
@@ -21,6 +21,20 @@ const bigShoulders = Big_Shoulders({
 const publicSans = Public_Sans({
 	subsets: ["latin"],
 	variable: "--font-public-sans",
+	display: "swap",
+});
+
+// Poppins is not variable on Google Fonts, so a weight has to be named. Only
+// 400 is loaded: `.eyebrow-heading` is the single consumer and uses nothing else.
+//
+// `latin-ext` is not optional on this site. The `latin` subset stops before the
+// carons and rings, so on the Czech pages every č, ě, ř, ů, š, ž, ť, ď and ň
+// would silently fall back to a system face — measured, not assumed — and the
+// headings would render in two fonts at once.
+const poppins = Poppins({
+	subsets: ["latin", "latin-ext"],
+	weight: ["400"],
+	variable: "--font-poppins",
 	display: "swap",
 });
 
@@ -149,7 +163,7 @@ export default async function RootLayout({
 	return (
 		<html
 			lang={initialLocale}
-			className={`${bigShoulders.variable} ${publicSans.variable} ${splineSansMono.variable}`}
+			className={`${bigShoulders.variable} ${publicSans.variable} ${splineSansMono.variable} ${poppins.variable}`}
 		>
 			<head>
 				<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />

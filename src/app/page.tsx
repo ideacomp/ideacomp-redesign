@@ -212,10 +212,12 @@ const Home = () => {
 										aria-hidden="true"
 									/>
 									<div>
-										<h3 className="flex items-center gap-2 font-display text-xl font-semibold tracking-[-0.01em] text-foreground transition-colors motion-safe:duration-300 group-hover:text-signal">
+										<h3 className="eyebrow-heading flex items-center gap-2 text-foreground transition-colors motion-safe:duration-300 group-hover:text-signal">
 											{capability.title}
 											<ArrowRight
-												size={16}
+												// Down from 16 with the title: at 14px type a 16px
+												// arrow outweighs the words it belongs to.
+												size={14}
 												className="shrink-0 transition-transform motion-safe:duration-300 group-hover:translate-x-1"
 												aria-hidden="true"
 											/>

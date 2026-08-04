@@ -16,6 +16,9 @@
 	--font-sans: var(--font-public-sans);
 	--font-display: var(--font-big-shoulders);
 	--font-mono: var(--font-spline-mono);
+	/* Used only by `.eyebrow-heading` below — the capability and process step
+	   titles. Not a fourth general-purpose family; see that rule. */
+	--font-label: var(--font-poppins);
 	--color-ring: var(--ring);
 	--color-input: var(--input);
 	--color-border: var(--border);
@@ -123,6 +126,27 @@
 		line-height: 1.65;
 	}
 
+	/* The capability titles on Home and the process step titles, in one place so
+	 * the two sections cannot drift apart.
+	 *
+	 * Every value is lifted from the reference the client picked — the "Why
+	 * businesses choose us" cards on templatemonster demo 52524, measured from
+	 * its computed styles: Poppins 400 / 14px / 30px / +2.24px / uppercase.
+	 * 2.24px at 14px is 0.16em, so it holds if the size is ever changed.
+	 *
+	 * Note what this does to hierarchy: at 14px these headings are *smaller*
+	 * than the 16px paragraphs beneath them, which is why the uppercase and the
+	 * tracking are load-bearing rather than decorative — they are the only thing
+	 * marking these as titles. Raised with the client and confirmed as intended.
+	 * Poppins only ships 400 here, so do not reach for a bolder weight. */
+	.eyebrow-heading {
+		font-family: var(--font-label), ui-sans-serif, system-ui, sans-serif;
+		font-weight: 400;
+		font-size: 0.875rem;
+		line-height: 1.875rem;
+		letter-spacing: 0.16em;
+		text-transform: uppercase;
+	}
 }
 
 @media (prefers-reduced-motion: reduce) {
