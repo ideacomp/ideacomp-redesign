@@ -1,0 +1,380 @@
+/* Shared stylesheet for the six /solutions panels.
+ *
+ * Every value here is calibrated for ONE delivered size: the card on
+ * /solutions is 552px wide (max-w-6xl = 1152px, gap-12, two columns), and the
+ * source is 1600px. That is a 2.9x downscale, so:
+ *
+ *   .name  44px -> 15px   load-bearing, must stay readable
+ *   .stat  92px -> 32px   the anchor your eye lands on first
+ *   .kind  15px -> 5px    texture, not text
+ *
+ * Nothing smaller than 15px is allowed: an earlier version used 11px labels,
+ * they resolved to 4px and vanished.
+ *
+ * Rank by LUMINANCE, size and bar length — never by hue. These panels are
+ * near-monochrome by design, so a red/amber/green severity scale would read as
+ * decoration rather than as an order, and it is unreadable to a substantial
+ * share of viewers either way. The three tiers below (--ink-hi / --ink-mid /
+ * --ink-lo) exist so that ranking is a token, not a judgement call per panel.
+ *
+ * This rule predates the removal of the site-wide duotone, which used to
+ * greyscale every panel before tinting it cyan. Nothing tints them now — the
+ * palette here is the delivered palette — but the rule stands on its own.
+ */
+
+:root {
+	--bg: #141a22;
+	--panel: #1d252f;
+	--panel-2: #222c37;
+	--line: #3f4a57;
+	--dot: #2b3540;
+
+	/* Luminance ladder — the only legitimate way to rank anything here. */
+	--ink-hi: #f2f5f8;
+	--ink-mid: #93a0ad;
+	--ink-lo: #6d7b88;
+
+	--signal: #36c3e7;
+	--signal-soft: #7fd0e8;
+	--signal-dim: #4f8396;
+	--signal-line: #5f93a6;
+
+	--mono: "Spline Sans Mono", monospace;
+	--display: "Big Shoulders Display", sans-serif;
+}
+
+* {
+	margin: 0;
+	padding: 0;
+	box-sizing: border-box;
+}
+
+body {
+	width: 1600px;
+	height: 1067px;
+	background: var(--bg);
+	overflow: hidden;
+	position: relative;
+}
+
+/* The dot grid is what makes six unrelated layouts read as one set. */
+.grid {
+	position: absolute;
+	inset: 0;
+	background-image: radial-gradient(var(--dot) 2px, transparent 2px);
+	background-size: 44px 44px;
+	background-position: 12px 12px;
+}
+
+svg#wires {
+	position: absolute;
+	inset: 0;
+	width: 1600px;
+	height: 1067px;
+	pointer-events: none;
+}
+
+/* ---- page furniture: same three elements on every panel ---- */
+
+.title {
+	position: absolute;
+	left: 64px;
+	top: 56px;
+	font-family: var(--mono);
+	font-size: 18px;
+	letter-spacing: 0.2em;
+	text-transform: uppercase;
+	color: #9dabb7;
+}
+
+.rule {
+	position: absolute;
+	left: 64px;
+	top: 94px;
+	width: 170px;
+	height: 3px;
+	background: var(--signal);
+}
+
+.foot {
+	position: absolute;
+	left: 64px;
+	bottom: 56px;
+	font-family: var(--mono);
+	font-size: 15px;
+	letter-spacing: 0.14em;
+	text-transform: uppercase;
+	color: var(--ink-lo);
+}
+
+/* ---- node: a box on the wire canvas, wires attach to its .port ---- */
+
+.node {
+	position: absolute;
+	width: 372px;
+	background: var(--panel);
+	border: 2px solid var(--line);
+	border-radius: 10px;
+	padding: 20px 24px 18px;
+}
+
+.kind {
+	font-family: var(--mono);
+	font-size: 15px;
+	letter-spacing: 0.17em;
+	text-transform: uppercase;
+	color: var(--ink-mid);
+}
+
+.name {
+	font-family: var(--display);
+	font-weight: 600;
+	font-size: 44px;
+	line-height: 1;
+	letter-spacing: -0.012em;
+	color: var(--ink-hi);
+	margin-top: 7px;
+}
+
+.meta {
+	font-family: var(--mono);
+	font-size: 15px;
+	color: #8f9ca9;
+	margin-top: 9px;
+}
+
+.pill {
+	display: inline-block;
+	font-family: var(--mono);
+	font-size: 13px;
+	letter-spacing: 0.12em;
+	text-transform: uppercase;
+	border: 2px solid #3f8fa6;
+	border-radius: 999px;
+	padding: 3px 12px;
+	color: var(--signal-soft);
+	margin-top: 11px;
+}
+
+/* Wires are drawn from the measured centre of these, never hand-authored. */
+.port {
+	position: absolute;
+	width: 16px;
+	height: 16px;
+	border-radius: 50%;
+	background: var(--panel);
+	border: 2px solid var(--signal-line);
+	z-index: 2;
+}
+.port.l { left: -9px; top: 50%; margin-top: -8px; }
+.port.r { right: -9px; top: 50%; margin-top: -8px; }
+.port.t { top: -9px; left: 50%; margin-left: -8px; }
+.port.b { bottom: -9px; left: 50%; margin-left: -8px; }
+/* A box that fans out to two children needs two distinct bottom ports:
+   render.mjs resolves "core:b1" by class, so each one needs its own. */
+.port.b1 { bottom: -9px; left: 32%; margin-left: -8px; }
+.port.b2 { bottom: -9px; left: 68%; margin-left: -8px; }
+
+/* ---- panel: a titled region. Unlike .node it is laid out, not positioned. ---- */
+
+.panel {
+	position: absolute;
+	background: var(--panel);
+	border: 2px solid var(--line);
+	border-radius: 10px;
+	padding: 22px 26px;
+}
+
+.panel > .head {
+	font-family: var(--mono);
+	font-size: 16px;
+	letter-spacing: 0.17em;
+	text-transform: uppercase;
+	color: var(--ink-mid);
+	margin-bottom: 16px;
+}
+
+/* ---- stat: the big number that anchors a column ---- */
+
+.stat {
+	font-family: var(--display);
+	font-weight: 600;
+	font-size: 92px;
+	line-height: 0.86;
+	letter-spacing: -0.02em;
+	color: var(--ink-hi);
+}
+
+.stat.sm { font-size: 64px; }
+
+.stat-label {
+	font-family: var(--mono);
+	font-size: 15px;
+	letter-spacing: 0.14em;
+	text-transform: uppercase;
+	color: var(--ink-mid);
+	margin-top: 8px;
+}
+
+/* ---- bar: quantity as length. Reads identically after greyscale. ---- */
+
+.bar-row {
+	display: flex;
+	align-items: center;
+	gap: 18px;
+	margin-top: 22px;
+}
+
+.bar-name {
+	font-family: var(--mono);
+	font-size: 22px;
+	color: #a6b2be;
+	width: 196px;
+	flex: none;
+}
+
+/* display:block matters — these are spans, and an inline box ignores width. */
+.bar-track {
+	display: block;
+	flex: 1;
+	height: 22px;
+	background: #2a333d;
+	border-radius: 3px;
+	overflow: hidden;
+}
+
+.bar-fill {
+	display: block;
+	height: 100%;
+	background: var(--signal-dim);
+	border-radius: 3px;
+}
+
+/* Rank by brightness, never by hue: --t1 is the one you should read first. */
+.bar-fill.t1 { background: var(--signal); }
+.bar-fill.t2 { background: var(--signal-dim); }
+.bar-fill.t3 { background: #3a4c56; }
+
+.bar-value {
+	font-family: var(--mono);
+	font-size: 18px;
+	color: var(--ink-hi);
+	width: 56px;
+	text-align: right;
+	flex: none;
+}
+
+/* ---- chip: a small labelled token ---- */
+
+.chip {
+	display: inline-block;
+	font-family: var(--mono);
+	font-size: 15px;
+	letter-spacing: 0.1em;
+	text-transform: uppercase;
+	border: 2px solid var(--line);
+	border-radius: 6px;
+	padding: 5px 12px;
+	color: #a6b2be;
+}
+
+.chip.on {
+	border-color: #3f8fa6;
+	color: var(--signal-soft);
+}
+
+/* ---- chain: an ordered run of steps, arrows drawn in CSS ---- */
+
+.chain {
+	--gap: 42px; /* set per panel; the connector geometry below follows it */
+	display: flex;
+	align-items: stretch;
+	gap: 0;
+}
+
+.step {
+	flex: 1;
+	background: var(--panel);
+	border: 2px solid var(--line);
+	border-radius: 10px;
+	padding: 18px 20px;
+	position: relative;
+}
+
+.step + .step { margin-left: var(--gap); }
+
+/* The connector between steps, so .chain needs no measured wires. */
+.step + .step::before {
+	content: "";
+	position: absolute;
+	left: calc(-1 * var(--gap) - 2px);
+	top: 50%;
+	width: calc(var(--gap) - 14px);
+	height: 3px;
+	background: var(--signal-dim);
+}
+/* Arrowhead, not a side accent: a 0x0 box whose left border is solid and whose
+ * top/bottom borders are transparent renders as a right-pointing triangle. */
+.step + .step::after {
+	content: "";
+	position: absolute;
+	left: -16px;
+	top: 50%;
+	margin-top: -8px;
+	width: 0;
+	height: 0;
+	border-left: 14px solid var(--signal-dim);
+	border-top: 8px solid transparent;
+	border-bottom: 8px solid transparent;
+}
+
+.step.active {
+	border-color: #3f8fa6;
+	background: var(--panel-2);
+}
+
+.step-name {
+	font-family: var(--display);
+	font-weight: 600;
+	font-size: 40px;
+	line-height: 1;
+	letter-spacing: -0.012em;
+	color: var(--ink-hi);
+}
+
+.step-meta {
+	font-family: var(--mono);
+	font-size: 15px;
+	color: var(--ink-mid);
+	margin-top: 8px;
+}
+
+/* ---- frame: a device outline. Content inside is our own block drawing, ----
+ * never lorem bars and never rendered text we cannot read at 552px. */
+
+.frame {
+	position: absolute;
+	background: #0f151c;
+	border: 3px solid var(--line);
+	overflow: hidden;
+}
+
+.frame.desktop { border-radius: 10px; }
+.frame.tablet { border-radius: 14px; }
+.frame.phone { border-radius: 26px; }
+
+.frame-label {
+	position: absolute;
+	font-family: var(--mono);
+	font-size: 16px;
+	letter-spacing: 0.17em;
+	text-transform: uppercase;
+	color: var(--ink-mid);
+}
+
+/* Blocks that stand in for interface content inside a .frame. They are
+ * deliberately abstract: any rendered copy would be 5px on the card. */
+.ui-bar { background: #2a343f; border-radius: 3px; }
+.ui-block { background: #263039; border: 2px solid #33404c; border-radius: 6px; }
+.ui-accent { background: var(--signal-dim); border-radius: 3px; }
+.ui-hero { background: linear-gradient(160deg, #2c3a45, #1b242d); border-radius: 6px; }

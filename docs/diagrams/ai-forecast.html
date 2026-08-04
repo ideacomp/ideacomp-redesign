@@ -1,0 +1,118 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8">
+<title>AI &amp; ML — demand forecast</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@600&family=Spline+Sans+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="panel.css">
+<style>
+  /* Covers all three features of the ai-ml slot in one frame:
+     the chart is Predictive Analytics, TOP DRIVERS is Process Analysis,
+     and the bottom-right block is Process Automation with its override. */
+  .chart{position:absolute;left:64px;top:172px;width:912px;height:672px}
+  .plot{position:absolute;inset:0;background:var(--panel);border:2px solid var(--line);
+    border-radius:10px}
+  .ylab{position:absolute;left:22px;font-family:var(--mono);font-size:16px;color:var(--ink-lo)}
+  .now{position:absolute;top:0;bottom:0;width:2px;background:#55636f}
+  .nowtag{position:absolute;font-family:var(--mono);font-size:16px;letter-spacing:.18em;
+    text-transform:uppercase;color:#a6b2be;background:var(--panel);padding:0 8px}
+  .xlab{position:absolute;bottom:16px;font-family:var(--mono);font-size:16px;color:var(--ink-lo)}
+  .legend{position:absolute;left:64px;top:872px;display:flex;gap:38px;align-items:center}
+  .key{display:flex;align-items:center;gap:11px;font-family:var(--mono);font-size:17px;
+    color:#a6b2be}
+  .swatch{width:38px;height:4px;background:var(--ink-hi)}
+  .swatch.dash{height:0;border-top:4px dashed var(--signal);width:40px}
+  .swatch.band{height:16px;background:#2d4650;border:1px solid #3d5f6b}
+
+  /* Both side panels bottom out at 844px, the chart's own bottom edge. */
+  .side{left:1016px;width:520px}
+  #drivers{top:172px;height:268px}
+  #action{top:472px;height:372px}
+  .actline{font-family:var(--display);font-weight:600;font-size:64px;line-height:1.02;
+    letter-spacing:-.015em;color:var(--ink-hi);margin-top:6px}
+  .actmeta{font-family:var(--mono);font-size:19px;color:#a6b2be;margin-top:22px;line-height:1.6}
+  .actchips{margin-top:30px;display:flex;gap:10px}
+</style></head>
+<body>
+<div class="grid"></div>
+
+<div class="title">Demand forecast &middot; 6 weeks ahead</div>
+<div class="rule"></div>
+<div class="foot">every output traceable to its inputs</div>
+
+<div class="chart">
+  <div class="plot"></div>
+
+  <div class="ylab" style="top:68px">2.4k</div>
+  <div class="ylab" style="top:248px">1.8k</div>
+  <div class="ylab" style="top:428px">1.2k</div>
+  <div class="ylab" style="top:560px">600</div>
+
+  <svg viewBox="0 0 912 672" style="position:absolute;inset:0;width:912px;height:672px">
+    <!-- horizontal guides -->
+    <g stroke="#2a333d" stroke-width="2">
+      <line x1="100" y1="78" x2="884" y2="78"/>
+      <line x1="100" y1="258" x2="884" y2="258"/>
+      <line x1="100" y1="438" x2="884" y2="438"/>
+      <line x1="100" y1="570" x2="884" y2="570"/>
+    </g>
+
+    <!-- 80% interval: one closed path, upper edge left-to-right then lower edge
+         back. It widens with the horizon, which is the whole point of drawing it. -->
+    <path d="M600,268 L671,240 L742,202 L813,152 L884,136
+             L884,292 L813,284 L742,302 L671,304 L600,292 Z"
+          fill="#2d4650" stroke="#3d5f6b" stroke-width="2" stroke-linejoin="round"/>
+
+    <!-- history: solid, and the brightest thing in the plot -->
+    <polyline points="112,530 173,486 234,506 295,440 356,456 417,390 478,404 539,344 600,280"
+              fill="none" stroke="#f2f5f8" stroke-width="5" stroke-linejoin="round"
+              stroke-linecap="round"/>
+    <!-- forecast: dashed, in signal. Dash vs solid is the distinction that
+         survives greyscale; the colour change alone would not. -->
+    <polyline points="600,280 671,272 742,252 813,218 884,214"
+              fill="none" stroke="#36c3e7" stroke-width="5" stroke-dasharray="16 12"
+              stroke-linejoin="round" stroke-linecap="round"/>
+    <circle cx="600" cy="280" r="9" fill="#141a22" stroke="#f2f5f8" stroke-width="5"/>
+  </svg>
+
+  <div class="now" style="left:600px"></div>
+  <div class="nowtag" style="left:548px;top:596px">now</div>
+
+  <div class="xlab" style="left:112px">wk 01</div>
+  <div class="xlab" style="left:400px">wk 05</div>
+  <div class="xlab" style="left:790px">wk 14</div>
+</div>
+
+<div class="legend">
+  <div class="key"><span class="swatch"></span>actual</div>
+  <div class="key"><span class="swatch dash"></span>forecast</div>
+  <div class="key"><span class="swatch band"></span>80% interval</div>
+</div>
+
+<div class="panel side" id="drivers">
+  <div class="head">What is driving it</div>
+  <div class="bar-row">
+    <span class="bar-name">Order backlog</span>
+    <span class="bar-track"><span class="bar-fill t1" style="width:88%"></span></span>
+    <span class="bar-value">41%</span>
+  </div>
+  <div class="bar-row">
+    <span class="bar-name">Lead time</span>
+    <span class="bar-track"><span class="bar-fill t2" style="width:56%"></span></span>
+    <span class="bar-value">26%</span>
+  </div>
+  <div class="bar-row">
+    <span class="bar-name">Seasonality</span>
+    <span class="bar-track"><span class="bar-fill t3" style="width:32%"></span></span>
+    <span class="bar-value">15%</span>
+  </div>
+</div>
+
+<div class="panel side" id="action">
+  <div class="head">Automated action</div>
+  <div class="actline">Reorder raised</div>
+  <div class="actmeta">triggered at 92% confidence<br>held 4h for human review</div>
+  <div class="actchips">
+    <span class="chip on">override available</span>
+    <span class="chip">logged</span>
+  </div>
+</div>
+</body></html>

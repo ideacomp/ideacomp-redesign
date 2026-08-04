@@ -1,0 +1,130 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8">
+<title>Outsourcing — managed operations board</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@600&family=Spline+Sans+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="panel.css">
+<style>
+  /* One column per feature of the outsourcing slot, named after it:
+     Helpdesk & End-User Support, Network Management, Server Management.
+     Each column is anchored by one big number — at the delivered 552px that
+     number is the only thing that has to survive, and it does. */
+  .col{top:172px;height:672px;width:464px}
+  #helpdesk{left:64px}
+  #network{left:568px}
+  #servers{left:1072px}
+
+  .lines{margin-top:32px}
+  .line{display:flex;justify-content:space-between;align-items:baseline;
+    font-family:var(--mono);font-size:21px;color:#a6b2be;padding:14px 0;
+    border-top:2px solid #2a333d}
+  .line .v{color:var(--ink-hi)}
+  .line .v.dim{color:var(--ink-lo)}
+  .colchips{margin-top:28px;display:flex;flex-wrap:wrap;gap:10px}
+  .topo{margin-top:30px}
+
+  /* A week of history at the foot of each column: it fills the panel with
+     something true to the subject rather than with air. */
+  .spark{margin-top:34px}
+  .spark-head{font-family:var(--mono);font-size:17px;letter-spacing:.14em;
+    text-transform:uppercase;color:var(--ink-lo)}
+  .spark-bars{display:flex;align-items:flex-end;gap:12px;height:96px;margin-top:16px}
+  .spark-bars i{flex:1;background:#2f4a55;border-top:3px solid var(--signal-dim);
+    border-radius:2px}
+  .spark-bars i.hi{background:#38606e;border-top-color:var(--signal)}
+</style></head>
+<body>
+<div class="grid"></div>
+
+<div class="title">Managed operations</div>
+<div class="rule"></div>
+<div class="foot">your tooling, your cadence</div>
+
+<div class="panel col" id="helpdesk">
+  <div class="head">Helpdesk</div>
+  <div class="stat">18</div>
+  <div class="stat-label">open tickets, first and second line</div>
+  <div class="lines">
+    <div class="line"><span>P1 &middot; to breach</span><span class="v">00:12</span></div>
+    <div class="line"><span>P2 &middot; to breach</span><span class="v">01:40</span></div>
+    <div class="line"><span>P3 &middot; to breach</span><span class="v dim">06:22</span></div>
+    <div class="line"><span>Resolved today</span><span class="v">41</span></div>
+  </div>
+  <div class="colchips">
+    <span class="chip on">within SLA</span>
+    <span class="chip">your ticketing</span>
+  </div>
+  <div class="spark">
+    <div class="spark-head">tickets closed, last 7 days</div>
+    <div class="spark-bars">
+      <i style="height:52%"></i><i style="height:71%"></i><i style="height:44%"></i>
+      <i style="height:83%"></i><i class="hi" style="height:100%"></i>
+      <i style="height:66%"></i><i style="height:38%"></i>
+    </div>
+  </div>
+</div>
+
+<div class="panel col" id="network">
+  <div class="head">Network</div>
+  <div class="stat">99.98<span style="font-size:52px">%</span></div>
+  <div class="stat-label">link availability, 4 sites</div>
+
+  <svg class="topo" viewBox="0 0 412 214" style="width:412px;height:214px">
+    <!-- core out to four sites: management of an estate, not one box -->
+    <g stroke="#4f8396" stroke-width="3" fill="none">
+      <path d="M206,54 C206,84 62,84 62,132"/>
+      <path d="M206,54 C206,84 158,84 158,132"/>
+      <path d="M206,54 C206,84 254,84 254,132"/>
+      <path d="M206,54 C206,84 350,84 350,132"/>
+    </g>
+    <rect x="136" y="10" width="140" height="44" rx="8" fill="#222c37" stroke="#5f93a6"
+          stroke-width="3"/>
+    <text x="206" y="39" text-anchor="middle" fill="#f2f5f8"
+          font-family="Spline Sans Mono, monospace" font-size="20">core</text>
+    <g fill="#1d252f" stroke="#3f4a57" stroke-width="3">
+      <rect x="26" y="132" width="72" height="60" rx="8"/>
+      <rect x="122" y="132" width="72" height="60" rx="8"/>
+      <rect x="218" y="132" width="72" height="60" rx="8"/>
+      <rect x="314" y="132" width="72" height="60" rx="8"/>
+    </g>
+    <g fill="#93a0ad" font-family="Spline Sans Mono, monospace" font-size="18"
+       text-anchor="middle">
+      <text x="62" y="169">hq</text>
+      <text x="158" y="169">dc</text>
+      <text x="254" y="169">wh</text>
+      <text x="350" y="169">lab</text>
+    </g>
+  </svg>
+
+  <div class="colchips">
+    <span class="chip on">monitored 24/7</span>
+    <span class="chip">alerting</span>
+  </div>
+  <div class="lines">
+    <div class="line"><span>Peak throughput</span><span class="v">1.8 Gbps</span></div>
+    <div class="line"><span>Config backups</span><span class="v">nightly</span></div>
+  </div>
+</div>
+
+<div class="panel col" id="servers">
+  <div class="head">Servers</div>
+  <div class="stat">126</div>
+  <div class="stat-label">hosts under management</div>
+  <div class="lines">
+    <div class="line"><span>Patched</span><span class="v">124 / 126</span></div>
+    <div class="line"><span>Uptime, 90 days</span><span class="v">99.97%</span></div>
+    <div class="line"><span>Backups verified</span><span class="v">nightly</span></div>
+    <div class="line"><span>Capacity alerts</span><span class="v dim">2 open</span></div>
+  </div>
+  <div class="colchips">
+    <span class="chip on">caught before outage</span>
+  </div>
+  <div class="spark">
+    <div class="spark-head">disk headroom by host group</div>
+    <div class="spark-bars">
+      <i style="height:74%"></i><i style="height:58%"></i><i class="hi" style="height:91%"></i>
+      <i style="height:46%"></i><i style="height:67%"></i><i style="height:80%"></i>
+      <i style="height:53%"></i>
+    </div>
+  </div>
+</div>
+</body></html>

@@ -4,7 +4,7 @@ import Image from "next/image";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { motion, useReducedMotion, type PanInfo } from "motion/react";
 import { ChevronLeft, ChevronRight, Pause, Play } from "lucide-react";
-import { DuotoneLayers, IMAGE_FILTER } from "@/components/duotone-image";
+import { IMAGE_FRAME } from "@/components/framed-image";
 import { useLocale } from "@/lib/i18n/locale-context";
 import { cn } from "@/lib/utils";
 
@@ -38,7 +38,7 @@ const CONTROL =
 	"focus-visible:ring-[3px] focus-visible:ring-ring/50 focus-visible:outline-none";
 
 /**
- * Crossfading photo band, sharing the site's single duotone treatment.
+ * Crossfading photo band, sharing the site's single image frame.
  *
  * Adapted from the react-bits Carousel (the same collection Grainient and
  * TextType came from) rather than dropped in: that component is a fixed
@@ -137,11 +137,7 @@ const PhotoCarousel = ({
 	return (
 		<div
 			ref={hostRef}
-			className={cn(
-				"group relative isolate overflow-hidden rounded-lg border border-border",
-				"transition-colors motion-safe:duration-300 hover:border-signal/40",
-				className,
-			)}
+			className={cn(IMAGE_FRAME, className)}
 			role="group"
 			aria-roledescription={dict.common.carouselRoleDescription}
 			aria-label={label}
@@ -185,29 +181,38 @@ const PhotoCarousel = ({
 							sizes={sizes}
 							priority={priority && i === 0}
 							draggable={false}
-							className={cn("object-cover select-none", IMAGE_FILTER)}
+							className="object-cover select-none"
 						/>
 					</motion.div>
 				))}
 			</motion.div>
 
-			<DuotoneLayers />
-
-			{/* Caption and controls sit above the blend stack, on their own scrim and
-			    in the `dark` palette.
+			{/* Caption and controls sit on their own scrim and in the `dark` palette.
 
 			    Both are needed. The slides run from a near-black stage to a bright
 			    daylit forecourt, so no single ink colour clears contrast on all of
 			    them — the scrim gives the text a consistent ground regardless of the
 			    photo under it. Switching to `dark` then makes every token resolve to
 			    its light-on-graphite value, including `signal`, whose light-surface
-			    value is too dark to read on that scrim. */}
+			    value is too dark to read on that scrim.
+
+			    This scrim carries the whole burden now. It used to sit on top of the
+			    duotone stack, which had already flattened and darkened every slide;
+			    with the photos in their own colour the brightest one is brighter than
+			    anything that was measured against back then. */}
 			{/* Reaches half the band and stays dense well above the bottom edge. The
 			    cluster is two rows tall, so a scrim that only darkens the last few
 			    pixels leaves the caption sitting on raw photo — measured at 3.1:1 over
-			    the daylit slides before this was deepened. */}
+			    the daylit slides before this was deepened.
+
+			    Deepened a second time when the duotone came off. At 80/55 the caption
+			    measured 4.76:1 over the brightest slide — passing, but with almost no
+			    room, since 11px is small text and the bar is 4.5:1. At 92/68 the worst
+			    slide measures 7.89:1. Re-measure from rendered pixels if a slide is
+			    swapped; parsing the computed `color` does not work, these tokens
+			    resolve to `oklab()`. */}
 			<div
-				className="pointer-events-none absolute inset-x-0 bottom-0 h-1/2 bg-gradient-to-t from-black/80 via-black/55 to-transparent"
+				className="pointer-events-none absolute inset-x-0 bottom-0 h-1/2 bg-gradient-to-t from-black/92 via-black/68 to-transparent"
 				aria-hidden="true"
 			/>
 			{/* Everything lives bottom-left, not split across the band. On desktop the

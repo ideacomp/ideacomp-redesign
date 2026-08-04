@@ -1,0 +1,103 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8">
+<title>Mobile app development — one core, two platforms</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@600&family=Spline+Sans+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="panel.css">
+<style>
+  /* All three features of the mobile-development slot: the core node fanning
+     out to both handsets is Cross-Platform, the native-module chip is Native
+     Development, and the queued-work strip in each handset is Offline-First.
+     Platforms are named in words — a rendered Apple or Android mark would be
+     third-party branding, which the photographic standard rules out. */
+  /* The core sits centred over the two handsets it feeds; the aside starts
+     clear of the right-hand frame at 1064px. */
+  #core{left:462px;top:172px}
+
+  .frame.phone{width:300px;height:452px;top:436px}
+  #ios{left:296px}
+  #droid{left:700px}
+
+  .screen{position:absolute;inset:0;display:flex;flex-direction:column;padding:22px 20px;
+    gap:14px}
+  .scr-title{font-family:var(--display);font-weight:600;font-size:34px;line-height:1;
+    color:var(--ink-hi)}
+  .scr-sub{font-family:var(--mono);font-size:15px;color:var(--ink-lo);margin-top:-6px}
+  .card{background:#263039;border:2px solid #33404c;border-radius:8px;padding:12px 14px}
+  .card .k{font-family:var(--mono);font-size:15px;color:#93a0ad}
+  .card .v{font-family:var(--mono);font-size:19px;color:var(--ink-hi);margin-top:4px}
+  .queue{margin-top:auto;border-top:2px solid #33404c;padding-top:12px;
+    font-family:var(--mono);font-size:16px;color:var(--signal-soft)}
+  .queue span{color:var(--ink-lo)}
+
+  /* Not uppercased: "iOS" is a proper noun and "IOS" is a different thing. */
+  .plat{position:absolute;top:912px;font-family:var(--mono);font-size:22px;
+    letter-spacing:.14em;color:#a6b2be;width:300px;text-align:center}
+  #plat-ios{left:296px}
+  #plat-droid{left:700px}
+
+  .aside{position:absolute;left:1064px;top:436px;width:472px}
+  .aside .k{font-family:var(--mono);font-size:19px;letter-spacing:.14em;
+    text-transform:uppercase;color:var(--ink-mid)}
+  .aside .big{font-family:var(--display);font-weight:600;font-size:56px;line-height:1.04;
+    letter-spacing:-.015em;color:var(--ink-hi);margin-top:10px}
+  .aside .note{font-family:var(--mono);font-size:19px;line-height:1.6;color:#a6b2be;
+    margin-top:16px}
+  .aside .chips{margin-top:26px;display:flex;flex-wrap:wrap;gap:10px}
+</style></head>
+<body>
+<div class="grid"></div>
+<svg id="wires"></svg>
+<script type="application/json" id="edges">
+[["v","core:b1","ios:t"],["v","core:b2","droid:t"]]
+</script>
+
+<div class="title">One core, two platforms</div>
+<div class="rule"></div>
+<div class="foot">usable with no signal at all</div>
+
+<div class="node" id="core">
+  <div class="kind">Shared core</div>
+  <div class="name">One codebase</div>
+  <div class="meta">domain logic, sync, storage</div>
+  <span class="pill">cross-platform</span>
+  <span class="port b1"></span><span class="port b2"></span>
+</div>
+
+<div class="frame phone" id="ios">
+  <span class="port t"></span>
+  <div class="screen">
+    <div class="scr-title">Work order</div>
+    <div class="scr-sub">#4821 &middot; line 3</div>
+    <div class="card"><div class="k">Asset</div><div class="v">Press 04</div></div>
+    <div class="card"><div class="k">Reading</div><div class="v">62.4 bar</div></div>
+    <div class="card"><div class="k">Signed off</div><div class="v">not yet</div></div>
+    <div class="queue">offline &middot; <span>3 queued</span></div>
+  </div>
+</div>
+
+<div class="frame phone" id="droid">
+  <span class="port t"></span>
+  <div class="screen">
+    <div class="scr-title">Work order</div>
+    <div class="scr-sub">#4821 &middot; line 3</div>
+    <div class="card"><div class="k">Asset</div><div class="v">Press 04</div></div>
+    <div class="card"><div class="k">Reading</div><div class="v">62.4 bar</div></div>
+    <div class="card"><div class="k">Signed off</div><div class="v">not yet</div></div>
+    <div class="queue">offline &middot; <span>3 queued</span></div>
+  </div>
+</div>
+
+<div class="plat" id="plat-ios">iOS</div>
+<div class="plat" id="plat-droid">Android</div>
+
+<div class="aside">
+  <div class="k">Where native wins</div>
+  <div class="big">Camera, BLE and background sync run native</div>
+  <div class="note">the rest is shared, so a fix ships to both platforms at once</div>
+  <div class="chips">
+    <span class="chip on">native module</span>
+    <span class="chip">local-first store</span>
+    <span class="chip">syncs on reconnect</span>
+  </div>
+</div>
+</body></html>

@@ -1,0 +1,100 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8">
+<title>Cybersecurity — perimeter and response</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@600&family=Spline+Sans+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="panel.css">
+<style>
+  /* All three features of the cybersecurity slot, in one frame:
+     the top chain is Firewall & Network Perimeter, the lower-left panel is
+     Security Assessments, the lower-right panel is Incident Response. */
+  .perimeter{position:absolute;left:64px;top:186px;width:1472px}
+  .perimeter .step{padding:22px 24px}
+
+  .half{top:392px;height:452px;width:716px}
+  #assess{left:64px}
+  #respond{left:820px}
+  #assess .bar-row{margin-top:34px}
+
+  .runbook{--gap:30px;margin-top:34px}
+  .runbook .step{padding:16px 16px;text-align:center}
+  .runbook .step-name{font-size:30px}
+
+  .statrow{display:flex;align-items:flex-end;gap:26px}
+  .statnote{font-family:var(--mono);font-size:19px;line-height:1.5;color:#a6b2be;
+    padding-bottom:6px}
+  .unit{font-size:52px;margin-left:10px}
+  .chiprow{margin-top:34px;display:flex;gap:10px}
+  .close{font-family:var(--mono);font-size:19px;color:var(--ink-lo);margin-top:32px}
+</style></head>
+<body>
+<div class="grid"></div>
+
+<div class="title">Perimeter &amp; response</div>
+<div class="rule"></div>
+<div class="foot">containment is a procedure, not a scramble</div>
+
+<div class="chain perimeter">
+  <div class="step">
+    <div class="step-name">Internet</div>
+    <div class="step-meta">untrusted</div>
+  </div>
+  <div class="step active">
+    <div class="step-name">Firewall</div>
+    <div class="step-meta">412 rules &middot; deny by default</div>
+  </div>
+  <div class="step">
+    <div class="step-name">DMZ</div>
+    <div class="step-meta">published services only</div>
+  </div>
+  <div class="step">
+    <div class="step-name">Internal</div>
+    <div class="step-meta">segmented by role</div>
+  </div>
+</div>
+
+<div class="panel half" id="assess">
+  <div class="head">Assessment &middot; findings by impact</div>
+  <div class="bar-row">
+    <span class="bar-name">Critical</span>
+    <span class="bar-track"><span class="bar-fill t1" style="width:18%"></span></span>
+    <span class="bar-value">2</span>
+  </div>
+  <div class="bar-row">
+    <span class="bar-name">High</span>
+    <span class="bar-track"><span class="bar-fill t2" style="width:45%"></span></span>
+    <span class="bar-value">5</span>
+  </div>
+  <div class="bar-row">
+    <span class="bar-name">Medium</span>
+    <span class="bar-track"><span class="bar-fill t3" style="width:100%"></span></span>
+    <span class="bar-value">11</span>
+  </div>
+  <div class="chiprow">
+    <span class="chip on">fixed in priority order</span>
+    <span class="chip">re-tested</span>
+  </div>
+  <div class="close">scope: network and application, tested against real exposure</div>
+</div>
+
+<div class="panel half" id="respond">
+  <div class="head">Incident response</div>
+  <div class="statrow">
+    <div>
+      <div class="stat">11<span class="unit">min</span></div>
+      <div class="stat-label">median time to contain</div>
+    </div>
+    <div class="statnote">runbook written<br>before the incident</div>
+  </div>
+  <div class="chain runbook">
+    <div class="step"><div class="step-name">Detect</div></div>
+    <div class="step active"><div class="step-name">Contain</div></div>
+    <div class="step"><div class="step-name">Eradicate</div></div>
+    <div class="step"><div class="step-name">Recover</div></div>
+  </div>
+  <div class="chiprow">
+    <span class="chip">on-call rota</span>
+    <span class="chip">evidence preserved</span>
+    <span class="chip">post-incident report</span>
+  </div>
+</div>
+</body></html>

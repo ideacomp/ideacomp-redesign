@@ -1,58 +1,156 @@
-# Photo sources & the photographic standard
+# Image sources & the visual standard
 
 Every image on the site is self-hosted from `public/`. `next.config.ts` allows no
-remote image hosts, so a photo must be committed to the repo to render.
+remote image hosts, so an image must be committed to the repo to render.
 
-## The rule that makes the set look like a set
+There are two sets, and they answer to different rules:
 
-Source colour is irrelevant. `src/components/duotone-image.tsx` greyscales each
-photo and re-tints it through four blend layers, so anything dropped into a slot
-comes out in the same signal-cyan duotone. Two of those layers paint
-`bg-background`, which is redefined per art-directed surface — that is why the
-same component renders a graphite-cyan duotone inside a `.dark` band and a
-paper-cyan duotone on the light "datasheet" surface, with no per-surface files.
+- **`/solutions` — six generated panels** in `public/solutions/`, built from
+  `docs/diagrams/`. These are ours; see below.
+- **The home `FocusBand` — four real photographs** in `public/gitex-*.jpg`, our
+  own from GITEX Global Dubai. These are photographs and stay photographs.
 
-What is **not** interchangeable is subject and tonality. Every photo must:
+## Why /solutions is drawn rather than photographed
 
-- **say what its own discipline does.** This is the constraint that matters most
-  and the one an earlier pass got wrong: a set of six handsome infrastructure
-  photos was stylistically perfect and semantically useless, because all six read
-  as "datacenter". A card for *Mobile App Development* has to look like mobile app
-  development.
-- contain **no people** — no handshakes, no meetings, no hands in frame
-  (PRODUCT.md anti-references). The one exception is the home `FocusBand` carousel,
-  which is our own photos of our own colleague; the ban is on *stock* people, and a
-  real colleague is the opposite of that.
-- keep one dominant subject, mid-to-dark tonality, hard geometric lines
-- carry no legible third-party branding, and **no content that misreads in a
-  sales context.** Screens need reading at full size before use: a monitoring
-  dashboard rejected here turned out to be a COVID-19 tracker with a "Total
-  Deaths" counter, and an editor screenshot showed an AI assistant asking
-  permission to write the code on a page selling senior engineering.
+Stock could not say what these disciplines do. The set that used to sit here was
+five Unsplash photos and one generated diagram, and four of the five were the same
+shot — a close-up of a screen at an angle:
 
-A photo that breaks those will still tint correctly and still be wrong.
+| slot | what it actually was | why it failed |
+|---|---|---|
+| `cybersecurity` | consumer antivirus panel, "Virus free" | not firewalls, assessments or incident response |
+| `web-development` | HTML in browser devtools | reads as "some code" |
+| `outsourcing` | a component in an editor | says nothing about helpdesk, networks or servers |
+| `mobile-development` | two phones running "byte", a social app | legible third-party branding |
+| `cloud-devops` | Plex installing on a Raspberry Pi, `rpikernelhack` in the paths | a hobby project on a page selling managed infrastructure |
 
-## Current slots
+Twelve searches over 114 candidates had already failed to find a usable node-editor
+shot for `ai-ml`, which is why that one slot was generated. Extending that decision
+to all six is what this set is.
 
-Five slots are Unsplash — free licence, commercial use, no attribution required —
-processed to 1600×1067 (3:2), JPEG q78, progressive, EXIF stripped. The `ai-ml`
-slot is a diagram we generate ourselves; see the next section.
+Envato Elements was considered and is a dead end from inside the repo: it needs a
+paid subscription and a login, so nothing can be fetched here. An AI-generated set
+was also tried and rejected — the files carried garbled text ("Sharows sparting"),
+placeholder labels named after their own icons ("Globe / CDN & Edge", "Phone Frame")
+and stock photos of people inside the mocked-up app screens.
 
-| Slot (`solutionsData[].slug`) | File | Subject | Source |
+## There is no longer a duotone
+
+Every image used to be flattened to greyscale and re-tinted signal-cyan through
+four blend layers in `duotone-image.tsx`, so that mixed stock sources landed in
+one colour family regardless of what they looked like. **That was removed on
+request.** `src/components/framed-image.tsx` is what is left: the frame, the
+hover, and nothing over the image.
+
+Two things follow, and both matter more than the treatment did:
+
+- **Source colour is load-bearing now.** The tint used to absorb it. An image that
+  clashes with the palette will clash on the page, and the fix is to grade the
+  file, not to add a CSS filter back.
+- **The panels supply their own palette.** They are generated in our tokens, which
+  is why `/solutions` still reads as one signal-cyan set with nothing tinting it.
+  This is also why removing the duotone changed the panels barely at all and
+  changed the GITEX photographs completely — those are now in their own colour.
+
+## The rules a panel has to hold
+
+**Rank by luminance, not hue.** This outlived the duotone that motivated it, and
+it is still right: a red / amber / green severity scale is unreadable to a
+substantial share of viewers and reads as decoration in a monochrome panel.
+`panel.css` exposes the ladder as `--ink-hi` / `--ink-mid` / `--ink-lo` and
+`.bar-fill.t1/.t2/.t3`, so it is a token rather than a judgement call per panel.
+
+**The delivered width is 552px.** The grid caps at `max-w-6xl` (1152px) with
+`gap-12`, so a column never exceeds 552px. Source is 1600px, a 2.9x downscale:
+
+| in source | on the card | use for |
+|---|---|---|
+| 92px `.stat` | 32px | the anchor the eye lands on first |
+| 40-64px `.name` / `.step-name` | 14-22px | load-bearing copy |
+| 15-22px `.meta` / `.kind` | 5-8px | texture, never something that must be read |
+
+Nothing below 15px. An earlier version used 11px labels; they resolved to 4px and
+vanished.
+
+**Each panel shows its slot's three `features`,** the ones in `solutionsData` that
+render as the bullet list beside it. That is the constraint that matters most and
+the one the old set got wrong. `docs/diagrams/*.html` each open with a comment
+naming which region covers which feature — keep that comment true.
+
+**Mid-to-dark tonality.** `ai-ml`, `web-development` and `mobile-development` sit
+on the *light* surface (`isDark = index % 2 === 1` in `src/app/solutions/page.tsx`),
+so on those three a dark panel is a dark card on paper. That used to be a real
+hazard — a baked-dark image read as a hole punched in the light surface, which is
+what the duotone existed to prevent. With the duotone gone the panels are simply
+dark, deliberately and consistently, and the border plus the surrounding whitespace
+carry them. `public/solutions/ai-ml.png` is the calibration reference; grade
+against it, and check those three bands after any change.
+
+**No people, no third-party branding, no lorem bars, and no copy that misreads in
+a sales context.** Platform names are written as words for this reason — an Apple
+or Android mark in the frame would be third-party branding. Interface content
+inside a device frame is drawn as blocks, because real rendered copy would be 5px
+on the card and read as noise.
+
+## The six panels
+
+| Slot (`solutionsData[].slug`) | File | Source | Shows |
 |---|---|---|---|
-| `ai-ml` | `public/ai-solution.png` | Node workflow canvas: validate → forecast, with a human-review branch merging into the decision | **generated** — `docs/diagrams/` |
-| `cybersecurity` | `public/cybersecurity-solution.jpg` | Security status panel: networks safe, virus free, apps current | Unsplash `photo-1751448555253-f39c06e29d82` |
-| `web-development` | `public/web-solutions.jpg` | Browser devtools: page HTML beside its applied styles | Unsplash `photo-1518773553398-650c184e0bb3` |
-| `outsourcing` | `public/outsourcing-solution.jpg` | Code review of a component, changed lines marked in the gutter | Unsplash `photo-1653387137517-fbc54d488ed8` |
-| `mobile-development` | `public/mobile-solution.jpg` | Two phones side by side, each running a different app UI | Unsplash `photo-1581287053822-fd7bf4f4bfec` |
-| `cloud-devops` | `public/cloud-solution.jpg` | Terminal streaming package install and provisioning steps | Unsplash `photo-1608742213509-815b97c30b36` |
-| home `FocusBand` | `public/gitex-*.jpg` (4 files) | Our own GITEX Global Dubai photos, in a carousel | **our own photos** — see below |
+| `ai-ml` | `public/solutions/ai-ml.png` | `ai-forecast.html` | forecast curve past a `now` marker with an 80% band, driver ranking, an automated action held for review |
+| `cybersecurity` | `public/solutions/cybersecurity.png` | `security-perimeter.html` | internet → firewall → DMZ → internal chain, findings by impact, detect/contain/eradicate/recover runbook |
+| `web-development` | `public/solutions/web-development.png` | `web-viewports.html` | one layout at three widths, offline badge on the phone, the API endpoints behind all three |
+| `outsourcing` | `public/solutions/outsourcing.png` | `ops-board.html` | three columns named Helpdesk, Network, Servers, each anchored by one big number |
+| `mobile-development` | `public/solutions/mobile-development.png` | `mobile-core.html` | one shared core fanning out to iOS and Android running the same screen, work queued offline |
+| `cloud-devops` | `public/solutions/cloud-devops.png` | `deploy-pipeline.html` | commit → build → test → stage → prod with a blocking gate, replica health, infrastructure as code |
 
-If a source is an intrinsically pale outlier, grade **that file** before saving —
-do not retune `duotone-image.tsx`, which is calibrated against the whole set.
+The filename is the slug, so a panel and its content slot cannot drift apart.
 
-`FocusBand` deliberately has its own files rather than sharing a Solutions photo,
-so changing one never silently changes the other.
+## Regenerating
+
+```
+npm i -D playwright                    # once, if node_modules is fresh
+node docs/diagrams/render.mjs          # all six
+node docs/diagrams/render.mjs ai-ml    # one, while iterating
+```
+
+The script renders at 1600×1067 with `deviceScaleFactor: 2`, then downscales
+3200×2134 to 1600×1067. That downscale is what keeps the thin strokes and the mono
+type clean at 552px. It shells out to `sips`, so this is macOS-only — an authoring
+tool run by hand, never part of `npm run build`.
+
+Output is **PNG**, not JPEG. The 2-3px strokes and small mono type pick up visible
+ringing under JPEG; PNG keeps the source clean and `next/image` still serves AVIF.
+
+### Two things in `render.mjs` that are load-bearing
+
+**Wires are drawn from the measured centre of each `.port` element**, never from
+hand-authored path data. That is what keeps an edge attached when a node's label
+gets longer and changes its box size. Horizontal edges leave and arrive along x,
+vertical along y — mixing the two is what once swept a wire out past the right edge
+and back.
+
+**Each panel declares its own edges, inside its own HTML:**
+
+```html
+<svg id="wires"></svg>
+<script type="application/json" id="edges">
+[["v","core:b1","ios:t"],["v","core:b2","droid:t"]]
+</script>
+```
+
+`"core:b1"` resolves to the measured centre of `#core`'s `.port.b1`. Any positioned
+box can carry ports, not just `.node` — `mobile-core.html` hangs them off device
+frames. A panel with no `#edges` block is simply screenshotted.
+
+### Editing a panel
+
+`docs/diagrams/panel.css` is the shared system: page furniture (`.title` / `.rule`
+/ `.foot`), `.node` + `.port`, `.panel`, `.stat`, `.bar-*`, `.chip`, `.chain` +
+`.step`, `.frame` and the `.ui-*` blocks that stand in for interface content. Each
+panel adds only its own layout on top. Change `panel.css` and you change all six —
+which is the point, and also the risk.
+
+Panels bottom out at y=844 so the set keeps one rhythm when scrolled through.
 
 ## The `FocusBand` is a carousel of our own photos
 
@@ -76,15 +174,23 @@ stock.
 crossfades instead of sliding, why it only borrows behaviour from the react-bits
 Carousel instead of using it, why the controls sit bottom-left, and the full list of
 conditions that stop autoplay — read that before changing it. Both it and
-`DuotoneImage` composite through the same exported `DuotoneLayers`, so the treatment
-has one definition.
+`FramedImage` share the exported `IMAGE_FRAME`, so the frame has one definition.
+
+**These photos are now in their own colour**, which is the whole visible effect of
+removing the duotone: purple stage lighting, daylight on the forecourt. The
+treatment used to flatten all of that.
 
 Two measured constraints worth not breaking: the caption is 11px, so it is *small*
 text needing 4.5:1, and the scrim behind the control cluster has to stay dense well
 above the bottom edge — the cluster is two rows tall, and a shallower scrim measured
-3.1:1 over the daylit slides. Current worst case is 7.5:1. Re-measure from rendered
-pixels if either changes; parsing the computed `color` does not work, since these
-tokens resolve to `oklab()`.
+3.1:1 over the daylit slides.
+
+The scrim was deepened a second time when the duotone came off, because the slides
+underneath got brighter: at `from-black/80 via-black/55` the caption measured
+**4.76:1**, passing but with no headroom. At `from-black/92 via-black/68` the worst
+slide measures **7.89:1**. Re-measure from rendered pixels if a slide or the scrim
+changes; parsing the computed `color` does not work, since these tokens resolve to
+`oklab()`.
 
 ### Sourcing them from the old site
 
@@ -113,53 +219,6 @@ These are choices, already flagged and accepted. Do not "fix" them:
   paragraph and its "Meet the team" CTA carry the connection. If this ever grates,
   the fix is the copy or moving the carousel to `/about`, not swapping in stock.
 
-Rebuild any of the Unsplash slots from the CDN with:
-
-```
-https://images.unsplash.com/photo-<id>?w=2400&q=90&fm=jpg&fit=max
-```
-
-then centre-crop to 3:2 and resize to 1600×1067 at q78.
-
-## The `ai-ml` diagram is generated
-
-Stock had nothing usable here. Twelve searches over 114 candidates turned up no
-freely-licensed screenshot of a node/workflow canvas: the closest match had
-`BRANDING / BRAND DESIGN / 3D RENDERS` legible on the nodes themselves, and the
-next closest went muddy under the duotone once the monitor bezel took over the
-frame. So this one is ours.
-
-Source lives in `docs/diagrams/`:
-
-- `ai-pipeline.html` — the diagram. Nodes are plain HTML positioned absolutely;
-  the wires are **not** in the file.
-- `render.mjs` — Playwright renders the page at 1600×1067 with
-  `deviceScaleFactor: 2`, measures the real centre of every `.port` element, draws
-  the bezier wires from those measured coordinates, then screenshots.
-
-Measuring the ports rather than hand-authoring path data is what keeps the wires
-attached when a node's label length changes its box size. Horizontal edges leave
-and arrive along x; vertical edges along y — mixing them is what made an earlier
-version sweep a wire out past the right edge and back.
-
-Regenerate with:
-
-```
-cd docs/diagrams && node render.mjs        # writes public/ai-solution@2x.png
-# then downscale 3200x2134 -> 1600x1067 and save as public/ai-solution.png
-```
-
-It is a **PNG**, unlike the photographs. Thin 2px strokes and small mono type pick
-up visible ringing under JPEG; PNG keeps the source clean and `next/image` still
-serves AVIF (the 640w card variant is ~6 KB, far smaller than any of the photos).
-
-Two things to hold onto if it gets edited: the type is scaled so the node names
-stay readable in a **552px** card — that is the real delivered width, and an
-earlier version had 11px labels that resolved to 4px and vanished. And the node
-labels are load-bearing copy, not decoration: `Human review — override available`
-and `Decision — auditable` are what make the card agree with the section's claim
-of being "explainable and auditable, not a black box".
-
 ## The hero has no photograph and no decorative shapes
 
 The home hero is the Grainient shader, the bottom fade, and the typed headline.
@@ -174,41 +233,30 @@ Nothing else. Two additions were built there and both were removed on request:
 Recorded so the work is recoverable, not as a suggestion. Don't add either back
 without being asked.
 
-## Swapping in Envato Elements assets
-
-Envato Elements requires a paid subscription and a login, so these files could
-not be sourced from it directly. The slots are built so a swap needs no code
-change: **download, crop to 3:2, resize to 1600×1067, overwrite the file at the
-same path.** Alt text lives in `src/lib/sitemap.ts` and must be updated to
-describe the new photo.
-
-Envato's search pages are client-rendered, so item URLs could not be verified
-from here and are deliberately not listed — a fabricated item id is worse than
-none. These search URLs are correct and land on the right result sets:
-
-| Slot | Search |
-|---|---|
-| `ai-ml` | *n/a — generated, see above.* Only relevant if the diagram is abandoned: <https://elements.envato.com/photos/node-editor> |
-| `cybersecurity` | <https://elements.envato.com/photos/security-dashboard> |
-| `web-development` | <https://elements.envato.com/photos/source-code-editor> |
-| `outsourcing` | <https://elements.envato.com/photos/code-review> |
-| `mobile-development` | <https://elements.envato.com/photos/mobile-app-screen> |
-| `cloud-devops` | <https://elements.envato.com/photos/terminal-command-line> |
-| home `FocusBand` | *n/a — our own GITEX photo, see above.* |
-| hero object | <https://elements.envato.com/photos/fiber-optic> — filter to shots on a black background |
-
-When picking, judge candidates on the bullets at the top of this file, not on how
-they look in the Envato grid: everything is desaturated and re-tinted before it
-reaches the page, so colour is irrelevant and **subject legibility is
-everything**. Open each candidate at full resolution and read every word visible
-on any screen in the frame.
-
-## Checking a swap
-
-The failure mode worth looking for is a photo that reads as a hole punched in the
-light surface — that is what forced this rework in the first place. Load
-`/solutions` and confirm the bands on the light surface still read as cards.
+## Checking a change
 
 ```
+node docs/diagrams/render.mjs
+npm run build
 npm run dev          # then /solutions and / at 375, 768, 1440, 1920
 ```
+
+- **Read it at 552px, not at 1600.** Screenshot the card at its delivered width and
+  read the header, the load-bearing labels and the big numbers. Anything that was
+  meant to be readable and is not gets bigger in the source — the card does not
+  get bigger.
+- **Check the light bands.** `ai-ml`, `web-development` and `mobile-development` sit
+  on the light surface and must read as cards, not as holes.
+- **Desaturate it.** Convert the PNG to greyscale and look again. If two things
+  that were meant to be distinguishable merge, they were carrying meaning in hue
+  and have to be redone in luminance. Nothing greyscales these panels for you any
+  more, so this is now a check you have to run deliberately rather than something
+  the treatment enforced.
+- **Read every word in the frame at full resolution.** This is the rule a COVID-19
+  tracker with a "Total Deaths" counter and an editor screenshot of an AI assistant
+  asking permission to write code both failed.
+- **Both locales.** Alt text lives in `src/lib/sitemap.ts` under `en` and `cs`, and
+  describes what is actually in the panel — it is an accessibility requirement from
+  PRODUCT.md, not decoration.
+- **`ai-ml` is the only one with `priority`** and sits in the LCP path. Keep an eye
+  on its AVIF 640w variant.

@@ -1,0 +1,108 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8">
+<title>Cloud &amp; DevOps — pipeline to production</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@600&family=Spline+Sans+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="panel.css">
+<style>
+  /* All three features of the cloud-devops slot: the stage chain is CI/CD
+     Automation, the left panel is Containerization, the right panel is Cloud
+     Infrastructure — provisioned as code and sized for real load. */
+  .stages{position:absolute;left:64px;top:186px;width:1472px;--gap:36px}
+  .stages .step{padding:20px 20px}
+  .stages .step-name{font-size:38px}
+  .gate{display:inline-block;margin-top:10px;font-family:var(--mono);font-size:14px;
+    letter-spacing:.1em;text-transform:uppercase;color:var(--signal-soft);
+    border:2px solid #3f8fa6;border-radius:6px;padding:3px 9px}
+
+  /* Both halves bottom out at 844px, matching every other panel in the set. */
+  .half{top:376px;height:468px;width:716px}
+  #run{left:64px}
+  #infra{left:820px}
+
+  .lines{margin-top:30px}
+  .line{display:flex;justify-content:space-between;align-items:baseline;
+    font-family:var(--mono);font-size:21px;color:#a6b2be;padding:13px 0;
+    border-top:2px solid #2a333d}
+  .line .v{color:var(--ink-hi)}
+  .chiprow{margin-top:26px;display:flex;flex-wrap:wrap;gap:10px}
+
+  .replicas{display:flex;gap:10px;margin-top:26px}
+  .rep{width:52px;height:52px;border-radius:8px;background:#263039;
+    border:2px solid #33404c}
+  .rep.up{background:#2d4650;border-color:#5f93a6}
+
+  .scale{margin-top:18px}
+</style></head>
+<body>
+<div class="grid"></div>
+
+<div class="title">Pipeline to production</div>
+<div class="rule"></div>
+<div class="foot">automated gates, reversible releases</div>
+
+<div class="chain stages">
+  <div class="step">
+    <div class="step-name">Commit</div>
+    <div class="step-meta">signed</div>
+  </div>
+  <div class="step">
+    <div class="step-name">Build</div>
+    <div class="step-meta">2m 10s &middot; image pinned</div>
+  </div>
+  <div class="step active">
+    <div class="step-name">Test</div>
+    <div class="step-meta">4m 02s</div>
+    <span class="gate">gate: must pass</span>
+  </div>
+  <div class="step">
+    <div class="step-name">Stage</div>
+    <div class="step-meta">canary 10%</div>
+  </div>
+  <div class="step">
+    <div class="step-name">Prod</div>
+    <div class="step-meta">38s to roll back</div>
+  </div>
+</div>
+
+<div class="panel half" id="run">
+  <div class="head">Containers in production</div>
+  <div class="stat">6 / 6</div>
+  <div class="stat-label">replicas healthy</div>
+  <div class="replicas">
+    <span class="rep up"></span><span class="rep up"></span><span class="rep up"></span>
+    <span class="rep up"></span><span class="rep up"></span><span class="rep up"></span>
+  </div>
+  <div class="lines">
+    <div class="line"><span>Autoscale range</span><span class="v">2 &rarr; 12</span></div>
+    <div class="line"><span>Restart on failure</span><span class="v">automatic</span></div>
+  </div>
+  <div class="chiprow">
+    <span class="chip on">orchestrated</span>
+    <span class="chip">horizontal</span>
+  </div>
+</div>
+
+<div class="panel half" id="infra">
+  <div class="head">Infrastructure as code</div>
+  <div class="scale">
+    <svg viewBox="0 0 664 148" style="width:664px;height:110px">
+      <!-- load against capacity: capacity is the step line, load the curve -->
+      <path d="M8,124 L118,124 L118,96 L228,96 L228,68 L338,68 L338,44 L448,44
+               L448,68 L558,68 L558,96 L656,96"
+            fill="none" stroke="#4f8396" stroke-width="3" stroke-dasharray="10 8"/>
+      <path d="M8,136 C90,132 120,112 200,106 C280,100 300,80 380,62
+               C450,48 500,72 560,86 C610,98 630,104 656,108"
+            fill="none" stroke="#f2f5f8" stroke-width="4"/>
+    </svg>
+  </div>
+  <div class="lines">
+    <div class="line"><span>Environments</span><span class="v">dev &middot; stage &middot; prod</span></div>
+    <div class="line"><span>Provisioning</span><span class="v">declared in code</span></div>
+    <div class="line"><span>Drift</span><span class="v">detected, then corrected</span></div>
+  </div>
+  <div class="chiprow">
+    <span class="chip on">sized for real load</span>
+    <span class="chip">reproducible</span>
+  </div>
+</div>
+</body></html>

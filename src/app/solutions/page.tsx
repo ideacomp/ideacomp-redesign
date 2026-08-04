@@ -5,7 +5,7 @@ import { solutionsData, content } from "@/lib/sitemap";
 import Header from "@/components/header";
 import Footer from "@/components/footer";
 import HeroBackdrop from "@/components/hero";
-import DuotoneImage from "@/components/duotone-image";
+import FramedImage from "@/components/framed-image";
 import { Reveal } from "@/components/reveal";
 import { IndustriesGrid } from "@/components/industries-grid";
 import { CtaSection } from "@/components/cta-section";
@@ -64,7 +64,7 @@ const Solutions = () => {
 					>
 						<div className="mx-auto grid max-w-6xl items-center gap-12 lg:grid-cols-2">
 							<Reveal className={reversed ? "lg:order-2" : undefined}>
-								<DuotoneImage
+								<FramedImage
 									src={solution.image.src}
 									alt={solution.image.alt}
 									// The grid caps at max-w-6xl (1152px) with gap-12, so a

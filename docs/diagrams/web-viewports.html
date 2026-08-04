@@ -1,0 +1,128 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8">
+<title>Custom web development — one interface, every viewport</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@600&family=Spline+Sans+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="panel.css">
+<style>
+  /* All three features of the web-development slot: the same layout redrawn at
+     three widths is Responsive & PWA, the endpoint table is Backend & API
+     Architecture, and the frames themselves are Frontend Engineering.
+     The interface inside each frame is drawn as blocks on purpose — real copy
+     would resolve to 5px on the delivered card and read as noise. */
+  .frame{padding:0}
+  #desk{left:64px;top:180px;width:852px;height:480px}
+  #tab{left:948px;top:230px;width:330px;height:430px}
+  #ph{left:1310px;top:268px;width:226px;height:392px}
+
+  .frame-label{top:676px}
+  .lbl-desk{left:64px}
+  .lbl-tab{left:948px}
+  .lbl-ph{left:1310px}
+
+  /* One layout, three widths. Percentages, so each frame lays it out itself. */
+  .ui{position:absolute;inset:0;display:flex;flex-direction:column}
+  .ui-nav{display:flex;align-items:center;gap:2.5%;padding:5% 5% 0}
+  .ui-nav .ui-bar{height:9px}
+  .ui-body{flex:1;padding:5%;display:flex;flex-direction:column;gap:6%}
+  .ui-hero{flex:1.5}
+  .ui-cols{flex:1;display:flex;gap:6%}
+  .ui-cols .ui-block{flex:1}
+  /* Phone is one column — that is the responsive story, drawn rather than said.
+     The extra bottom padding keeps the badge off the blocks behind it. */
+  #ph .ui-cols{flex-direction:column}
+  #ph .ui-body{padding-bottom:64px}
+
+  .badge{position:absolute;left:50%;transform:translateX(-50%);bottom:18px;
+    font-family:var(--mono);font-size:15px;letter-spacing:.1em;text-transform:uppercase;
+    color:var(--signal-soft);border:2px solid #3f8fa6;border-radius:6px;padding:4px 10px;
+    background:#141a22}
+
+  #api{left:64px;top:736px;width:1472px;height:210px}
+  .rows{display:flex;gap:64px;margin-top:6px}
+  .row{font-family:var(--mono);font-size:24px;color:#a6b2be;line-height:1.9}
+  .ok{color:var(--ink-hi)}
+  .ms{color:var(--signal-soft)}
+  .apichips{position:absolute;right:26px;bottom:24px;display:flex;gap:10px}
+</style></head>
+<body>
+<div class="grid"></div>
+
+<div class="title">One interface, every viewport</div>
+<div class="rule"></div>
+<div class="foot">accessible and fast at every width</div>
+
+<div class="frame desktop" id="desk">
+  <div class="ui">
+    <div class="ui-nav">
+      <span class="ui-accent" style="width:11%;height:11px"></span>
+      <span class="ui-bar" style="width:7%"></span>
+      <span class="ui-bar" style="width:7%"></span>
+      <span class="ui-bar" style="width:7%"></span>
+      <span style="flex:1"></span>
+      <span class="ui-accent" style="width:9%;height:11px"></span>
+    </div>
+    <div class="ui-body">
+      <div class="ui-hero"></div>
+      <div class="ui-cols">
+        <div class="ui-block"></div><div class="ui-block"></div><div class="ui-block"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="frame tablet" id="tab">
+  <div class="ui">
+    <div class="ui-nav">
+      <span class="ui-accent" style="width:22%;height:9px"></span>
+      <span class="ui-bar" style="width:14%"></span>
+      <span style="flex:1"></span>
+      <span class="ui-accent" style="width:18%;height:9px"></span>
+    </div>
+    <div class="ui-body">
+      <div class="ui-hero"></div>
+      <div class="ui-cols">
+        <div class="ui-block"></div><div class="ui-block"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="frame phone" id="ph">
+  <div class="ui">
+    <div class="ui-nav">
+      <span class="ui-accent" style="width:34%;height:8px"></span>
+      <span style="flex:1"></span>
+      <span class="ui-bar" style="width:18%"></span>
+    </div>
+    <div class="ui-body">
+      <div class="ui-hero"></div>
+      <div class="ui-cols">
+        <div class="ui-block"></div><div class="ui-block"></div>
+      </div>
+    </div>
+  </div>
+  <div class="badge">offline ready</div>
+</div>
+
+<div class="frame-label lbl-desk">Desktop &middot; 1440</div>
+<div class="frame-label lbl-tab">Tablet &middot; 768</div>
+<div class="frame-label lbl-ph">Phone &middot; 375</div>
+
+<div class="panel" id="api">
+  <div class="head">The API behind all three</div>
+  <div class="rows">
+    <div class="row">
+      GET&nbsp; /v1/orders &nbsp;<span class="ok">200</span>&nbsp; <span class="ms">34 ms</span><br>
+      GET&nbsp; /v1/orders/:id &nbsp;<span class="ok">200</span>&nbsp; <span class="ms">21 ms</span>
+    </div>
+    <div class="row">
+      POST /v1/orders &nbsp;<span class="ok">201</span>&nbsp; <span class="ms">58 ms</span><br>
+      POST /v1/orders/:id/hold &nbsp;<span class="ok">202</span>&nbsp; <span class="ms">40 ms</span>
+    </div>
+  </div>
+  <div class="apichips">
+    <span class="chip on">versioned contract</span>
+    <span class="chip">typed end to end</span>
+  </div>
+</div>
+</body></html>

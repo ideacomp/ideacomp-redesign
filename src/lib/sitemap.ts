@@ -177,9 +177,10 @@ export interface Solution {
 		name: string;
 		description: string;
 	}[];
-	/** Rendered through `<DuotoneImage>`, which greyscales and re-tints every
-	 *  photo into the signal-cyan family — so source colour does not matter,
-	 *  only subject and tonality. Self-hosted; see docs/photo-sources.md. */
+	/** A generated panel from `docs/diagrams/`, rendered through `<FramedImage>`
+	 *  in its own colour — the panel supplies the palette itself, nothing tints
+	 *  it. It shows this slot's three `features`; see docs/photo-sources.md
+	 *  before changing one. */
 	image: {
 		src: string;
 		alt: string;
@@ -214,8 +215,8 @@ export const solutionsData: Record<Locale, Solution[]> = {
 				},
 			],
 			image: {
-				src: "/ai-solution.png",
-				alt: "Node workflow canvas: operational data is validated, then forecast by a versioned model, with a human review step feeding the final decision",
+				src: "/solutions/ai-ml.png",
+				alt: "Forecasting panel: a demand curve of actual figures continues past a “now” marker as a dashed forecast inside an 80% confidence band, beside a ranked list of the drivers behind it and an automated reorder held open for human review",
 			},
 		},
 		{
@@ -244,8 +245,8 @@ export const solutionsData: Record<Locale, Solution[]> = {
 				},
 			],
 			image: {
-				src: "/cybersecurity-solution.jpg",
-				alt: "Security status panel listing networks as safe, virus free, and applications up to date",
+				src: "/solutions/cybersecurity.png",
+				alt: "Security console: traffic passes from the internet through a firewall of 412 deny-by-default rules into a DMZ and then a segmented internal network, beside assessment findings ranked by impact and an incident runbook running from detect to recover",
 			},
 		},
 		{
@@ -274,8 +275,8 @@ export const solutionsData: Record<Locale, Solution[]> = {
 				},
 			],
 			image: {
-				src: "/web-solutions.jpg",
-				alt: "Browser developer tools showing a page’s HTML structure alongside its applied styles",
+				src: "/solutions/web-development.png",
+				alt: "The same interface laid out at desktop, tablet and phone widths — three columns collapsing to one, with an “offline ready” badge on the phone — above the versioned API endpoints and response times that serve all three",
 			},
 		},
 		{
@@ -304,8 +305,8 @@ export const solutionsData: Record<Locale, Solution[]> = {
 				},
 			],
 			image: {
-				src: "/outsourcing-solution.jpg",
-				alt: "Code review of a component, with changed lines marked in the editor gutter",
+				src: "/solutions/outsourcing.png",
+				alt: "Operations board in three columns: a helpdesk column with 18 open tickets and their time to SLA breach, a network column showing 99.98% link availability across four connected sites, and a server column tracking 126 managed hosts, patch state and verified backups",
 			},
 		},
 		{
@@ -334,8 +335,8 @@ export const solutionsData: Record<Locale, Solution[]> = {
 				},
 			],
 			image: {
-				src: "/mobile-solution.jpg",
-				alt: "Two phones side by side, each showing a different application interface",
+				src: "/solutions/mobile-development.png",
+				alt: "One shared codebase branching into two handsets, iOS and Android, both running the same work-order screen with three items queued offline, beside a note that camera, Bluetooth and background sync run natively",
 			},
 		},
 		{
@@ -364,8 +365,8 @@ export const solutionsData: Record<Locale, Solution[]> = {
 				},
 			],
 			image: {
-				src: "/cloud-solution.jpg",
-				alt: "Terminal output streaming package installation and provisioning steps for a server",
+				src: "/solutions/cloud-devops.png",
+				alt: "Deployment pipeline running commit, build, test, stage and production, with the test stage held open as a gate that must pass, above six healthy container replicas and infrastructure declared in code across dev, stage and production",
 			},
 		},
 	],
@@ -396,8 +397,8 @@ export const solutionsData: Record<Locale, Solution[]> = {
 				},
 			],
 			image: {
-				src: "/ai-solution.png",
-				alt: "Workflow canvas s uzly: provozní data se validují, verzovaný model z nich vytvoří predikci a krok lidské kontroly vstupuje do výsledného rozhodnutí",
+				src: "/solutions/ai-ml.png",
+				alt: "Predikční panel: křivka skutečné poptávky pokračuje za značkou „now“ čárkovanou předpovědí uvnitř 80% intervalu spolehlivosti, vedle seřazeného seznamu faktorů, které ji ovlivňují, a automaticky navýšené objednávky pozdržené k lidské kontrole",
 			},
 		},
 		{
@@ -426,8 +427,8 @@ export const solutionsData: Record<Locale, Solution[]> = {
 				},
 			],
 			image: {
-				src: "/cybersecurity-solution.jpg",
-				alt: "Panel stavu zabezpečení s výpisem, že sítě jsou v pořádku, systém bez virů a aplikace aktuální",
+				src: "/solutions/cybersecurity.png",
+				alt: "Bezpečnostní konzole: provoz prochází z internetu firewallem se 412 pravidly v režimu deny-by-default do DMZ a dál do segmentované vnitřní sítě, vedle nálezů z auditu seřazených podle dopadu a runbooku incidentu od detekce po obnovu",
 			},
 		},
 		{
@@ -456,8 +457,8 @@ export const solutionsData: Record<Locale, Solution[]> = {
 				},
 			],
 			image: {
-				src: "/web-solutions.jpg",
-				alt: "Vývojářské nástroje prohlížeče s HTML strukturou stránky a přiřazenými styly",
+				src: "/solutions/web-development.png",
+				alt: "Totéž rozhraní vysázené v šířce desktopu, tabletu a telefonu — tři sloupce se skládají do jednoho a na telefonu svítí odznak „offline ready“ — nad verzovanými API endpointy a dobami odezvy, které obsluhují všechny tři",
 			},
 		},
 		{
@@ -486,8 +487,8 @@ export const solutionsData: Record<Locale, Solution[]> = {
 				},
 			],
 			image: {
-				src: "/outsourcing-solution.jpg",
-				alt: "Code review komponenty s vyznačenými změněnými řádky v okraji editoru",
+				src: "/solutions/outsourcing.png",
+				alt: "Provozní nástěnka ve třech sloupcích: helpdesk s 18 otevřenými tickety a časem do porušení SLA, síť s 99,98% dostupností linek napříč čtyřmi propojenými lokalitami a servery se 126 spravovanými hosty, stavem záplat a ověřenými zálohami",
 			},
 		},
 		{
@@ -516,8 +517,8 @@ export const solutionsData: Record<Locale, Solution[]> = {
 				},
 			],
 			image: {
-				src: "/mobile-solution.jpg",
-				alt: "Dva telefony vedle sebe, každý se zobrazeným rozhraním jiné aplikace",
+				src: "/solutions/mobile-development.png",
+				alt: "Jedna sdílená kódová základna se větví do dvou telefonů, iOS a Androidu, na obou běží tatáž obrazovka pracovního příkazu se třemi položkami ve frontě offline, vedle poznámky, že fotoaparát, Bluetooth a synchronizace na pozadí běží nativně",
 			},
 		},
 		{
@@ -546,8 +547,8 @@ export const solutionsData: Record<Locale, Solution[]> = {
 				},
 			],
 			image: {
-				src: "/cloud-solution.jpg",
-				alt: "Výstup terminálu s průběhem instalace balíčků a provisioningu serveru",
+				src: "/solutions/cloud-devops.png",
+				alt: "Nasazovací pipeline s kroky commit, build, test, stage a produkce, kde je testovací krok bránou, kterou je nutné projít, nad šesti běžícími replikami kontejnerů a infrastrukturou popsanou kódem pro dev, stage i produkci",
 			},
 		},
 	],
