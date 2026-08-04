@@ -7,8 +7,15 @@ const Grainient = dynamic(() => import("@/components/grainient"), { ssr: false }
 
 /**
  * Instrument-canvas hero backdrop: a slow-drifting grainy gradient in the
- * brand's signal-cyan against the graphite background, textured with film
- * grain rather than a flat swirl.
+ * brand's signal-cyan against the graphite background, textured with film grain
+ * rather than a flat swirl, fading into the section below.
+ *
+ * This is the whole backdrop, and deliberately so. Two additions were tried here
+ * and both were removed on request: a photographic focal object composited with
+ * `mix-blend-screen` (a fanned burst of lit optical fibres on black,
+ * `photo-1597733336794-12d05021d510`), and a set of drifting outline polygons on
+ * pointer parallax. The shader plus the typed headline carry the hero alone —
+ * don't reintroduce either without being asked.
  */
 const HeroBackdrop = () => {
 	return (

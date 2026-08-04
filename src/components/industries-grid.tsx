@@ -1,20 +1,34 @@
 import { industries } from "@/lib/sitemap";
+import AccentHeading from "@/components/accent-heading";
+import SectionWatermark from "@/components/section-watermark";
 import { Reveal } from "@/components/reveal";
 import { useLocale } from "@/lib/i18n/locale-context";
 
-export function IndustriesGrid({ title, subtitle }: { title: string; subtitle: string }) {
+export function IndustriesGrid({
+	title,
+	subtitle,
+	/** Trailing words of the heading, rendered in signal. */
+	accent,
+	/** Oversized background word. Omitted on pages that already have one nearby. */
+	watermark,
+}: {
+	title: string;
+	subtitle: string;
+	accent?: string;
+	watermark?: string;
+}) {
 	const { locale } = useLocale();
 	return (
-		<section className="px-4 py-24 sm:px-6 lg:px-8" aria-labelledby="industries-heading">
-			<div className="mx-auto max-w-6xl">
+		<section
+			className="relative overflow-hidden px-4 py-24 sm:px-6 lg:px-8"
+			aria-labelledby="industries-heading"
+		>
+			{watermark ? <SectionWatermark word={watermark} /> : null}
+
+			<div className="relative mx-auto max-w-6xl">
 				<Reveal className="max-w-2xl">
-					<h2
-						id="industries-heading"
-						className="font-display text-4xl font-semibold tracking-[-0.02em] text-foreground sm:text-5xl"
-					>
-						{title}
-					</h2>
-					<p className="mt-4 text-lg leading-relaxed text-muted-foreground">{subtitle}</p>
+					<AccentHeading id="industries-heading" title={title} accent={accent} rule />
+					<p className="mt-8 text-lg leading-relaxed text-muted-foreground">{subtitle}</p>
 				</Reveal>
 
 				<div

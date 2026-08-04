@@ -3,20 +3,10 @@ import type { NextConfig } from "next";
 const nextConfig: NextConfig = {
     // Image optimization for better performance and SEO
     images: {
-        remotePatterns: [
-            {
-                protocol: "https",
-                hostname: "images.unsplash.com",
-                port: "",
-                pathname: "/**",
-            },
-            {
-                protocol: "https",
-                hostname: "media.giphy.com",
-                port: "",
-                pathname: "/media/**",
-            },
-        ],
+        // Every image is self-hosted from `public/` — see docs/photo-sources.md.
+        // No remote hosts are allowed on purpose: it keeps the CSP img-src tight
+        // and means a third-party CDN can never become a render dependency.
+        remotePatterns: [],
         formats: ["image/avif", "image/webp"],
         deviceSizes: [640, 750, 828, 1080, 1200, 1920, 2048, 3840],
         imageSizes: [16, 32, 48, 64, 96, 128, 256, 384],

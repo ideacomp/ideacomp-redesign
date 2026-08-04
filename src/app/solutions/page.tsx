@@ -1,11 +1,11 @@
 "use client";
 
-import Image from "next/image";
 import { CheckCircle } from "lucide-react";
 import { solutionsData, content } from "@/lib/sitemap";
 import Header from "@/components/header";
 import Footer from "@/components/footer";
 import HeroBackdrop from "@/components/hero";
+import DuotoneImage from "@/components/duotone-image";
 import { Reveal } from "@/components/reveal";
 import { IndustriesGrid } from "@/components/industries-grid";
 import { CtaSection } from "@/components/cta-section";
@@ -64,16 +64,16 @@ const Solutions = () => {
 					>
 						<div className="mx-auto grid max-w-6xl items-center gap-12 lg:grid-cols-2">
 							<Reveal className={reversed ? "lg:order-2" : undefined}>
-								<div className="group relative isolate aspect-[3/2] overflow-hidden rounded-lg border border-border transition-colors motion-safe:duration-300 hover:border-signal/40">
-									<Image
-										src={solution.image.src}
-										alt={solution.image.alt}
-										fill
-										sizes="(min-width: 1024px) 50vw, 100vw"
-										className="object-cover grayscale-[0.25] contrast-110 transition-transform motion-safe:duration-500 motion-safe:group-hover:scale-105"
-									/>
-									<div className="absolute inset-0 bg-signal/20 mix-blend-color" aria-hidden="true" />
-								</div>
+								<DuotoneImage
+									src={solution.image.src}
+									alt={solution.image.alt}
+									// The grid caps at max-w-6xl (1152px) with gap-12, so a
+									// column never exceeds 552px — a plain 50vw would fetch
+									// the 1080w candidate for it on a wide viewport.
+									sizes="(min-width: 1152px) 552px, (min-width: 1024px) 50vw, 100vw"
+									priority={index === 0}
+									className="aspect-[3/2]"
+								/>
 							</Reveal>
 
 							<Reveal className={(reversed ? "lg:order-1 " : "") + "group"}>

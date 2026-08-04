@@ -9,11 +9,14 @@ import { useLocale } from "@/lib/i18n/locale-context";
 export function CtaSection({
 	title,
 	subtitle,
+	accent,
 	ctaText,
 	ctaHref,
 }: {
 	title: string;
 	subtitle: string;
+	/** Trailing words of the heading, rendered in signal. */
+	accent?: string;
 	/** Defaults to the localized "Get in Touch" string when omitted. */
 	ctaText?: string;
 	ctaHref: string;
@@ -25,6 +28,7 @@ export function CtaSection({
 			<Reveal className="mx-auto max-w-3xl text-center">
 				<h2 id="cta-heading" className="font-display text-4xl font-semibold tracking-[-0.02em] text-foreground sm:text-5xl">
 					{title}
+					{accent ? <span className="text-signal">{` ${accent}`}</span> : null}
 				</h2>
 				<p className="mx-auto mt-4 max-w-xl text-lg leading-relaxed text-foreground/70">{subtitle}</p>
 				<div className="mt-10 flex justify-center">

@@ -167,17 +167,8 @@ export const processSteps: Record<Locale, ProcessStep[]> = {
 };
 
 // Solutions data (the required "Our Solutions" content)
-export type DiagramKind =
-	| "ai-ml"
-	| "cybersecurity"
-	| "web-dev"
-	| "outsourcing"
-	| "mobile"
-	| "cloud-devops";
-
 export interface Solution {
 	slug: string;
-	diagram: DiagramKind;
 	icon: ComponentType<{ className?: string; size?: number }>;
 	title: string;
 	description: string;
@@ -186,7 +177,9 @@ export interface Solution {
 		name: string;
 		description: string;
 	}[];
-	/** Background photo behind the schematic diagram card. Free-license Unsplash photos, verified to resolve. */
+	/** Rendered through `<DuotoneImage>`, which greyscales and re-tints every
+	 *  photo into the signal-cyan family — so source colour does not matter,
+	 *  only subject and tonality. Self-hosted; see docs/photo-sources.md. */
 	image: {
 		src: string;
 		alt: string;
@@ -197,7 +190,6 @@ export const solutionsData: Record<Locale, Solution[]> = {
 	en: [
 		{
 			slug: "ai-ml",
-			diagram: "ai-ml",
 			icon: Brain,
 			title: "AI & Machine Learning",
 			description:
@@ -222,13 +214,12 @@ export const solutionsData: Record<Locale, Solution[]> = {
 				},
 			],
 			image: {
-				src: "/ai-solution.jpg",
-				alt: "Illustration of an automation workflow connecting a form trigger, data filter, CRM update, and notification steps",
+				src: "/ai-solution.png",
+				alt: "Node workflow canvas: operational data is validated, then forecast by a versioned model, with a human review step feeding the final decision",
 			},
 		},
 		{
 			slug: "cybersecurity",
-			diagram: "cybersecurity",
 			icon: Shield,
 			title: "Cybersecurity",
 			description:
@@ -254,12 +245,11 @@ export const solutionsData: Record<Locale, Solution[]> = {
 			],
 			image: {
 				src: "/cybersecurity-solution.jpg",
-				alt: "Illustration of a security operations dashboard showing alert counts and a recent security events log",
+				alt: "Security status panel listing networks as safe, virus free, and applications up to date",
 			},
 		},
 		{
 			slug: "web-development",
-			diagram: "web-dev",
 			icon: Code,
 			title: "Custom Web Development",
 			description:
@@ -285,12 +275,11 @@ export const solutionsData: Record<Locale, Solution[]> = {
 			],
 			image: {
 				src: "/web-solutions.jpg",
-				alt: "Illustration of a responsive marketing website displayed across desktop, tablet, and mobile screens",
+				alt: "Browser developer tools showing a page’s HTML structure alongside its applied styles",
 			},
 		},
 		{
 			slug: "outsourcing",
-			diagram: "outsourcing",
 			icon: Braces,
 			title: "Outsourcing & Team Augmentation",
 			description:
@@ -316,12 +305,11 @@ export const solutionsData: Record<Locale, Solution[]> = {
 			],
 			image: {
 				src: "/outsourcing-solution.jpg",
-				alt: "Illustration of a support ticket queue alongside a ticket detail and resolution panel",
+				alt: "Code review of a component, with changed lines marked in the editor gutter",
 			},
 		},
 		{
 			slug: "mobile-development",
-			diagram: "mobile",
 			icon: Smartphone,
 			title: "Mobile App Development",
 			description:
@@ -347,12 +335,11 @@ export const solutionsData: Record<Locale, Solution[]> = {
 			],
 			image: {
 				src: "/mobile-solution.jpg",
-				alt: "Illustration of a mobile app design tool showing two connected phone screen mockups",
+				alt: "Two phones side by side, each showing a different application interface",
 			},
 		},
 		{
 			slug: "cloud-devops",
-			diagram: "cloud-devops",
 			icon: Cloud,
 			title: "Cloud & DevOps",
 			description:
@@ -378,14 +365,13 @@ export const solutionsData: Record<Locale, Solution[]> = {
 			],
 			image: {
 				src: "/cloud-solution.jpg",
-				alt: "Illustration of a cloud infrastructure dashboard showing server, database, storage, and cost panels",
+				alt: "Terminal output streaming package installation and provisioning steps for a server",
 			},
 		},
 	],
 	cs: [
 		{
 			slug: "ai-ml",
-			diagram: "ai-ml",
 			icon: Brain,
 			title: "AI a strojové učení",
 			description:
@@ -410,13 +396,12 @@ export const solutionsData: Record<Locale, Solution[]> = {
 				},
 			],
 			image: {
-				src: "/ai-solution.jpg",
-				alt: "Ilustrace automatizovaného workflow propojujícího spuštění formuláře, filtr dat, aktualizaci CRM a odeslání notifikace",
+				src: "/ai-solution.png",
+				alt: "Workflow canvas s uzly: provozní data se validují, verzovaný model z nich vytvoří predikci a krok lidské kontroly vstupuje do výsledného rozhodnutí",
 			},
 		},
 		{
 			slug: "cybersecurity",
-			diagram: "cybersecurity",
 			icon: Shield,
 			title: "Kybernetická bezpečnost",
 			description:
@@ -442,12 +427,11 @@ export const solutionsData: Record<Locale, Solution[]> = {
 			],
 			image: {
 				src: "/cybersecurity-solution.jpg",
-				alt: "Ilustrace dashboardu bezpečnostního dohledu se zobrazením počtu upozornění a logu nedávných bezpečnostních událostí",
+				alt: "Panel stavu zabezpečení s výpisem, že sítě jsou v pořádku, systém bez virů a aplikace aktuální",
 			},
 		},
 		{
 			slug: "web-development",
-			diagram: "web-dev",
 			icon: Code,
 			title: "Vývoj webových aplikací na míru",
 			description:
@@ -473,12 +457,11 @@ export const solutionsData: Record<Locale, Solution[]> = {
 			],
 			image: {
 				src: "/web-solutions.jpg",
-				alt: "Ilustrace responzivního marketingového webu zobrazeného na desktopu, tabletu a mobilu",
+				alt: "Vývojářské nástroje prohlížeče s HTML strukturou stránky a přiřazenými styly",
 			},
 		},
 		{
 			slug: "outsourcing",
-			diagram: "outsourcing",
 			icon: Braces,
 			title: "Outsourcing a rozšíření týmu",
 			description:
@@ -504,12 +487,11 @@ export const solutionsData: Record<Locale, Solution[]> = {
 			],
 			image: {
 				src: "/outsourcing-solution.jpg",
-				alt: "Ilustrace fronty podpůrných tiketů spolu s panelem detailu a řešení tiketu",
+				alt: "Code review komponenty s vyznačenými změněnými řádky v okraji editoru",
 			},
 		},
 		{
 			slug: "mobile-development",
-			diagram: "mobile",
 			icon: Smartphone,
 			title: "Vývoj mobilních aplikací",
 			description:
@@ -535,12 +517,11 @@ export const solutionsData: Record<Locale, Solution[]> = {
 			],
 			image: {
 				src: "/mobile-solution.jpg",
-				alt: "Ilustrace nástroje pro návrh mobilní aplikace se dvěma propojenými maketami obrazovek telefonu",
+				alt: "Dva telefony vedle sebe, každý se zobrazeným rozhraním jiné aplikace",
 			},
 		},
 		{
 			slug: "cloud-devops",
-			diagram: "cloud-devops",
 			icon: Cloud,
 			title: "Cloud a DevOps",
 			description:
@@ -566,7 +547,7 @@ export const solutionsData: Record<Locale, Solution[]> = {
 			],
 			image: {
 				src: "/cloud-solution.jpg",
-				alt: "Ilustrace dashboardu cloudové infrastruktury se zobrazením serverů, databáze, úložiště a nákladových panelů",
+				alt: "Výstup terminálu s průběhem instalace balíčků a provisioningu serveru",
 			},
 		},
 	],
@@ -847,18 +828,47 @@ export const socialLinks: SocialLink[] = [
 	// { name: "LinkedIn", href: "https://linkedin.com/company/ideacomp", icon: Linkedin },
 ];
 
+/**
+ * Headings are split into `title` + `accent` because the accent colour falls on
+ * the trailing words, and which words those are differs per language — it can't
+ * be derived by slicing the string.
+ */
+interface AccentTitle {
+	title: string;
+	accent?: string;
+}
+
 export const content: Record<Locale, {
 	hero: {
+		/** Whole headline as one string. Still the source of truth for the
+		 *  reduced-motion branch, so it must always read as the full title. */
 		title: string;
+		/** Smaller, lighter first line of the two-line headline stack. */
+		titleLead: string;
+		/** Oversized second line. This is the part the typewriter types. */
+		titleMain: string;
+		/** Short mono line above the headline, paired with a signal hairline. */
+		tagline: string;
 		subtitle: string;
+		/** Hairline datasheet row under the buttons. Real facts only. */
+		specs: { label: string; value: string }[];
 		ctaPrimary: { href: string };
 		ctaSecondary: { href: string };
 	};
 	home: {
-		capabilities: { title: string; subtitle: string };
-		process: { title: string; subtitle: string };
-		industries: { title: string; subtitle: string };
-		finalCta: { title: string; subtitle: string; cta: { href: string } };
+		capabilities: AccentTitle & { subtitle: string; watermark: string };
+		focus: AccentTitle & {
+			body: string;
+			bodyStrong: string;
+			watermark: string;
+			cta: { href: string };
+			/** Names the carousel for assistive tech. */
+			slidesLabel: string;
+			slides: { src: string; alt: string; caption: string }[];
+		};
+		process: AccentTitle & { subtitle: string; watermark: string };
+		industries: AccentTitle & { subtitle: string; watermark: string };
+		finalCta: AccentTitle & { subtitle: string; cta: { href: string } };
 	};
 	solutions: {
 		hero: { title: string; subtitle: string };
@@ -882,8 +892,16 @@ export const content: Record<Locale, {
 	en: {
 		hero: {
 			title: "Driven by Ideas",
+			titleLead: "Driven by",
+			titleMain: "Ideas",
+			tagline: "Custom software engineering — Czech Republic",
 			subtitle:
 				"We engineer software, AI, and infrastructure for organizations that can't afford to gamble on a vendor — across healthcare, government, manufacturing, education, media, and non-profit work.",
+			specs: [
+				{ label: "Based in", value: "Czech Republic" },
+				{ label: "Founded", value: "2024" },
+				{ label: "Disciplines", value: "Six" },
+			],
 			ctaPrimary: {
 				href: "/solutions",
 			},
@@ -893,22 +911,61 @@ export const content: Record<Locale, {
 		},
 		home: {
 			capabilities: {
-				title: "Where We Build",
+				title: "Where We",
+				accent: "Build",
 				subtitle:
 					"Three disciplines, one delivery standard.",
+				watermark: "Disciplines",
+			},
+			focus: {
+				title: "Engineered to Hold",
+				accent: "Weight",
+				body: "Most software fails long after the launch demo — when the data grows, the regulation changes, or the person who wrote it leaves. We build for that part. Architecture is documented before it is written, security review runs on every release rather than once before launch, and the system is handed over in a state your own team can operate.",
+				bodyStrong:
+					"A small, senior team: the people who scope your project are the people who build it.",
+				watermark: "Method",
+				cta: { href: "/about" },
+				slidesLabel: "Ideacomp at GITEX Global, Dubai",
+				slides: [
+					{
+						src: "/gitex-dev-slam.jpg",
+						alt: "Ideacomp at GITEX Global in Dubai, in front of the Global Dev Slam stage backdrop showing source code",
+						caption: "Global Dev Slam · GITEX Global, Dubai",
+					},
+					{
+						src: "/gitex-main-stage.jpg",
+						alt: "The GITEX Global Dubai 2024 main stage entrance, flanked by tall illuminated columns",
+						caption: "Main stage · GITEX Global Dubai 2024",
+					},
+					{
+						src: "/gitex-entrance.jpg",
+						alt: "The approach to the GITEX Global venue in Dubai, lined with event flags",
+						caption: "Venue approach · Dubai World Trade Centre",
+					},
+					{
+						src: "/gitex-signage.jpg",
+						alt: "Ideacomp beside the GITEX Global Dubai 2024 signage outside the venue",
+						caption: "On site · GITEX Global Dubai 2024",
+					},
+				],
 			},
 			process: {
-				title: "How We Work",
+				title: "How We",
+				accent: "Work",
 				subtitle:
 					"A delivery process built for organizations that need to defend every decision to their own stakeholders.",
+				watermark: "Process",
 			},
 			industries: {
-				title: "Industries We Serve",
+				title: "Industries We",
+				accent: "Serve",
 				subtitle:
 					"Domain-specific constraints, not a generic playbook.",
+				watermark: "Sectors",
 			},
 			finalCta: {
-				title: "Ready to Build Something That Has to Work?",
+				title: "Ready to Build Something That Has to",
+				accent: "Work?",
 				subtitle:
 					"Tell us what you're building and what it has to hold up against. We'll tell you honestly whether we're the right team for it.",
 				cta: {
@@ -978,9 +1035,18 @@ export const content: Record<Locale, {
 	},
 	cs: {
 		hero: {
+			// The slogan is the brand mark and stays in English in both locales.
 			title: "Driven by Ideas",
+			titleLead: "Driven by",
+			titleMain: "Ideas",
+			tagline: "Vývoj softwaru na míru — Česká republika",
 			subtitle:
 				"Vyvíjíme software, AI a infrastrukturu pro organizace, které si nemohou dovolit hazardovat s dodavatelem — ve zdravotnictví, veřejné správě, výrobě, vzdělávání, médiích i neziskovém sektoru.",
+			specs: [
+				{ label: "Sídlo", value: "Česká republika" },
+				{ label: "Založeno", value: "2024" },
+				{ label: "Oblastí", value: "Šest" },
+			],
 			ctaPrimary: {
 				href: "/solutions",
 			},
@@ -990,22 +1056,61 @@ export const content: Record<Locale, {
 		},
 		home: {
 			capabilities: {
-				title: "Kde stavíme",
+				title: "Kde",
+				accent: "stavíme",
 				subtitle:
 					"Tři oblasti, jeden standard dodávky.",
+				watermark: "Oblasti",
+			},
+			focus: {
+				title: "Postavené, aby to",
+				accent: "uneslo zátěž",
+				body: "Většina softwaru se nerozpadne při spouštěcím demu, ale dlouho po něm — když naroste objem dat, změní se regulace nebo odejde člověk, který to napsal. Stavíme právě na tuhle část. Architekturu dokumentujeme dřív, než ji napíšeme, bezpečnostní kontrola probíhá u každého vydání místo jednou před spuštěním, a systém předáváme ve stavu, kdy ho zvládne provozovat váš vlastní tým.",
+				bodyStrong:
+					"Malý, seniorní tým: lidé, kteří projekt vymezují, jsou i těmi, kdo ho staví.",
+				watermark: "Metoda",
+				cta: { href: "/about" },
+				slidesLabel: "Ideacomp na GITEX Global v Dubaji",
+				slides: [
+					{
+						src: "/gitex-dev-slam.jpg",
+						alt: "Ideacomp na GITEX Global v Dubaji před scénou Global Dev Slam se zobrazeným zdrojovým kódem",
+						caption: "Global Dev Slam · GITEX Global, Dubaj",
+					},
+					{
+						src: "/gitex-main-stage.jpg",
+						alt: "Vstup na hlavní pódium GITEX Global Dubai 2024 mezi vysokými osvětlenými sloupy",
+						caption: "Hlavní pódium · GITEX Global Dubai 2024",
+					},
+					{
+						src: "/gitex-entrance.jpg",
+						alt: "Příchod k areálu GITEX Global v Dubaji podél vlajek akce",
+						caption: "Příchod k areálu · Dubai World Trade Centre",
+					},
+					{
+						src: "/gitex-signage.jpg",
+						alt: "Ideacomp u prostorového loga GITEX Global Dubai 2024 před areálem",
+						caption: "Na místě · GITEX Global Dubai 2024",
+					},
+				],
 			},
 			process: {
-				title: "Jak pracujeme",
+				title: "Jak",
+				accent: "pracujeme",
 				subtitle:
 					"Dodávkový proces navržený pro organizace, které musí každé rozhodnutí umět obhájit před vlastními zainteresovanými stranami.",
+				watermark: "Proces",
 			},
 			industries: {
-				title: "Odvětví, kterým sloužíme",
+				title: "Odvětví, kterým",
+				accent: "sloužíme",
 				subtitle:
 					"Omezení specifická pro daný obor, ne obecný playbook.",
+				watermark: "Odvětví",
 			},
 			finalCta: {
-				title: "Připraveni stavět něco, co musí fungovat?",
+				title: "Připraveni stavět něco, co musí",
+				accent: "fungovat?",
 				subtitle:
 					"Řekněte nám, co stavíte a čemu to musí odolat. Upřímně vám řekneme, jestli jsme na to ten správný tým.",
 				cta: {

@@ -25,6 +25,14 @@ export interface Dictionary {
 		closeMenu: string;
 		cookieConsentLabel: string;
 		jumpToSolutionLabel: string;
+		scrollToContent: string;
+		meetTheTeam: string;
+		carouselRoleDescription: string;
+		goToSlide: string;
+		previousSlide: string;
+		nextSlide: string;
+		pauseSlideshow: string;
+		playSlideshow: string;
 	};
 	contactInfo: {
 		address: string;
@@ -157,6 +165,14 @@ export const dictionaries: Record<Locale, Dictionary> = {
 			closeMenu: "Close navigation menu",
 			cookieConsentLabel: "Cookie consent",
 			jumpToSolutionLabel: "Jump to a solution",
+			scrollToContent: "Scroll to what we build",
+			meetTheTeam: "Meet the team",
+			carouselRoleDescription: "Photo carousel",
+			goToSlide: "Go to photo",
+			previousSlide: "Previous photo",
+			nextSlide: "Next photo",
+			pauseSlideshow: "Pause the photo carousel",
+			playSlideshow: "Resume the photo carousel",
 		},
 		contactInfo: {
 			address: "Prague, Czech Republic",
@@ -343,6 +359,14 @@ export const dictionaries: Record<Locale, Dictionary> = {
 			closeMenu: "Zavřít navigační menu",
 			cookieConsentLabel: "Souhlas s cookies",
 			jumpToSolutionLabel: "Přejít na řešení",
+			scrollToContent: "Přejít na to, co stavíme",
+			meetTheTeam: "Poznejte tým",
+			carouselRoleDescription: "Fotogalerie",
+			goToSlide: "Přejít na fotku",
+			previousSlide: "Předchozí fotka",
+			nextSlide: "Další fotka",
+			pauseSlideshow: "Pozastavit fotogalerii",
+			playSlideshow: "Spustit fotogalerii",
 		},
 		contactInfo: {
 			address: "Praha, Česká republika",

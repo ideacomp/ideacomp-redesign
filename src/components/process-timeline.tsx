@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { motion, useScroll, useReducedMotion } from "motion/react";
 import type { ProcessStep } from "@/lib/sitemap";
 
@@ -17,13 +17,20 @@ export function ProcessTimeline({ steps }: { steps: ProcessStep[] }) {
 		target: containerRef,
 		offset: ["start center", "end center"],
 	});
+	// `useReducedMotion` is null during SSR and resolves after hydration, so
+	// feeding it straight into `style` makes the server emit scaleY(0) where the
+	// client wants none. Read it only once mounted, and keep the static track
+	// (scaleY 1) as the value both renders agree on beforehand.
+	const [mounted, setMounted] = useState(false);
+	useEffect(() => setMounted(true), []);
+	const trackScale = mounted && !shouldReduceMotion ? scrollYProgress : 1;
 
 	return (
 		<div ref={containerRef} className="relative mt-16">
 			<div className="absolute left-0 top-0 h-full w-px bg-border" aria-hidden="true">
 				<motion.div
 					className="w-full origin-top bg-signal"
-					style={{ height: "100%", scaleY: shouldReduceMotion ? 1 : scrollYProgress }}
+					style={{ height: "100%", scaleY: trackScale }}
 				/>
 			</div>
 

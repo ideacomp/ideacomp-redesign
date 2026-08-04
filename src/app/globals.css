@@ -122,6 +122,7 @@
 	.dark .prose-ink {
 		line-height: 1.65;
 	}
+
 }
 
 @media (prefers-reduced-motion: reduce) {
