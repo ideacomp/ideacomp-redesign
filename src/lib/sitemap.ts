@@ -84,12 +84,12 @@ export const capabilities: Record<Locale, Capability[]> = {
 			icon: Brain,
 			title: "AI a strojové učení",
 			description:
-				"Provozní data proměníme v predikce, automatizaci a systémy pro podporu rozhodování, které váš tým dokáže prověřit a kterým může důvěřovat.",
+				"Provozní data proměníme v předpovědi, automatizaci a podporu rozhodování — v systémy, které si váš tým může sám ověřit, a proto jim může věřit.",
 			slug: "ai-ml",
 		},
 		{
 			icon: Code,
-			title: "Vývoj software na míru",
+			title: "Vývoj softwaru na míru",
 			description:
 				"Produkčně nasaditelné webové a mobilní aplikace navržené podle omezení vašeho oboru, ne podle obecné šablony.",
 			slug: "web-development",
@@ -98,7 +98,7 @@ export const capabilities: Record<Locale, Capability[]> = {
 			icon: Braces,
 			title: "Outsourcing a rozšíření týmu",
 			description:
-				"Inženýři, kteří se začlení do vašich stávajících procesů a workflow, aby se váš roadmap nezastavil.",
+				"Inženýři, kteří se zapojí do vašich stávajících procesů a nástrojů, aby se vývoj nezastavil.",
 			slug: "outsourcing",
 		},
 	],
@@ -143,19 +143,19 @@ export const processSteps: Record<Locale, ProcessStep[]> = {
 			step: "01",
 			title: "Analýza a architektura",
 			description:
-				"Nejprve zmapujeme vaše limity — compliance, integrace, škálování, stávající systémy — dřív, než napíšeme jediný řádek kódu.",
+				"Nejdřív zmapujeme vaše omezení — compliance, integrace, škálování, stávající systémy — a teprve pak napíšeme první řádek kódu.",
 		},
 		{
 			step: "02",
 			title: "Vývoj s otevřenými kartami",
 			description:
-				"Iterativní dodávky s funkčním software brzy a přímým přístupem k inženýrům, kteří ho stavějí — ne k account manažerovi předávajícímu informace z druhé ruky.",
+				"Iterativní dodávky: funkční software vidíte brzy a mluvíte přímo s inženýry, kteří ho vyvíjejí — ne s account manažerem, který informace jen předává dál.",
 		},
 		{
 			step: "03",
 			title: "Bezpečnost a kontrola kvality",
 			description:
-				"Code review, bezpečnostní testování a kontrola compliance jsou součástí každého release cyklu, ne dodatečně přišroubovaný krok na konci.",
+				"Code review, bezpečnostní testování a kontrola compliance patří ke každému vydání — nejsou to kroky přidané narychlo na konec.",
 		},
 		{
 			step: "04",
@@ -376,19 +376,19 @@ export const solutionsData: Record<Locale, Solution[]> = {
 			icon: Brain,
 			title: "AI a strojové učení",
 			description:
-				"Chytrá řešení, která proměňují komplexní a nepřehledná data v rozhodnutí, za kterými si váš tým může stát.",
+				"Chytrá řešení, která ze složitých a nepřehledných dat udělají rozhodnutí, za kterými si váš tým může stát.",
 			detailedDescription:
-				"Navrhujeme a nasazujeme systémy AI a strojového učení, které proměňují provozní data v predikce, automatizaci procesů a podporu rozhodování — vysvětlitelné a auditovatelné, ne černou skříňku přišroubovanou k vašemu stacku.",
+				"Navrhujeme a nasazujeme systémy AI a strojového učení, které proměňují provozní data v předpovědi, automatizaci procesů a podporu rozhodování — vysvětlitelné a auditovatelné, ne černou skříňku přilepenou na váš stávající systém.",
 			features: [
 				{
 					name: "Prediktivní analytika",
 					description:
-						"Predikční modely trénované na vašich vlastních provozních datech, navržené pro měřitelná obchodní rozhodnutí.",
+						"Predikční modely natrénované na vašich vlastních provozních datech, stavěné pro měřitelná obchodní rozhodnutí.",
 				},
 				{
 					name: "Analýza procesů",
 					description:
-						"Instrumentace a analytické pipeline, které odhalí, kde workflow skutečně ztrácí čas nebo peníze.",
+						"Měření a analytické pipeline, které odhalí, kde proces doopravdy ztrácí čas nebo peníze.",
 				},
 				{
 					name: "Automatizace procesů",
@@ -398,7 +398,7 @@ export const solutionsData: Record<Locale, Solution[]> = {
 			],
 			image: {
 				src: "/solutions/ai-ml.png",
-				alt: "Predikční panel: křivka skutečné poptávky pokračuje za značkou „now“ čárkovanou předpovědí uvnitř 80% intervalu spolehlivosti, vedle seřazeného seznamu faktorů, které ji ovlivňují, a automaticky navýšené objednávky pozdržené k lidské kontrole",
+				alt: "Predikční panel: křivka skutečné poptávky pokračuje za značkou „now“ čárkovanou předpovědí uvnitř 80% intervalu spolehlivosti, vedle seřazeného seznamu faktorů, které ji ovlivňují, a automatické doobjednávky pozdržené ke schválení člověkem",
 			},
 		},
 		{
@@ -406,29 +406,29 @@ export const solutionsData: Record<Locale, Solution[]> = {
 			icon: Shield,
 			title: "Kybernetická bezpečnost",
 			description:
-				"Ochrana vašich systémů a dat s bezpečností zabudovanou do dodávky, ne auditovanou dodatečně.",
+				"Ochrana vašich systémů a dat. Bezpečnost je součástí vývoje, ne až dodatečného auditu.",
 			detailedDescription:
-				"Navrhujeme, nasazujeme a spravujeme bezpečnostní programy, které chrání vaši infrastrukturu a data, udržují vás připravené na audit a obstojí pod regulatorním dohledem ve zdravotnictví, státní správě i podnikovém prostředí.",
+				"Navrhujeme, nasazujeme a spravujeme bezpečnostní opatření, která chrání vaši infrastrukturu i data, drží vás připravené na audit a obstojí i při kontrole regulátora — ve zdravotnictví, ve státní správě i ve velkých firmách.",
 			features: [
 				{
 					name: "Firewall a síťový perimetr",
 					description:
-						"Nasazení Sophos, Fortinet a Palo Alto nakonfigurovaná a spravovaná podle vašeho skutečného síťového provozu, ne podle výchozích nastavení.",
+						"Řešení Sophos, Fortinet a Palo Alto nastavená a spravovaná podle vašeho skutečného síťového provozu, ne podle výchozích hodnot.",
 				},
 				{
 					name: "Bezpečnostní audity",
 					description:
-						"Audity zabezpečení sítě a aplikací, které identifikují reálná rizika a určí priority oprav podle dopadu.",
+						"Audity zabezpečení sítě a aplikací, které odhalí reálná rizika a seřadí opravy podle dopadu.",
 				},
 				{
 					name: "Reakce na incidenty",
 					description:
-						"Plány reakce a postupy připravené předem, aby zvládnutí incidentu byl postup podle plánu, ne panika.",
+						"Plány reakce a postupy připravené dřív, než incident nastane — aby se pak postupovalo podle plánu, ne v panice.",
 				},
 			],
 			image: {
 				src: "/solutions/cybersecurity.png",
-				alt: "Bezpečnostní konzole: provoz prochází z internetu firewallem se 412 pravidly v režimu deny-by-default do DMZ a dál do segmentované vnitřní sítě, vedle nálezů z auditu seřazených podle dopadu a runbooku incidentu od detekce po obnovu",
+				alt: "Bezpečnostní konzole: provoz prochází z internetu firewallem se 412 pravidly v režimu deny-by-default do DMZ a dál do segmentované vnitřní sítě, vedle nálezů z auditu seřazených podle dopadu a postupu pro řešení incidentu od detekce po obnovu",
 			},
 		},
 		{
@@ -436,19 +436,19 @@ export const solutionsData: Record<Locale, Solution[]> = {
 			icon: Code,
 			title: "Vývoj webových aplikací na míru",
 			description:
-				"Vývoj webových řešení v celém cyklu, od architektury přes nasazení až po údržbu.",
+				"Vývoj webových aplikací v celém cyklu — od architektury přes nasazení až po údržbu.",
 			detailedDescription:
 				"Stavíme moderní, škálovatelné webové aplikace od začátku do konce — architekturu, frontend, backend i infrastrukturu, na které běží — s technologiemi, které odpovídají vašim požadavkům, ne těmi, které jsou zrovna v módě.",
 			features: [
 				{
 					name: "Frontend vývoj",
 					description:
-						"Rozhraní v React a Next.js navržená s ohledem na přístupnost a výkon, ne jen na pixelovou přesnost návrhu.",
+						"Rozhraní v Reactu a Next.js navržená s ohledem na přístupnost a výkon, ne jen na pixelovou přesnost návrhu.",
 				},
 				{
 					name: "Backend a API architektura",
 					description:
-						"Backendy v Node.js, Pythonu a Go s API kontrakty navrženými tak, aby přežily i první integraci, která je používá.",
+						"Backendy v Node.js, Pythonu a Go s API kontrakty navrženými tak, aby vydržely déle než první integrace, která je použije.",
 				},
 				{
 					name: "Responzivní a progresivní webové aplikace",
@@ -458,7 +458,7 @@ export const solutionsData: Record<Locale, Solution[]> = {
 			],
 			image: {
 				src: "/solutions/web-development.png",
-				alt: "Totéž rozhraní vysázené v šířce desktopu, tabletu a telefonu — tři sloupce se skládají do jednoho a na telefonu svítí odznak „offline ready“ — nad verzovanými API endpointy a dobami odezvy, které obsluhují všechny tři",
+				alt: "Totéž rozhraní v šířce desktopu, tabletu a telefonu — tři sloupce se skládají do jednoho a na telefonu svítí štítek „offline ready“ — nad verzovanými API endpointy a dobami odezvy, které obsluhují všechna tři zařízení",
 			},
 		},
 		{
@@ -466,29 +466,29 @@ export const solutionsData: Record<Locale, Solution[]> = {
 			icon: Braces,
 			title: "Outsourcing a rozšíření týmu",
 			description:
-				"Přístup ke zkušeným inženýrům, kteří se zapojí do vašeho stávajícího workflow.",
+				"Zkušení inženýři, kteří se zapojí do vašeho zavedeného způsobu práce.",
 			detailedDescription:
-				"Rozšiřte svou dodávkovou kapacitu o inženýry, kteří se integrují do vašich stávajících nástrojů, standardů a tempa práce — reportují do vašeho procesu, ne že by vedli paralelní.",
+				"Rozšiřte svou vývojovou kapacitu o inženýry, kteří se přizpůsobí vašim nástrojům, standardům i tempu práce — zapojí se do vašeho procesu, místo aby vedli vlastní paralelní.",
 			features: [
 				{
 					name: "Helpdesk a podpora koncových uživatelů",
 					description:
-						"Pohotová podpora první a druhé úrovně, díky které se vaše interní týmy nikdy nezaseknou.",
+						"Pohotová podpora první a druhé úrovně, díky které se vaše interní týmy nezaseknou.",
 				},
 				{
 					name: "Správa sítě",
 					description:
-						"Průběžný monitoring a správa vaší síťové infrastruktury, včetně nástrojů postavených na ManageEngine.",
+						"Průběžný dohled a správa vaší síťové infrastruktury, včetně nástrojů postavených na ManageEngine.",
 				},
 				{
 					name: "Správa serverů",
 					description:
-						"Proaktivní údržba a monitoring, díky kterým se problémy infrastruktury odhalí dřív, než se stanou výpadkem.",
+						"Preventivní údržba a dohled, díky kterým se problémy v infrastruktuře odhalí dřív, než z nich bude výpadek.",
 				},
 			],
 			image: {
 				src: "/solutions/outsourcing.png",
-				alt: "Provozní nástěnka ve třech sloupcích: helpdesk s 18 otevřenými tickety a časem do porušení SLA, síť s 99,98% dostupností linek napříč čtyřmi propojenými lokalitami a servery se 126 spravovanými hosty, stavem záplat a ověřenými zálohami",
+				alt: "Provozní nástěnka ve třech sloupcích: helpdesk s 18 otevřenými tickety a časem do porušení SLA, síť s 99,98% dostupností linek ve čtyřech propojených lokalitách a servery se 126 spravovanými stroji, stavem záplat a ověřenými zálohami",
 			},
 		},
 		{
@@ -496,9 +496,9 @@ export const solutionsData: Record<Locale, Solution[]> = {
 			icon: Smartphone,
 			title: "Vývoj mobilních aplikací",
 			description:
-				"Nativní i cross-platform aplikace navržené pro reálné použití, ne jen na ukázku.",
+				"Nativní i multiplatformní aplikace stavěné pro reálný provoz, ne jen na ukázku.",
 			detailedDescription:
-				"Stavíme výkonné mobilní aplikace pro iOS a Android a pro každý projekt volíme nativní nebo cross-platform přístup podle výkonu, rozpočtu a dosahu — ne podle univerzálního výchozího řešení.",
+				"Vyvíjíme výkonné mobilní aplikace pro iOS a Android. U každého projektu volíme mezi nativním a multiplatformním přístupem podle výkonu, rozpočtu a dosahu — ne podle jednoho univerzálního receptu.",
 			features: [
 				{
 					name: "Nativní vývoj",
@@ -506,14 +506,14 @@ export const solutionsData: Record<Locale, Solution[]> = {
 						"iOS a Android postavené nativně tam, kde to výkon nebo integrace s platformou skutečně vyžadují.",
 				},
 				{
-					name: "Cross-platform aplikace",
+					name: "Multiplatformní aplikace",
 					description:
-						"React Native a Flutter pro efektivní dodávku napříč platformami bez zdvojování vývojářského úsilí.",
+						"React Native a Flutter pro efektivní vývoj napříč platformami bez zdvojené práce.",
 				},
 				{
-					name: "Funkčnost offline-first",
+					name: "Provoz i bez připojení",
 					description:
-						"Práce s daty založená primárně na lokálním úložišti, aby aplikace zůstala použitelná v terénu, ve sklepě nemocnice nebo na hale továrny.",
+						"Data se drží primárně v zařízení, aby aplikace fungovala i v terénu, v suterénu nemocnice nebo ve výrobní hale.",
 				},
 			],
 			image: {
@@ -528,22 +528,22 @@ export const solutionsData: Record<Locale, Solution[]> = {
 			description:
 				"Infrastruktura a automatizace pro systémy, které musí zůstat v provozu.",
 			detailedDescription:
-				"Navrhujeme a provozujeme cloudovou infrastrukturu a dodávkové pipeline tak, aby se vaše aplikace předvídatelně škálovaly, automaticky zotavovaly z výpadků a nasazovaly bez dramat.",
+				"Navrhujeme a provozujeme cloudovou infrastrukturu i nasazovací pipeline tak, aby se vaše aplikace předvídatelně škálovaly, samy se zotavily z výpadku a jejich nasazení proběhlo bez dramat.",
 			features: [
 				{
 					name: "Cloudová infrastruktura",
 					description:
-						"Prostředí AWS, Azure a Google Cloud definovaná jako kód a dimenzovaná podle vaší skutečné zátěže.",
+						"Prostředí AWS, Azure a Google Cloud popsaná kódem a dimenzovaná podle vaší skutečné zátěže.",
 				},
 				{
 					name: "Kontejnerizace",
 					description:
-						"Orchestrace pomocí Dockeru a Kubernetes pro zátěže, které potřebují horizontální škálování a automatické zotavení.",
+						"Orchestrace v Dockeru a Kubernetes pro zátěže, které potřebují horizontální škálování a automatické zotavení.",
 				},
 				{
-					name: "CI/CD automatizace",
+					name: "Automatizace CI/CD",
 					description:
-						"Nasazovací pipeline s automatizovanými testovacími branami, díky kterým není nasazení v pátek riziko.",
+						"Nasazovací pipeline s automatickými testovacími branami, díky kterým není nasazení v pátek riziko.",
 				},
 			],
 			image: {
@@ -603,7 +603,7 @@ export const industries: Record<Locale, Industry[]> = {
 		{
 			name: "Vzdělávání",
 			icon: GraduationCap,
-			description: "Platformy, které obstojí při semestrálních špičkách provozu a dlouhých zadávacích cyklech.",
+			description: "Platformy, které ustojí nápor na začátku semestru i dlouhá výběrová řízení.",
 		},
 		{
 			name: "Výroba",
@@ -613,12 +613,12 @@ export const industries: Record<Locale, Industry[]> = {
 		{
 			name: "Veřejná správa",
 			icon: Landmark,
-			description: "Auditovatelná dodávka postavená na compliance, odpovídající standardům odpovědnosti ve veřejném sektoru.",
+			description: "Dohledatelná dodávka s důrazem na compliance, odpovídající nárokům na odpovědnost ve veřejné správě.",
 		},
 		{
 			name: "Média a zábava",
 			icon: Clapperboard,
-			description: "Obsahové a streamovací platformy navržené pro špičky provozu a komplexní licenční práva.",
+			description: "Obsahové a streamovací platformy navržené pro nárazové špičky provozu a spletitá licenční práva.",
 		},
 		{
 			name: "Neziskový sektor",
@@ -699,43 +699,43 @@ export const caseStudies: Record<Locale, CaseStudy[]> = {
 	cs: [
 		{
 			industry: "Zdravotnictví",
-			title: "Migrace do cloudu bez výpadku dostupné pro pacienty",
+			title: "Migrace do cloudu bez výpadku pro pacienty",
 			challenge:
-				"Poskytovatel zdravotní péče potřeboval přesunout starší systém plánování z dosluhujících on-premise serverů, aniž by přerušil klinický provoz nebo ohrozil pacientská data během přechodu.",
+				"Poskytovatel zdravotní péče potřeboval přesunout starší objednávkový systém z dosluhujících vlastních serverů, aniž by přerušil klinický provoz nebo během přechodu ohrozil data pacientů.",
 			approach:
-				"Fázovaná migrace se stínovým prostředím běžícím paralelně, automatizované kontroly integrity dat před každým krokem přechodu a plán zvratu odzkoušený dřív, než byl vůbec potřeba.",
+				"Migrace po etapách se stínovým prostředím běžícím souběžně, automatické kontroly integrity dat před každým krokem a plán návratu k původnímu stavu nacvičený dřív, než ho bylo vůbec potřeba.",
 			outcome:
-				"Migrace, u které úspěch znamená, že si po ní nikdo na druhé straně ničeho nevšimne.",
+				"Migrace, u které úspěch znamená, že si nikdo z uživatelů ničeho nevšimne.",
 		},
 		{
 			industry: "Veřejná správa",
 			title: "Platforma pro správu případů připravená na audit",
 			challenge:
-				"Instituce veřejného sektoru potřebovala systém pro správu případů, kde musela být každá akce dohledatelná pro účely compliance kontroly, aniž by to zpomalilo referenty, kteří s ním pracují denně.",
+				"Instituce veřejné správy potřebovala systém pro správu případů, ve kterém musí být každý úkon dohledatelný pro účely kontroly, aniž by to zdrželo referenty, kteří s ním pracují denně.",
 			approach:
-				"Neměnné auditní logování zabudované do datové vrstvy hned od začátku (ne přidané dodatečně), spolu s řízením přístupu na základě rolí namapovaným přímo na existující schvalovací proces organizace.",
+				"Neměnný auditní záznam zabudovaný do datové vrstvy hned od začátku, ne dodělaný později, a řízení přístupu podle rolí navázané přímo na schvalovací proces, který v organizaci už funguje.",
 			outcome:
-				"Každou změnu záznamu lze zpětně rekonstruovat — auditní stopa je vedlejším produktem architektury, ne samostatnou reportovací agendou.",
+				"Každou změnu záznamu lze zpětně dohledat — auditní stopa vzniká sama z architektury, není to zvláštní agenda navíc.",
 		},
 		{
 			industry: "Výroba",
 			title: "Prediktivní údržba v rozpočtu výrobní haly",
 			challenge:
-				"Výrobce chtěl snížit neplánované výpadky způsobené poruchami zařízení, ale nedokázal zdůvodnit plnohodnotnou průmyslovou IoT platformu pro jedinou výrobní linku.",
+				"Výrobce chtěl omezit neplánované prostoje kvůli poruchám strojů, ale investici do plnohodnotné průmyslové IoT platformy kvůli jediné výrobní lince neuměl obhájit.",
 			approach:
-				"Úsporná pipeline pro senzorová data a predikční model zaměřený jen na tu hrstku poruch, na kterých skutečně záleželo, nasazený postupně tak, aby se přínos projevil dřív, než dojde rozpočet.",
+				"Úsporná pipeline pro data ze senzorů a predikční model zaměřený jen na tu hrstku poruch, na kterých opravdu záleželo, nasazovaný postupně tak, aby se přínos projevil dřív, než dojde rozpočet.",
 			outcome:
-				"Důkaz, že prediktivní údržba nemusí vyžadovat rozpočet na úrovni podnikového IoT, aby se vyplatila.",
+				"Důkaz, že prediktivní údržba se vyplatí i bez rozpočtu na podnikové IoT.",
 		},
 		{
 			industry: "Vzdělávání",
-			title: "Zápisový systém prověřený semestrální zátěží",
+			title: "Zápisový systém, který ustojí nápor semestru",
 			challenge:
-				"Zápisový portál vzdělávací instituce spolehlivě padal během první hodiny po otevření registrace každý semestr — přesně v okamžiku, kdy na tom nejvíc záleželo.",
+				"Zápisový portál školy každý semestr spolehlivě spadl během první hodiny po otevření registrace — přesně v okamžiku, kdy na něm nejvíc záleželo.",
 			approach:
-				"Zátěžové testování postavené na skutečné historické špičce provozu instituce (ne na obecných benchmarcích), řazení do fronty při zátěži místo pádu a CDN/cache vrstva pro části procesu, které vůbec nepotřebovaly zasahovat do databáze.",
+				"Zátěžové testy postavené na skutečné historické špičce dané školy, ne na obecných benchmarcích, řazení do fronty místo pádu a CDN s cache pro ty části zápisu, které databázi vůbec nepotřebovaly.",
 			outcome:
-				"Den zápisu přestal být cvičením v řešení incidentů.",
+				"Ze dne zápisu přestalo být hašení požárů.",
 		},
 	],
 };
@@ -783,32 +783,32 @@ export const faqs: Record<Locale, FaqItem[]> = {
 		{
 			question: "Kolik obvykle stojí projekt s Ideacomp?",
 			answer:
-				"Záleží na rozsahu, ale většina zakázek se pohybuje mezi 10 000 a 100 000+ USD. Reálný odhad vám dáme po prvním rozhovoru — ne podle ceníku, protože integrace ve zdravotnictví s vysokými nároky na compliance a malý interní nástroj se odpovědně staví za úplně jinou cenu.",
+				"Záleží na rozsahu, ale většina zakázek se pohybuje mezi 10 000 a 100 000 USD i výš. Reálné rozpětí vám řekneme po prvním hovoru — ceník na to nemáme, protože integrace ve zdravotnictví s vysokými nároky na compliance a malý interní nástroj vyjdou při stejně poctivém přístupu úplně jinak.",
 		},
 		{
 			question: "Jak dlouho typický projekt trvá?",
 			answer:
-				"Malé, dobře vymezené projekty lze dodat za 4–8 týdnů. Větší systémy s integracemi, požadavky na compliance nebo více zainteresovanými stranami obvykle běží 3–6 měsíců. Reálný harmonogram dostanete během úvodní analýzy, ne optimistický odhad, který má jen vyhrát zakázku.",
+				"Malé a dobře vymezené projekty zvládneme dodat za 4–8 týdnů. Větší systémy s integracemi, požadavky na compliance nebo více schvalovateli obvykle běží 3–6 měsíců. Reálný harmonogram dostanete během úvodní analýzy — ne optimistický odhad, který má jen vyhrát zakázku.",
 		},
 		{
 			question: "Pracujeme přímo s inženýry, kteří projekt staví?",
 			answer:
-				"Ano. Máte přímý přístup k lidem, kteří píšou kód, ne k account manažerovi předávajícímu informace od týmu, se kterým nikdy nemluvíte. Je to záměrná součást toho, jak pracujeme, ne prémiová varianta.",
+				"Ano. Mluvíte přímo s lidmi, kteří píší kód, ne s account manažerem, který jen tlumočí informace od týmu, se kterým se nikdy nepotkáte. Je to záměrná součást toho, jak pracujeme, ne příplatková služba.",
 		},
 		{
 			question: "Jak řešíte požadavky na bezpečnost a compliance?",
 			answer:
-				"Bezpečnostní kontrola je součástí každého release cyklu, ne krok přidaný na konci. U regulovaných prostředí (zdravotnictví, státní správa, finanční data) vymezíme požadavky na compliance už během úvodní analýzy, dřív, než se uzamknou architektonická rozhodnutí — navrhnout systém pro compliance je mnohem levnější než ji dodělávat dodatečně.",
+				"Bezpečnostní kontrola patří ke každému vydání, není to krok přidaný na konec. U regulovaných prostředí (zdravotnictví, státní správa, finanční data) si požadavky na compliance vyjasníme už během úvodní analýzy, dřív než se uzavřou architektonická rozhodnutí — navrhnout systém rovnou podle pravidel vyjde mnohem levněji než ho jim přizpůsobovat dodatečně.",
 		},
 		{
 			question: "Můžete podepsat NDA, než sdílíme detaily projektu?",
 			answer:
-				"Ano, standardně u všeho, co zahrnuje citlivá data, jednání ve fázi výběrového řízení nebo nezveřejněné produktové plány. Řekněte si o něj během prvního rozhovoru a než půjdeme do hloubky, budeme ho mít podepsaný.",
+				"Ano, běžně to tak děláme u všeho, co se týká citlivých dat, jednání ve výběrovém řízení nebo nezveřejněných produktových plánů. Stačí si o něj říct hned při prvním hovoru — než půjdeme do detailů, bude podepsaná.",
 		},
 		{
 			question: "Nabízíte podporu i po spuštění, nebo jen samotnou dodávku?",
 			answer:
-				"Obojí. Každý projekt končí dokumentací a plánem podpory, se kterým dokáže pracovat i váš vlastní tým — a pro týmy, které chtějí, abychom postavené řešení dál provozovali, nabízíme i průběžnou podporu a údržbu.",
+				"Obojí. Každý projekt končí dokumentací a plánem podpory, se kterým si poradí i váš vlastní tým — a pokud chcete, aby hotové řešení dál provozoval někdo od nás, nabízíme i průběžnou podporu a údržbu.",
 		},
 	],
 };
@@ -1042,11 +1042,11 @@ export const content: Record<Locale, {
 			titleMain: "Ideas",
 			tagline: "Vývoj softwaru na míru — Česká republika",
 			subtitle:
-				"Vyvíjíme software, AI a infrastrukturu pro organizace, které si nemohou dovolit hazardovat s dodavatelem — ve zdravotnictví, veřejné správě, výrobě, vzdělávání, médiích i neziskovém sektoru.",
+				"Vyvíjíme software, AI a infrastrukturu pro organizace, které si nemohou dovolit riskovat výběr dodavatele — ve zdravotnictví, veřejné správě, výrobě, vzdělávání, médiích i neziskovém sektoru.",
 			specs: [
 				{ label: "Sídlo", value: "Česká republika" },
 				{ label: "Založeno", value: "2024" },
-				{ label: "Oblastí", value: "Šest" },
+				{ label: "Obory", value: "Šest" },
 			],
 			ctaPrimary: {
 				href: "/solutions",
@@ -1057,18 +1057,18 @@ export const content: Record<Locale, {
 		},
 		home: {
 			capabilities: {
-				title: "Kde",
-				accent: "stavíme",
+				title: "Co",
+				accent: "vyvíjíme",
 				subtitle:
-					"Tři oblasti, jeden standard dodávky.",
-				watermark: "Oblasti",
+					"Tři obory, jeden standard dodávky.",
+				watermark: "Obory",
 			},
 			focus: {
-				title: "Postavené, aby to",
+				title: "Navržené tak, aby to",
 				accent: "uneslo zátěž",
-				body: "Většina softwaru se nerozpadne při spouštěcím demu, ale dlouho po něm — když naroste objem dat, změní se regulace nebo odejde člověk, který to napsal. Stavíme právě na tuhle část. Architekturu dokumentujeme dřív, než ji napíšeme, bezpečnostní kontrola probíhá u každého vydání místo jednou před spuštěním, a systém předáváme ve stavu, kdy ho zvládne provozovat váš vlastní tým.",
+				body: "Většina softwaru se nerozpadne při spouštěcím demu, ale dlouho po něm — když naroste objem dat, změní se regulace nebo odejde člověk, který to napsal. Právě s tímhle obdobím dopředu počítáme. Architekturu popíšeme dřív, než ji napíšeme, bezpečnostní kontrola probíhá u každého vydání, ne jen jednou před spuštěním, a systém předáváme ve stavu, kdy ho zvládne provozovat váš vlastní tým.",
 				bodyStrong:
-					"Malý, seniorní tým: lidé, kteří projekt vymezují, jsou i těmi, kdo ho staví.",
+					"Malý, seniorní tým: projekt s vámi navrhují ti samí lidé, kteří ho pak vyvíjejí.",
 				watermark: "Metoda",
 				cta: { href: "/about" },
 				slidesLabel: "Ideacomp na GITEX Global v Dubaji",
@@ -1085,12 +1085,12 @@ export const content: Record<Locale, {
 					},
 					{
 						src: "/gitex-entrance.jpg",
-						alt: "Příchod k areálu GITEX Global v Dubaji podél vlajek akce",
+						alt: "Cesta k areálu GITEX Global v Dubaji lemovaná vlajkami akce",
 						caption: "Příchod k areálu · Dubai World Trade Centre",
 					},
 					{
 						src: "/gitex-signage.jpg",
-						alt: "Ideacomp u prostorového loga GITEX Global Dubai 2024 před areálem",
+						alt: "Ideacomp u poutače GITEX Global Dubai 2024 před areálem",
 						caption: "Na místě · GITEX Global Dubai 2024",
 					},
 				],
@@ -1099,21 +1099,21 @@ export const content: Record<Locale, {
 				title: "Jak",
 				accent: "pracujeme",
 				subtitle:
-					"Dodávkový proces navržený pro organizace, které musí každé rozhodnutí umět obhájit před vlastními zainteresovanými stranami.",
+					"Proces dodávky navržený pro organizace, které musí každé rozhodnutí obhájit před vlastním vedením.",
 				watermark: "Proces",
 			},
 			industries: {
-				title: "Odvětví, kterým",
-				accent: "sloužíme",
+				title: "Odvětví, ve kterých",
+				accent: "působíme",
 				subtitle:
-					"Omezení specifická pro daný obor, ne obecný playbook.",
+					"Omezení konkrétního oboru, ne obecná příručka.",
 				watermark: "Odvětví",
 			},
 			finalCta: {
-				title: "Připraveni stavět něco, co musí",
+				title: "Chystáte něco, co prostě musí",
 				accent: "fungovat?",
 				subtitle:
-					"Řekněte nám, co stavíte a čemu to musí odolat. Upřímně vám řekneme, jestli jsme na to ten správný tým.",
+					"Napište nám, co chystáte a čemu to musí odolat. Řekneme vám na rovinu, jestli jsme pro to ten správný tým.",
 				cta: {
 					href: "/contact",
 				},
@@ -1123,17 +1123,17 @@ export const content: Record<Locale, {
 			hero: {
 				title: "Naše řešení",
 				subtitle:
-					"Šest oblastí, použitých společně nebo samostatně, podle toho, co problém skutečně potřebuje.",
+					"Šest oborů — použijeme je společně nebo samostatně, podle toho, co problém skutečně vyžaduje.",
 			},
 			industries: {
-				title: "Odvětví, kterým sloužíme",
+				title: "Odvětví, ve kterých působíme",
 				subtitle:
-					"Naše expertíza pokrývá zdravotnictví, vzdělávání, výrobu, veřejnou správu, média i neziskový sektor — každé s vlastními omezeními, podle kterých navrhujeme.",
+					"Rozumíme zdravotnictví, vzdělávání, výrobě, veřejné správě, médiím i neziskovému sektoru — každý z těchto oborů má svá omezení, se kterými při návrhu počítáme.",
 			},
 			finalCta: {
-				title: "Připraveni proměnit vaše podnikání?",
+				title: "Připraveni posunout své podnikání?",
 				subtitle:
-					"Pojďme probrat, jak vám naše řešení pomohou dosáhnout vašich cílů a přinést inovaci do vašeho oboru.",
+					"Pojďme probrat, jak vám naše řešení pomohou dosáhnout vašich cílů a posunout obor, ve kterém působíte.",
 				cta: {
 					href: "/contact",
 				},
@@ -1151,22 +1151,22 @@ export const content: Record<Locale, {
 			hero: {
 				title: "Tým za Ideacomp",
 				subtitle:
-					"Ne abstraktní \"my\" — malý, seniorní vývojářský tým, který zůstává v kontaktu s každým projektem, který přijme.",
+					"Žádné neurčité „my“ — malý, seniorní vývojářský tým, který má ke každé zakázce blízko.",
 			},
 			team: {
-				title: "Kdo to staví",
-				body: "Ideacomp byl založen v roce 2024 jako malý, seniorní vývojářský tým — záměrně, ne z nedostatku velikosti. Zůstáváme dost malí na to, aby lidé, kteří projekt vymezují, byli i těmi, kdo ho staví, a aby lidé, kteří ho staví, byli těmi, s kým mluvíte, když je potřeba rozhodnutí. S růstem týmu je tohle jediná věc, kterou nejsme ochotni obětovat.",
+				title: "Kdo za tím stojí",
+				body: "Ideacomp vznikl v roce 2024 jako malý, seniorní vývojářský tým — malý záměrně, ne z nouze. Zůstáváme dost malí na to, aby projekt navrhovali ti samí lidé, kteří ho pak vyvíjejí, a aby to byli právě oni, s kým mluvíte, když je potřeba se rozhodnout. Ať už tým poroste jakkoli, tohle je jediná věc, které se vzdát nechceme.",
 			},
 			compliance: {
 				title: "Bezpečnost a compliance",
-				body: "Bezpečnostní kontrola probíhá u každého vydání, ne jako checklist před spuštěním — viz \"Jak pracujeme\". U regulovaných prostředí vymezíme požadavky na compliance (GDPR, oborová pravidla) už během úvodní analýzy, dřív, než se uzamkne architektura, a u citlivých zakázek standardně podepisujeme NDA.",
+				body: "Bezpečnostní kontrola probíhá u každého vydání, není to checklist před spuštěním — viz „Jak pracujeme“. U regulovaných prostředí si požadavky na compliance (GDPR, oborová pravidla) vyjasníme už během úvodní analýzy, dřív než se architektura uzavře, a u citlivých zakázek běžně podepisujeme NDA.",
 				certificationsNote:
-					"Zatím nemáme formální certifikaci podle rámce jako ISO/IEC 27001 — pokud je to pro váš výběrový proces tvrdý požadavek, řekněte nám to včas a budeme k vám upřímní ohledně harmonogramu a vhodnosti spolupráce.",
+					"Zatím nemáme formální certifikaci podle rámce, jako je ISO/IEC 27001. Pokud je to pro vaše výběrové řízení nutná podmínka, řekněte nám to včas a my vám na rovinu napíšeme, jak jsme na tom s termínem a jestli to pro vás dává smysl.",
 			},
 			caseStudies: {
-				title: "Jaký typ práce děláme",
+				title: "Jakou práci děláme",
 				subtitle:
-					"Ilustrativní scénáře reprezentující naše zakázky — ne skutečné případové studie klientů (žádný klient zde zatím není jmenován ani citován). Jakmile to bude možné, nahradíme je skutečnými případovými studiemi se souhlasem klienta.",
+					"Ilustrativní scénáře, které odpovídají typu zakázek, jaké děláme — ne skutečné případové studie (žádný klient zde zatím není jmenován ani citován). Jakmile to půjde, nahradíme je skutečnými studiemi se souhlasem klienta.",
 			},
 		},
 		privacy: {

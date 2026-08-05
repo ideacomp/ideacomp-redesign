@@ -229,6 +229,7 @@ export function ContactFormStaged() {
 														value={values.company}
 														onChange={(event) => setField("company", event.target.value)}
 														ref={(node) => registerField("company", node)}
+														placeholder={copy.companyPlaceholder}
 														className={panelField}
 													/>
 												</div>
@@ -254,6 +255,7 @@ export function ContactFormStaged() {
 															ref={(node) => registerField("name", node)}
 															aria-invalid={!!visibleErrors.name}
 															aria-describedby={visibleErrors.name ? "name-error" : undefined}
+															placeholder={copy.namePlaceholder}
 															className={panelField}
 														/>
 														<FieldError id="name-error" message={visibleErrors.name} />

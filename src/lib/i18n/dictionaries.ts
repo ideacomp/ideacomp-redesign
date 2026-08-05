@@ -80,9 +80,11 @@ export interface Dictionary {
 		/** Tag on the two fields that aren't required, so nothing needs an asterisk. */
 		optional: string;
 		name: string;
+		namePlaceholder: string;
 		email: string;
 		emailPlaceholder: string;
 		company: string;
+		companyPlaceholder: string;
 		projectType: string;
 		projectTypeOptions: {
 			placeholder: string;
@@ -284,9 +286,13 @@ export const dictionaries: Record<Locale, Dictionary> = {
 				"We read every inquiry ourselves — no sales queue in between. The more concrete you are, the more concrete our answer.",
 			optional: "optional",
 			name: "Name",
+			// Sample values, not restatements of the label — the same register as
+			// the email placeholder, so a glance shows the shape of the answer.
+			namePlaceholder: "Jane Novak",
 			email: "Email",
 			emailPlaceholder: "your@email.com",
 			company: "Company / organization",
+			companyPlaceholder: "Acme Corporation",
 			projectType: "What are we building",
 			projectTypeOptions: {
 				placeholder: "Select project type",
@@ -457,7 +463,7 @@ export const dictionaries: Record<Locale, Dictionary> = {
 			allRightsReserved: "Všechna práva vyhrazena.",
 			managePreferences: "Nastavení cookies",
 			tagline:
-				"Driven by Ideas. Vyvíjíme software, AI a infrastrukturu pro organizace, které si nemohou dovolit hazardovat s dodavatelem.",
+				"Driven by Ideas. Vyvíjíme software, AI a infrastrukturu pro organizace, které si nemohou dovolit riskovat výběr dodavatele.",
 			legal: {
 				privacy: "Zásady ochrany osobních údajů",
 			},
@@ -470,12 +476,12 @@ export const dictionaries: Record<Locale, Dictionary> = {
 			closeMenu: "Zavřít navigační menu",
 			cookieConsentLabel: "Souhlas s cookies",
 			jumpToSolutionLabel: "Přejít na řešení",
-			scrollToContent: "Přejít na to, co stavíme",
-			meetTheTeam: "Poznejte tým",
+			scrollToContent: "Přejít níž na to, co vyvíjíme",
+			meetTheTeam: "Poznejte náš tým",
 			carouselRoleDescription: "Fotogalerie",
-			goToSlide: "Přejít na fotku",
-			previousSlide: "Předchozí fotka",
-			nextSlide: "Další fotka",
+			goToSlide: "Přejít na fotografii",
+			previousSlide: "Předchozí fotografie",
+			nextSlide: "Další fotografie",
 			pauseSlideshow: "Pozastavit fotogalerii",
 			playSlideshow: "Spustit fotogalerii",
 		},
@@ -484,13 +490,13 @@ export const dictionaries: Record<Locale, Dictionary> = {
 			officeHours: "Po–Pá, 9:00–17:00 (UTC+1)",
 			officeHoursFooter: "Po–Pá, 9:00–17:00 (UTC+1) · Praha, ČR",
 			replyNote:
-				"Každou zprávu čteme osobně. Odpověď dostanete do jednoho pracovního dne, s upřímným vyjádřením k rozsahu, harmonogramu a vhodnosti spolupráce.",
+				"Každou zprávu čteme osobně. Do jednoho pracovního dne se ozveme a napíšeme na rovinu, co si myslíme o rozsahu, termínech i tom, jestli jsme pro vás ten správný tým.",
 		},
 		about: {
 			founded: "Založeno",
 			teamSize: "Velikost týmu",
-			disciplines: "Oblasti",
-			industriesServed: "Obsluhovaná odvětví",
+			disciplines: "Obory",
+			industriesServed: "Odvětví",
 			challenge: "Zadání: ",
 			approach: "Přístup: ",
 			outcome: "Výsledek: ",
@@ -499,14 +505,14 @@ export const dictionaries: Record<Locale, Dictionary> = {
 			title: "Stránka nenalezena (404) – Ideacomp",
 			heading: "Stránka nenalezena",
 			subtitle:
-				"Stránka mohla být přesunuta, smazána, nebo je adresa URL chybná. Zde je návod, jak se vrátit zpět.",
+				"Stránka se nejspíš přesunula, byla smazána, nebo je adresa špatně. Tudy vede cesta zpátky.",
 			goHome: "Zpět domů",
 			ariaError: "Chyba 404",
 			ariaGoHome: "Návrat na domovskou stránku Ideacomp",
 			links: {
 				solutions: {
 					title: "Naše řešení",
-					description: "AI a strojové učení, kybernetická bezpečnost, vývoj software, cloud a DevOps.",
+					description: "AI a strojové učení, kybernetická bezpečnost, vývoj softwaru, cloud a DevOps.",
 				},
 				contact: {
 					title: "Kontaktujte nás",
@@ -533,13 +539,15 @@ export const dictionaries: Record<Locale, Dictionary> = {
 		contactForm: {
 			heading: "Řekněte nám o svém projektu",
 			intro:
-				"Každou poptávku čteme sami — žádná obchodní fronta mezi tím. Čím konkrétnější dotaz, tím konkrétnější odpověď.",
+				"Každou poptávku čteme my sami, neputuje přes žádné obchodní oddělení. Čím konkrétnější dotaz, tím konkrétnější odpověď.",
 			optional: "nepovinné",
 			name: "Jméno",
+			namePlaceholder: "Jan Novák",
 			email: "E-mail",
 			emailPlaceholder: "vas@email.cz",
 			company: "Firma / organizace",
-			projectType: "Co stavíme",
+			companyPlaceholder: "Acme s.r.o.",
+			projectType: "Co budeme vyvíjet",
 			projectTypeOptions: {
 				placeholder: "Vyberte typ projektu",
 				webApp: "Webová aplikace",
@@ -553,19 +561,19 @@ export const dictionaries: Record<Locale, Dictionary> = {
 			budget: "Rozpočet",
 			budgetOptions: {
 				placeholder: "Vyberte rozpočet",
-				under10k: "Méně než $10 000",
-				range10to25: "$10 000 – $25 000",
-				range25to50: "$25 000 – $50 000",
-				range50to100: "$50 000 – $100 000",
-				over100: "$100 000 a více",
+				under10k: "Méně než 10 000 $",
+				range10to25: "10 000 – 25 000 $",
+				range25to50: "25 000 – 50 000 $",
+				range50to100: "50 000 – 100 000 $",
+				over100: "100 000 $ a více",
 				discuss: "Domluvíme se",
 			},
 			budgetShortOptions: {
-				under10k: "Do $10 tis.",
-				range10to25: "$10–25 tis.",
-				range25to50: "$25–50 tis.",
-				range50to100: "$50–100 tis.",
-				over100: "$100 tis. a více",
+				under10k: "Do 10 tis. $",
+				range10to25: "10–25 tis. $",
+				range25to50: "25–50 tis. $",
+				range50to100: "50–100 tis. $",
+				over100: "100 tis. $ a více",
 				discuss: "Domluvíme se",
 			},
 			projectDetails: "Problém vašimi slovy",
@@ -574,13 +582,13 @@ export const dictionaries: Record<Locale, Dictionary> = {
 			projectDetailsHint:
 				"Cíle, omezení, termíny, systémy, se kterými se to musí propojit — cokoli už víte.",
 			submitIdle: "Odeslat zprávu",
-			submitSending: "Odesílám zprávu…",
+			submitSending: "Odesíláme zprávu…",
 			submitAriaIdle: "Odeslat zprávu společnosti Ideacomp",
-			submitAriaSending: "Odesílám zprávu, čekejte prosím",
+			submitAriaSending: "Odesíláme zprávu, čekejte prosím",
 			successHeading: "Poptávku máme.",
 			successMessage:
 				"Zpráva byla úspěšně odeslána. Ozveme se vám do jednoho pracovního dne.",
-			referenceLabel: "Značka",
+			referenceLabel: "Referenční číslo",
 			sendAnother: "Odeslat další poptávku",
 			errorHeading: "Odeslání se nezdařilo.",
 			errorMessage:
@@ -590,9 +598,9 @@ export const dictionaries: Record<Locale, Dictionary> = {
 				email: "Bez e-mailu vám nemůžeme odpovědět.",
 				emailFormat: "Tohle nevypadá jako platná e-mailová adresa.",
 				projectType: "Vyberte nejbližší možnost — detaily doladíme.",
-				message: "Napište stručně, co stavíte.",
+				message: "Napište stručně, co chystáte.",
 				messageShort:
-					"Stačí věta nebo dvě — abychom mohli odpovědět k věci.",
+					"Stačí věta nebo dvě, ať vám můžeme odpovědět k věci.",
 			},
 			privacyNote: {
 				before: "Co odešlete, dorazí do naší schránky a nikam jinam. Viz ",
@@ -603,19 +611,19 @@ export const dictionaries: Record<Locale, Dictionary> = {
 				progress: "Krok {current} ze {total}",
 				next: "Pokračovat",
 				back: "Zpět",
-				scope: { title: "Rozsah", hint: "Co stavíme a jak je to velké?" },
+				scope: { title: "Rozsah", hint: "Co budeme vyvíjet a v jakém rozsahu?" },
 				brief: { title: "Zadání", hint: "Problém vašimi slovy." },
 				identity: { title: "Vy", hint: "Kam máme poslat odpověď?" },
 			},
 			payload: {
 				title: "poptavka.request",
-				note: "Přesně tohle dorazí do naší schránky. Nic dalšího nesbíráme.",
+				note: "Přesně tohle dorazí do naší schránky. Nic dalšího neshromažďujeme.",
 				empty: "—",
 				receivedAt: "přijato",
 				status: {
 					draft: "rozpracováno",
 					ready: "připraveno k odeslání",
-					sending: "odesílám",
+					sending: "odesílání",
 					sent: "doručeno",
 					failed: "chyba",
 				},
@@ -633,7 +641,7 @@ export const dictionaries: Record<Locale, Dictionary> = {
 			whoWeAre: {
 				heading: "Kdo jsme",
 				before:
-					'Ideacomp s.r.o. ("Ideacomp", "my"), se sídlem v Praze, je správcem osobních údajů popsaných v těchto zásadách. S jakýmkoli dotazem nebo žádostí týkající se ochrany osobních údajů nás kontaktujte na ',
+					"Ideacomp s.r.o. (dále jen „Ideacomp“ nebo „my“), se sídlem v Praze, je správcem osobních údajů popsaných v těchto zásadách. S jakýmkoli dotazem nebo žádostí týkající se ochrany osobních údajů se na nás obraťte na adrese ",
 				after: ".",
 			},
 			whatWeCollect: {
@@ -644,7 +652,7 @@ export const dictionaries: Record<Locale, Dictionary> = {
 				},
 				analytics: {
 					label: "Analytika — pouze po vašem souhlasu.",
-					text: 'Pokud přijmete cookie lištu, načteme Google Analytics a EngageTrack, které shromažďují standardní webová analytická data (navštívené stránky, přibližná poloha, typ zařízení/prohlížeče, zdroj návštěvy). Ani jeden nástroj se nenačte, dokud souhlas neudělíte, a souhlas můžete kdykoli odvolat (viz "Cookies" níže).',
+					text: "Pokud v cookie liště udělíte souhlas, načteme Google Analytics a EngageTrack, které shromažďují standardní webová analytická data (navštívené stránky, přibližná poloha, typ zařízení a prohlížeče, zdroj návštěvy). Ani jeden nástroj se bez vašeho souhlasu nenačte a souhlas můžete kdykoli odvolat (viz oddíl „Cookies“ níže).",
 				},
 			},
 			whyWeProcess: {
@@ -653,7 +661,7 @@ export const dictionaries: Record<Locale, Dictionary> = {
 			},
 			whoWeShare: {
 				heading: "S kým údaje sdílíme",
-				intro: "Využíváme následující zpracovatele, z nichž každý jedná podle vlastních podmínek zpracování dat:",
+				intro: "Využíváme následující zpracovatele, z nichž každý postupuje podle vlastních podmínek zpracování osobních údajů:",
 				processors: {
 					emailjs: {
 						name: "EmailJS",
@@ -673,26 +681,26 @@ export const dictionaries: Record<Locale, Dictionary> = {
 			},
 			howLongWeKeep: {
 				heading: "Jak dlouho údaje uchováváme",
-				text: "Odeslané kontaktní formuláře uchováváme po dobu nezbytnou k vyřízení vašeho dotazu a vedení přiměřené obchodní evidence — zpravidla nejdéle 24 měsíců — pokud delší dobu nevyžaduje zákon nebo probíhající smluvní vztah. Analytická data se uchovávají podle standardních retenčních nastavení Google Analytics a EngageTrack a jsou okamžitě smazána, pokud odvoláte souhlas do budoucna.",
+				text: "Odeslané kontaktní formuláře uchováváme po dobu nezbytnou k vyřízení vašeho dotazu a vedení přiměřené obchodní evidence — zpravidla nejdéle 24 měsíců — pokud delší dobu nevyžaduje zákon nebo probíhající smluvní vztah. Analytická data se uchovávají podle standardních nastavení retence Google Analytics a EngageTrack; pokud souhlas odvoláte, od té chvíle je přestaneme sbírat.",
 			},
 			yourRights: {
 				heading: "Vaše práva",
 				before:
-					"Podle GDPR máte právo na přístup ke svým osobním údajům, jejich opravu nebo výmaz, na omezení či námitku proti jejich zpracování, na přenositelnost údajů a na odvolání souhlasu kdykoli. Pro uplatnění kteréhokoli z těchto práv nás kontaktujte na ",
+					"Podle GDPR máte právo na přístup ke svým osobním údajům, na jejich opravu nebo výmaz, na omezení zpracování, právo vznést proti zpracování námitku, právo na přenositelnost údajů a právo kdykoli odvolat souhlas. Kterékoli z těchto práv u nás můžete uplatnit na adrese ",
 				after:
 					". Máte také právo podat stížnost u Úřadu pro ochranu osobních údajů, dozorového úřadu pro Českou republiku.",
 			},
 			cookies: {
 				heading: "Cookies",
-				text: "Rozlišujeme pouze mezi nezbytnými a analytickými cookies: nic nad rámec toho, co je nezbytně nutné k provozu webu, se nenačte, dokud nepřijmete cookie lištu. Svou volbu můžete kdykoli změnit.",
+				text: "Rozlišujeme pouze mezi nezbytnými a analytickými cookies: dokud v cookie liště neudělíte souhlas, nenačte se nic nad rámec toho, co je nezbytně nutné k provozu webu. Svou volbu můžete kdykoli změnit.",
 			},
 			security: {
 				heading: "Zabezpečení",
-				text: "Tento web je provozován přes HTTPS a přístup k systémům, které pracují s vašimi údaji, mají pouze lidé, kteří jej potřebují ke své práci. Žádný systém není dokonale zabezpečený, ale s údaji, které nám svěříte, zacházíme se stejnou péčí, jakou navrhujeme do systémů pro naše klienty.",
+				text: "Tento web běží výhradně přes HTTPS a přístup k systémům, které pracují s vašimi údaji, mají jen lidé, kteří ho ke své práci potřebují. Žádný systém není dokonale zabezpečený, ale s údaji, které nám svěříte, zacházíme stejně pečlivě, jako když navrhujeme systémy pro naše klienty.",
 			},
 			changes: {
 				heading: "Změny těchto zásad",
-				text: 'Pokud se tyto zásady podstatně změní, aktualizujeme datum "poslední aktualizace" výše. Další používání webu po aktualizaci znamená souhlas s revidovanými zásadami.',
+				text: "Pokud se tyto zásady podstatně změní, aktualizujeme datum „poslední aktualizace“ uvedené výše. Pokud web používáte i po takové aktualizaci, vyjadřujete tím souhlas s upravenými zásadami.",
 			},
 		},
 	},

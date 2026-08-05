@@ -139,6 +139,7 @@ export function ContactFormPayload() {
 										ref={(node) => registerField("name", node)}
 										aria-invalid={!!visibleErrors.name}
 										aria-describedby={visibleErrors.name ? "name-error" : undefined}
+										placeholder={copy.namePlaceholder}
 										className={rowField}
 									/>
 									<FieldError id="name-error" message={visibleErrors.name} />
@@ -173,6 +174,7 @@ export function ContactFormPayload() {
 										onChange={(event) => setField("company", event.target.value)}
 										{...focusProps("company")}
 										ref={(node) => registerField("company", node)}
+										placeholder={copy.companyPlaceholder}
 										className={rowField}
 									/>
 								</Row>
