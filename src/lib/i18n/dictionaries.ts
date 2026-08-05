@@ -76,12 +76,13 @@ export interface Dictionary {
 	};
 	contactForm: {
 		heading: string;
+		intro: string;
+		/** Tag on the two fields that aren't required, so nothing needs an asterisk. */
+		optional: string;
 		name: string;
-		namePlaceholder: string;
 		email: string;
 		emailPlaceholder: string;
 		company: string;
-		companyPlaceholder: string;
 		projectType: string;
 		projectTypeOptions: {
 			placeholder: string;
@@ -103,14 +104,66 @@ export interface Dictionary {
 			over100: string;
 			discuss: string;
 		};
+		/** Same six ranges, abbreviated to fit a chip. */
+		budgetShortOptions: {
+			under10k: string;
+			range10to25: string;
+			range25to50: string;
+			range50to100: string;
+			over100: string;
+			discuss: string;
+		};
 		projectDetails: string;
 		projectDetailsPlaceholder: string;
+		projectDetailsHint: string;
 		submitIdle: string;
 		submitSending: string;
 		submitAriaIdle: string;
 		submitAriaSending: string;
+		successHeading: string;
 		successMessage: string;
+		referenceLabel: string;
+		sendAnother: string;
+		errorHeading: string;
 		errorMessage: string;
+		validation: {
+			name: string;
+			email: string;
+			emailFormat: string;
+			projectType: string;
+			message: string;
+			messageShort: string;
+		};
+		privacyNote: { before: string; link: string; after: string };
+		steps: {
+			progress: string;
+			next: string;
+			back: string;
+			scope: { title: string; hint: string };
+			brief: { title: string; hint: string };
+			identity: { title: string; hint: string };
+		};
+		payload: {
+			title: string;
+			note: string;
+			empty: string;
+			receivedAt: string;
+			status: {
+				draft: string;
+				ready: string;
+				sending: string;
+				sent: string;
+				failed: string;
+			};
+			fields: {
+				name: string;
+				email: string;
+				company: string;
+				projectType: string;
+				budget: string;
+				message: string;
+			};
+		};
 	};
 	privacy: {
 		whoWeAre: { heading: string; before: string; after: string };
@@ -227,13 +280,14 @@ export const dictionaries: Record<Locale, Dictionary> = {
 		},
 		contactForm: {
 			heading: "Tell Us About Your Project",
-			name: "Name *",
-			namePlaceholder: "Your full name",
-			email: "Email *",
+			intro:
+				"We read every inquiry ourselves — no sales queue in between. The more concrete you are, the more concrete our answer.",
+			optional: "optional",
+			name: "Name",
+			email: "Email",
 			emailPlaceholder: "your@email.com",
-			company: "Company/Organization",
-			companyPlaceholder: "Your company name (optional)",
-			projectType: "Project Type *",
+			company: "Company / organization",
+			projectType: "What are we building",
 			projectTypeOptions: {
 				placeholder: "Select project type",
 				webApp: "Web Application",
@@ -244,7 +298,7 @@ export const dictionaries: Record<Locale, Dictionary> = {
 				outsourcing: "Outsourcing / Team Augmentation",
 				other: "Other",
 			},
-			budget: "Budget Range",
+			budget: "Budget range",
 			budgetOptions: {
 				placeholder: "Select budget range",
 				under10k: "Under $10,000",
@@ -254,17 +308,74 @@ export const dictionaries: Record<Locale, Dictionary> = {
 				over100: "$100,000+",
 				discuss: "Let's discuss",
 			},
-			projectDetails: "Project Details *",
+			budgetShortOptions: {
+				under10k: "Under $10k",
+				range10to25: "$10–25k",
+				range25to50: "$25–50k",
+				range50to100: "$50–100k",
+				over100: "$100k+",
+				discuss: "Let's discuss",
+			},
+			projectDetails: "The problem, in your words",
 			projectDetailsPlaceholder:
-				"Tell us about your project goals, timeline, and any specific requirements...",
+				"What has to work, by when, and what it has to fit into…",
+			projectDetailsHint:
+				"Goals, constraints, deadlines, systems it has to talk to — whatever you already know.",
 			submitIdle: "Send Message",
 			submitSending: "Sending Message...",
 			submitAriaIdle: "Send your message to Ideacomp",
 			submitAriaSending: "Sending your message, please wait",
+			successHeading: "Request received.",
 			successMessage:
 				"Message sent successfully. We'll get back to you within one business day.",
+			referenceLabel: "Reference",
+			sendAnother: "Send another request",
+			errorHeading: "That didn't go through.",
 			errorMessage:
 				"Failed to send message. Please try again or email us directly at info@ideacomp.cz.",
+			validation: {
+				name: "Please tell us who you are.",
+				email: "We need an email address to reply to.",
+				emailFormat: "That doesn't look like a valid email address.",
+				projectType: "Pick the closest match — we'll sort out the details.",
+				message: "Tell us briefly what you're building.",
+				messageShort:
+					"A sentence or two, please — enough for us to give you a useful answer.",
+			},
+			privacyNote: {
+				before: "What you send reaches our inbox and nowhere else. See the ",
+				link: "privacy policy",
+				after: ".",
+			},
+			steps: {
+				progress: "Step {current} of {total}",
+				next: "Continue",
+				back: "Back",
+				scope: { title: "Scope", hint: "What are we building, and how big is it?" },
+				brief: { title: "Brief", hint: "The problem in your words." },
+				identity: { title: "You", hint: "Where do we send the answer?" },
+			},
+			payload: {
+				title: "inquiry.request",
+				note: "This is exactly what reaches our inbox. Nothing else is collected.",
+				empty: "—",
+				receivedAt: "received",
+				status: {
+					draft: "draft",
+					ready: "ready to send",
+					sending: "transmitting",
+					sent: "delivered",
+					failed: "failed",
+				},
+				fields: {
+					name: "name",
+					email: "email",
+					company: "company",
+					projectType: "scope",
+					budget: "budget",
+					message: "brief",
+				},
+			},
 		},
 		privacy: {
 			whoWeAre: {
@@ -421,13 +532,14 @@ export const dictionaries: Record<Locale, Dictionary> = {
 		},
 		contactForm: {
 			heading: "Řekněte nám o svém projektu",
-			name: "Jméno *",
-			namePlaceholder: "Vaše celé jméno",
-			email: "E-mail *",
+			intro:
+				"Každou poptávku čteme sami — žádná obchodní fronta mezi tím. Čím konkrétnější dotaz, tím konkrétnější odpověď.",
+			optional: "nepovinné",
+			name: "Jméno",
+			email: "E-mail",
 			emailPlaceholder: "vas@email.cz",
 			company: "Firma / organizace",
-			companyPlaceholder: "Název vaší firmy (nepovinné)",
-			projectType: "Typ projektu *",
+			projectType: "Co stavíme",
 			projectTypeOptions: {
 				placeholder: "Vyberte typ projektu",
 				webApp: "Webová aplikace",
@@ -448,17 +560,74 @@ export const dictionaries: Record<Locale, Dictionary> = {
 				over100: "$100 000 a více",
 				discuss: "Domluvíme se",
 			},
-			projectDetails: "Popis projektu *",
+			budgetShortOptions: {
+				under10k: "Do $10 tis.",
+				range10to25: "$10–25 tis.",
+				range25to50: "$25–50 tis.",
+				range50to100: "$50–100 tis.",
+				over100: "$100 tis. a více",
+				discuss: "Domluvíme se",
+			},
+			projectDetails: "Problém vašimi slovy",
 			projectDetailsPlaceholder:
-				"Popište nám cíle projektu, časový rámec a případné specifické požadavky…",
+				"Co má fungovat, do kdy a do čeho to musí zapadnout…",
+			projectDetailsHint:
+				"Cíle, omezení, termíny, systémy, se kterými se to musí propojit — cokoli už víte.",
 			submitIdle: "Odeslat zprávu",
 			submitSending: "Odesílám zprávu…",
 			submitAriaIdle: "Odeslat zprávu společnosti Ideacomp",
 			submitAriaSending: "Odesílám zprávu, čekejte prosím",
+			successHeading: "Poptávku máme.",
 			successMessage:
 				"Zpráva byla úspěšně odeslána. Ozveme se vám do jednoho pracovního dne.",
+			referenceLabel: "Značka",
+			sendAnother: "Odeslat další poptávku",
+			errorHeading: "Odeslání se nezdařilo.",
 			errorMessage:
 				"Odeslání zprávy se nezdařilo. Zkuste to prosím znovu, nebo nám napište přímo na info@ideacomp.cz.",
+			validation: {
+				name: "Napište nám prosím, kdo jste.",
+				email: "Bez e-mailu vám nemůžeme odpovědět.",
+				emailFormat: "Tohle nevypadá jako platná e-mailová adresa.",
+				projectType: "Vyberte nejbližší možnost — detaily doladíme.",
+				message: "Napište stručně, co stavíte.",
+				messageShort:
+					"Stačí věta nebo dvě — abychom mohli odpovědět k věci.",
+			},
+			privacyNote: {
+				before: "Co odešlete, dorazí do naší schránky a nikam jinam. Viz ",
+				link: "zásady ochrany osobních údajů",
+				after: ".",
+			},
+			steps: {
+				progress: "Krok {current} ze {total}",
+				next: "Pokračovat",
+				back: "Zpět",
+				scope: { title: "Rozsah", hint: "Co stavíme a jak je to velké?" },
+				brief: { title: "Zadání", hint: "Problém vašimi slovy." },
+				identity: { title: "Vy", hint: "Kam máme poslat odpověď?" },
+			},
+			payload: {
+				title: "poptavka.request",
+				note: "Přesně tohle dorazí do naší schránky. Nic dalšího nesbíráme.",
+				empty: "—",
+				receivedAt: "přijato",
+				status: {
+					draft: "rozpracováno",
+					ready: "připraveno k odeslání",
+					sending: "odesílám",
+					sent: "doručeno",
+					failed: "chyba",
+				},
+				fields: {
+					name: "jméno",
+					email: "e-mail",
+					company: "firma",
+					projectType: "rozsah",
+					budget: "rozpočet",
+					message: "zadání",
+				},
+			},
 		},
 		privacy: {
 			whoWeAre: {
