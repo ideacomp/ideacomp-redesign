@@ -172,14 +172,15 @@ export default async function RootLayout({
 				{/* Preconnect to external domains */}
 				<link rel="preconnect" href="https://fonts.googleapis.com" />
 				<link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
-				<link rel="dns-prefetch" href="https://images.unsplash.com" />
 				<link rel="dns-prefetch" href="https://www.googletagmanager.com" />
 				<link rel="dns-prefetch" href="https://api.emailjs.com" />
-				
-				{/* Preload critical resources */}
-				<link rel="preload" href="/landscape_logo.png" as="image" type="image/png" />
-				<link rel="preload" href="/logo.png" as="image" type="image/png" />
-				
+
+				{/* No logo preload. The header draws the logo inline (see
+				    components/logo.tsx), and `landscape_logo.png` is the Open Graph
+				    image, which no page ever renders — preloading either just fetched
+				    a PNG nothing was waiting on. The Unsplash dns-prefetch went with
+				    the Unsplash photographs. */}
+
 				{/* Favicon and app icons */}
 				<link rel="icon" href="/favicon.ico" sizes="any" />
 				<link rel="icon" href="/logo.png" type="image/png" />

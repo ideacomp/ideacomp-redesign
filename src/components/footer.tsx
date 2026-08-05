@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import Image from "next/image";
+import Logo from "@/components/logo";
 import { Clock, Mail, Phone } from "lucide-react";
 import { navigation, legalLinks, socialLinks, content } from "@/lib/sitemap";
 import { ManageCookiePreferences } from "@/components/cookie-consent";
@@ -18,11 +18,8 @@ const Footer = () => {
 			<div className="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8">
 				<div className="grid grid-cols-1 gap-12 md:grid-cols-12">
 					<div className="md:col-span-6">
-						<div className="mb-4 flex items-center gap-3">
-							<Image src="/logo.png" alt="" width={28} height={28} className="rounded-sm" />
-							<span className="font-display text-xl font-semibold uppercase tracking-tight text-foreground">
-								Ideacomp
-							</span>
+						<div className="mb-4 flex items-center text-foreground">
+							<Logo className="h-7" />
 						</div>
 						<p className="max-w-sm text-sm leading-relaxed text-foreground/60">
 							{dict.footer.tagline}

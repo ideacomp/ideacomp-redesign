@@ -1,10 +1,10 @@
 "use client";
 import { useState } from "react";
 import Link from "next/link";
-import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { Menu, X } from "lucide-react";
 import { navigation } from "@/lib/sitemap";
+import Logo from "@/components/logo";
 import { useLocale } from "@/lib/i18n/locale-context";
 import { LanguageSwitcher } from "@/components/language-switcher";
 
@@ -19,18 +19,10 @@ const Header = () => {
 		<header className="dark fixed top-0 z-40 w-full border-b border-border bg-background/95 backdrop-blur-md">
 			<div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
 				<div className="flex items-center justify-between py-4">
-					<Link href="/" className="flex items-center gap-3">
-						<Image
-							src="/logo.png"
-							alt="Ideacomp"
-							width={32}
-							height={32}
-							className="rounded-sm"
-							priority
-						/>
-						<span className="font-display text-2xl font-semibold uppercase tracking-tight text-foreground">
-							Ideacomp
-						</span>
+					{/* One <Logo>, not a mark plus typed name: the wordmark is part of the
+					    artwork. Height is set here, width follows from the viewBox. */}
+					<Link href="/" className="flex items-center text-foreground">
+						<Logo className="h-8" />
 					</Link>
 
 					<div className="hidden md:flex md:items-center md:gap-4">
