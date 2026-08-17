@@ -23,18 +23,19 @@ const Contact = () => {
 
 	return (
 		<div className="min-h-screen bg-background">
-			<Header />
+			<Header overlay />
 
 			{/* Hero */}
 			<section
-				className="dark relative flex min-h-[320px] items-center overflow-hidden bg-background px-4 pt-32 pb-16 sm:px-6 lg:px-8"
+				className="dark surface-signal relative flex min-h-[320px] items-center overflow-hidden bg-background px-4 pt-32 pb-16 sm:px-6 lg:px-8"
 				aria-labelledby="hero-heading"
 			>
-				<HeroBackdrop />
-				<div className="relative mx-auto max-w-4xl">
+				<HeroBackdrop variant="band" />
+				{/* Same column as the home hero — see the note on `/solutions`. */}
+				<div className="relative mx-auto w-full max-w-6xl">
 					<h1
 						id="hero-heading"
-						className="font-display text-[clamp(2.5rem,7vw,4.5rem)] font-semibold leading-[0.95] tracking-[-0.03em] text-foreground"
+						className="max-w-2xl font-display text-[clamp(2.5rem,7vw,4.5rem)] font-semibold leading-[0.95] tracking-[-0.03em] text-foreground"
 					>
 						{pageContent.contact.hero.title}
 					</h1>

@@ -18,18 +18,25 @@ const Solutions = () => {
 
 	return (
 		<div className="min-h-screen bg-background">
-			<Header />
+			<Header overlay />
 
 			{/* Hero */}
 			<section
-				className="dark relative flex min-h-[420px] items-center overflow-hidden bg-background px-4 pt-32 pb-16 sm:px-6 lg:px-8"
+				className="dark surface-signal relative flex min-h-[420px] items-center overflow-hidden bg-background px-4 pt-32 pb-16 sm:px-6 lg:px-8"
 				aria-labelledby="hero-heading"
 			>
-				<HeroBackdrop />
-				<div className="relative mx-auto max-w-4xl">
+				<HeroBackdrop variant="band" />
+				{/* `w-full max-w-6xl`, matching the home hero and every section below —
+				    not a shrink-to-fit `max-w-4xl`. A column that sizes to its content
+				    and then centres itself lands wherever the longest line happens to
+				    end (672px wide, so 27–83% of the viewport depending on width), and
+				    `.surface-signal` grades the field against one fixed copy edge. It
+				    also means the banner heading now sits on the same left margin as
+				    the page it introduces. */}
+				<div className="relative mx-auto w-full max-w-6xl">
 					<h1
 						id="hero-heading"
-						className="font-display text-[clamp(2.75rem,8vw,5rem)] font-semibold leading-[0.95] tracking-[-0.03em] text-foreground"
+						className="max-w-2xl font-display text-[clamp(2.75rem,8vw,5rem)] font-semibold leading-[0.95] tracking-[-0.03em] text-foreground"
 					>
 						{pageContent.solutions.hero.title}
 					</h1>
@@ -37,7 +44,14 @@ const Solutions = () => {
 						{pageContent.solutions.hero.subtitle}
 					</p>
 
-					<nav aria-label={dict.common.jumpToSolutionLabel} className="mt-10 flex flex-wrap gap-2">
+					{/* Held to the paragraph's `max-w-2xl`, not left to fill the container:
+					    these are 14px at 70% ink, so they answer to the same 4.5:1 the
+					    paragraph does and belong inside the same protected column that
+					    `--field-hold` is graded for. Costs a row of wrapping. */}
+					<nav
+						aria-label={dict.common.jumpToSolutionLabel}
+						className="mt-10 flex max-w-2xl flex-wrap gap-2"
+					>
 						{solutions.map((solution) => (
 							<a
 								key={solution.slug}

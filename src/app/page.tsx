@@ -50,16 +50,28 @@ const Home = () => {
 
 	return (
 		<div className="min-h-screen bg-background">
-			<Header />
+			<Header overlay />
 
 			{/* Hero */}
+			{/* `min-h-svh`, not `92vh` and not `dvh`. At 92vh the light section below
+			    showed as a strip along the bottom at every viewport tall enough for the
+			    hero's own content to fit — 115px at 2560×1440. `svh` is the small
+			    viewport, so on a phone the hero still fills the screen with the browser
+			    bars showing; `dvh` would do that too but re-lays the hero out every time
+			    those bars slide away mid-scroll. Where the copy is taller than the
+			    screen (short laptops, phones) this is only a floor and the hero grows. */}
 			<section
-				className="dark relative flex min-h-[92vh] flex-col justify-center overflow-hidden bg-background px-4 pt-32 pb-16 sm:px-6 lg:px-8"
+				className="dark surface-signal relative flex min-h-svh flex-col overflow-hidden bg-background px-4 pt-32 pb-16 sm:px-6 lg:px-8"
 				aria-labelledby="hero-heading"
 			>
 				<HeroBackdrop />
 
-				<div className="relative mx-auto w-full max-w-6xl">
+				{/* `flex-1` so the copy centres in whatever is left after the scroll cue
+				    below has taken its space, which keeps the cue on the bottom edge
+				    instead of floating a couple of hundred px above it on a tall screen.
+				    The item never shrinks below its content, so tall copy grows the
+				    section rather than being clipped by the `overflow-hidden`. */}
+				<div className="relative mx-auto flex w-full max-w-6xl flex-1 flex-col justify-center">
 					<motion.div
 						className="flex items-center gap-4"
 						initial="hidden"
@@ -68,7 +80,10 @@ const Home = () => {
 						transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
 					>
 						<span className="h-px w-16 bg-signal sm:w-24" aria-hidden="true" />
-						<span className="font-mono text-xs tracking-[0.15em] uppercase text-foreground/60">
+						{/* Ink levels through this hero run higher than the site's dark
+						    surface norm: the cyan canvas is far lighter than graphite, and
+						    at /60 this 12px tracked-out line falls to 3.9:1. */}
+						<span className="font-mono text-xs tracking-[0.15em] uppercase text-foreground/75">
 							{pageContent.hero.tagline}
 						</span>
 					</motion.div>
@@ -89,7 +104,7 @@ const Home = () => {
 						    SSR, and swapping the subtree on it desynchronises hydration. It
 						    also means the real headline is in the HTML for crawlers and
 						    no-JS. */}
-						<span className="block min-h-[1em] text-[clamp(1.75rem,4.5vw,3rem)] leading-[1] font-light tracking-[-0.01em] text-foreground/60">
+						<span className="block min-h-[1em] text-[clamp(1.75rem,4.5vw,3rem)] leading-[1] font-light tracking-[-0.01em] text-foreground/70">
 							{isTyping ? (
 								<TextType
 									as="span"
@@ -163,7 +178,7 @@ const Home = () => {
 					>
 						{pageContent.hero.specs.map((spec) => (
 							<div key={spec.label} className="border-t border-border pt-3">
-								<dt className="font-mono text-[0.6875rem] tracking-[0.15em] uppercase text-foreground/50">
+								<dt className="font-mono text-[0.6875rem] tracking-[0.15em] uppercase text-foreground/70">
 									{spec.label}
 								</dt>
 								<dd className="mt-1.5 font-display text-xl font-semibold text-foreground">

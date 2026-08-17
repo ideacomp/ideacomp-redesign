@@ -1,46 +1,86 @@
 "use client";
 
-import dynamic from "next/dynamic";
-
-// WebGL (ogl) touches `window` at render time — must never run during SSR.
-const Grainient = dynamic(() => import("@/components/grainient"), { ssr: false });
+import FacetField from "@/components/backgrounds/facet-field";
+import ParallaxTriangles from "@/components/backgrounds/parallax-triangles";
+import WaveField from "@/components/backgrounds/wave-field";
 
 /**
- * Instrument-canvas hero backdrop: a slow-drifting grainy gradient in the
- * brand's signal-cyan against the graphite background, textured with film grain
- * rather than a flat swirl, fading into the section below.
+ * The hero backdrop, in four layers, modelled on templatemonster demo 52524
+ * ("ConsultBiz") and recoloured from that template's royal blue to our cyan:
  *
- * This is the whole backdrop, and deliberately so. Two additions were tried here
- * and both were removed on request: a photographic focal object composited with
- * `mix-blend-screen` (a fanned burst of lit optical fibres on black,
- * `photo-1597733336794-12d05021d510`), and a set of drifting outline polygons on
- * pointer parallax. The shader plus the typed headline carry the hero alone —
- * don't reintroduce either without being asked.
+ *   1. the cyan field, deep under the copy and opening out to the right
+ *   2. `FacetField`   — a low-poly slab relief, the reference's "3D objects":
+ *                       real 3D geometry through a pinhole camera, relit as the
+ *                       pointer moves, on a ±1.2° tilt
+ *   3. `WaveField`    — the flowing ribbon, kept from the client's comp sheet
+ *   4. `ParallaxTriangles` — white triangles drifting against the mouse
+ *
+ * The reference's own background is only 1, 2 and 4; the ribbon is an addition
+ * the client asked to keep. Triangles sit above the ribbon so they read as the
+ * nearest plane, which is where the reference puts them.
+ *
+ * NOTE: an earlier revision of this file said the scattered triangles were
+ * "template furniture" that had been rejected here once and must not return.
+ * That instruction was reversed by the client on 2026-08-17, who asked for them
+ * by name along with the faceted background. Don't delete them on the strength
+ * of the old comment.
+ *
+ * Still deliberately absent: the `Grainient` WebGL gradient this replaced (the
+ * ribbon and the facets both need a flat ground to read against), and a
+ * photographic focal object composited with `mix-blend-screen`.
  */
-const HeroBackdrop = () => {
+interface HeroBackdropProps {
+	/**
+	 * `hero` is the home page's full-height opening; `band` is the short banner
+	 * the interior pages run above their content. Same four layers on the same
+	 * copy column — the only thing the height changes is `FacetField`.
+	 *
+	 * In a tall hero the height drives that layer's `slice` crop, and the
+	 * horizontal overflow carries its bright right-hand panels off past the copy.
+	 * A band is wider than it is tall, so the width drives instead and those
+	 * panels sit at a fixed 60% of it at every viewport — over the tail of the
+	 * paragraph at anything under about 1200. On graphite that was survivable;
+	 * on the cyan field it is 3.9:1, hence the dimming. See `intensity` there.
+	 */
+	variant?: "hero" | "band";
+}
+
+const HeroBackdrop = ({ variant = "hero" }: HeroBackdropProps) => {
 	return (
 		<div className="absolute inset-0 overflow-hidden" aria-hidden="true">
-			<Grainient
-				color1="#36c3e7"
-				color2="#1c5f7a"
-				color3="#0a0f16"
-				timeSpeed={0.7}
-				colorBalance={0}
-				warpStrength={1.0}
-				warpFrequency={8.5}
-				warpSpeed={1.8}
-				warpAmplitude={50}
-				blendSoftness={0.05}
-				rotationAmount={500}
-				noiseScale={2.0}
-				contrast={1.5}
-				saturation={1.0}
-				grainAmount={0.1}
-				grainScale={0.9}
-				zoom={0.9}
+			{/* The field itself — see `.surface-signal` in globals.css for why it is
+			    graded at all, and why `--field-hold` is per-breakpoint rather than one
+			    number. The slight tilt keeps it from reading as a UI gradient.
+
+			    This has to stay a plain div behind `FacetField` rather than becoming
+			    that layer's own backdrop: the facets are white and black alpha only,
+			    which is what makes recolouring the whole hero a one-token change. */}
+			<div
+				className="absolute inset-0"
+				style={{
+					background:
+						"linear-gradient(100deg, var(--background) 0%, var(--background) var(--field-hold), var(--canvas-far) 100%)",
+				}}
 			/>
 
-			<div className="absolute inset-0 bg-gradient-to-b from-background/0 via-background/40 to-background" />
+			<FacetField
+				className="absolute inset-0 h-full w-full"
+				intensity={variant === "band" ? 0.6 : 1}
+			/>
+
+			{/* Near-white rather than the logo cyan: the canvas underneath is now
+			    itself cyan, so the ribbon has to be lighter than the field to exist
+			    at all. Same relationship as the reference's white-on-blue lines.
+
+			    Static by request — the triangles are the only thing that moves here
+			    now, which is also what the reference does. Flip `animated` back on
+			    to restore the drift; the still pose is the same one reduced motion
+			    has always been served. */}
+			<WaveField className="absolute inset-0 h-full w-full" color="#dff5ff" animated={false} />
+
+			<ParallaxTriangles className="absolute inset-0" />
+
+			<div className="absolute inset-0 bg-gradient-to-b from-background/0 via-background/10 to-background" />
 		</div>
 	);
 };

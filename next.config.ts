@@ -7,6 +7,14 @@ const nextConfig: NextConfig = {
         // No remote hosts are allowed on purpose: it keeps the CSP img-src tight
         // and means a third-party CDN can never become a render dependency.
         remotePatterns: [],
+        // Next's own default here is "attachment", which makes every optimized
+        // image respond with `Content-Disposition: attachment; filename="….avif"`
+        // — i.e. it asks the browser to save the file rather than display it.
+        // That default guards against a *remote* image URL being turned into a
+        // drive-by download; with `remotePatterns: []` no remote image can be
+        // optimized at all and every source is our own file under `public/`, so
+        // it protects nothing and only tells browsers to download our photos.
+        contentDispositionType: "inline",
         formats: ["image/avif", "image/webp"],
         deviceSizes: [640, 750, 828, 1080, 1200, 1920, 2048, 3840],
         imageSizes: [16, 32, 48, 64, 96, 128, 256, 384],

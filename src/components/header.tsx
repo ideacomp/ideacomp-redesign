@@ -1,5 +1,5 @@
 "use client";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { Menu, X } from "lucide-react";
@@ -8,15 +8,46 @@ import Logo from "@/components/logo";
 import { useLocale } from "@/lib/i18n/locale-context";
 import { LanguageSwitcher } from "@/components/language-switcher";
 
-const Header = () => {
+interface HeaderProps {
+	/**
+	 * Sit transparently on the section below until the page is scrolled.
+	 *
+	 * Opt-in per page rather than derived from the route: it is only right over
+	 * a section that is both dark and *not* graphite. On the graphite heroes the
+	 * solid bar is indistinguishable from the hero anyway, and over a light first
+	 * section (`/privacy`) it would put this bar's light nav on near-white.
+	 */
+	overlay?: boolean;
+}
+
+const Header = ({ overlay = false }: HeaderProps) => {
 	const [isMenuOpen, setIsMenuOpen] = useState(false);
+	const [scrolled, setScrolled] = useState(false);
 	const pathname = usePathname();
 	const { dict } = useLocale();
 
 	const isActive = (path: string) => pathname === path;
 
+	useEffect(() => {
+		if (!overlay) return;
+		const onScroll = () => setScrolled(window.scrollY > 8);
+		// Run once: a reload restores the scroll position before this mounts.
+		onScroll();
+		window.addEventListener("scroll", onScroll, { passive: true });
+		return () => window.removeEventListener("scroll", onScroll);
+	}, [overlay]);
+
+	// The open mobile menu needs a ground of its own regardless of scroll.
+	const solid = !overlay || scrolled || isMenuOpen;
+
 	return (
-		<header className="dark fixed top-0 z-40 w-full border-b border-border bg-background/95 backdrop-blur-md">
+		<header
+			className={`dark fixed top-0 z-40 w-full border-b transition-colors motion-safe:duration-300 ${
+				solid
+					? "border-border bg-background/95 backdrop-blur-md"
+					: "border-transparent bg-transparent"
+			}`}
+		>
 			<div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
 				<div className="flex items-center justify-between py-4">
 					{/* One <Logo>, not a mark plus typed name: the wordmark is part of the
