@@ -2,22 +2,25 @@
 
 import FacetField from "@/components/backgrounds/facet-field";
 import ParallaxTriangles from "@/components/backgrounds/parallax-triangles";
-import WaveField from "@/components/backgrounds/wave-field";
 
 /**
- * The hero backdrop, in four layers, modelled on templatemonster demo 52524
+ * The hero backdrop, in three layers, modelled on templatemonster demo 52524
  * ("ConsultBiz") and recoloured from that template's royal blue to our cyan:
  *
  *   1. the cyan field, deep under the copy and opening out to the right
  *   2. `FacetField`   — a low-poly slab relief, the reference's "3D objects":
- *                       real 3D geometry through a pinhole camera, relit as the
- *                       pointer moves, on a ±1.2° tilt
- *   3. `WaveField`    — the flowing ribbon, kept from the client's comp sheet
- *   4. `ParallaxTriangles` — white triangles drifting against the mouse
+ *                       real 3D geometry through a pinhole camera, relit and
+ *                       sheared as the pointer moves
+ *   3. `ParallaxTriangles` — white triangles drifting against the mouse
  *
- * The reference's own background is only 1, 2 and 4; the ribbon is an addition
- * the client asked to keep. Triangles sit above the ribbon so they read as the
- * nearest plane, which is where the reference puts them.
+ * That is now exactly the reference's own stack. `WaveField` — the line ribbon
+ * the client picked off the comp sheet on 2026-08-14 — sat between 2 and 3 and
+ * was removed on 2026-08-18 at the client's request, after being made static and
+ * then shortened on laptops in the days before. **The component is still in the
+ * tree at `backgrounds/wave-field.tsx` and is deliberately not deleted**: it has
+ * been in and out once already, and `copyEdge()` there is still the canonical
+ * derivation of the copy-column fraction that `--field-hold` in `globals.css` is
+ * kept in step with. Remounting it is one line.
  *
  * NOTE: an earlier revision of this file said the scattered triangles were
  * "template furniture" that had been rejected here once and must not return.
@@ -26,13 +29,13 @@ import WaveField from "@/components/backgrounds/wave-field";
  * of the old comment.
  *
  * Still deliberately absent: the `Grainient` WebGL gradient this replaced (the
- * ribbon and the facets both need a flat ground to read against), and a
- * photographic focal object composited with `mix-blend-screen`.
+ * facets need a flat ground to read against), and a photographic focal object
+ * composited with `mix-blend-screen`.
  */
 interface HeroBackdropProps {
 	/**
 	 * `hero` is the home page's full-height opening; `band` is the short banner
-	 * the interior pages run above their content. Same four layers on the same
+	 * the interior pages run above their content. Same three layers on the same
 	 * copy column — the only thing the height changes is `FacetField`.
 	 *
 	 * In a tall hero the height drives that layer's `slice` crop, and the
@@ -67,16 +70,6 @@ const HeroBackdrop = ({ variant = "hero" }: HeroBackdropProps) => {
 				className="absolute inset-0 h-full w-full"
 				intensity={variant === "band" ? 0.6 : 1}
 			/>
-
-			{/* Near-white rather than the logo cyan: the canvas underneath is now
-			    itself cyan, so the ribbon has to be lighter than the field to exist
-			    at all. Same relationship as the reference's white-on-blue lines.
-
-			    Static by request — the triangles are the only thing that moves here
-			    now, which is also what the reference does. Flip `animated` back on
-			    to restore the drift; the still pose is the same one reduced motion
-			    has always been served. */}
-			<WaveField className="absolute inset-0 h-full w-full" color="#dff5ff" animated={false} />
 
 			<ParallaxTriangles className="absolute inset-0" />
 

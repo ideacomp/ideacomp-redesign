@@ -230,6 +230,14 @@ const hexToRgb = (hex: string) => {
  * the left, fan out to the right and drift continuously, dusted with sparkles
  * that ride the same curves.
  *
+ * **Nothing mounts this right now.** The client picked it off a five-up comp
+ * sheet on 2026-08-14, asked for it static on 2026-08-17, and took it out of the
+ * hero on 2026-08-18 — the backdrop is now the reference's own three layers, see
+ * `hero.tsx`. It is kept rather than deleted because it has already been in and
+ * out once, and because `copyEdge()` above is still the written derivation of the
+ * copy-column fraction that `--field-hold` in `globals.css` is held in step with.
+ * Remounting is one line in `HeroBackdrop`.
+ *
  * Canvas 2D rather than WebGL — it is a few thousand line segments a frame, and
  * this way there is no SSR guard, no context-loss handling and no shader to keep
  * in step with the palette.

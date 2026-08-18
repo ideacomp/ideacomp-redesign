@@ -55,7 +55,7 @@ const AboutContent = () => {
 						<dl className="grid grid-cols-2 gap-x-8 gap-y-8">
 							<div className="border-t border-border pt-4">
 								<dt className="text-sm text-muted-foreground">{dict.about.founded}</dt>
-								<dd className="mt-1 font-display text-4xl font-semibold text-foreground">2024</dd>
+								<dd className="mt-1 font-display text-4xl font-semibold text-foreground">2019</dd>
 							</div>
 							<div className="border-t border-border pt-4">
 								<dt className="text-sm text-muted-foreground">{dict.about.teamSize}</dt>

@@ -160,8 +160,7 @@ const ParallaxTriangles = ({ className }: { className?: string }) => {
 		// be safe there, but there is nothing to drive any of this on touch — the
 		// parallax is mouse-only — so the layer goes as a unit rather than becoming
 		// a static half-composition. Below `lg` the hero is the field plus
-		// `FacetField`, and the ribbon bows out too (`MAX_COPY_EDGE` in
-		// `wave-field.tsx`).
+		// `FacetField`, nothing else.
 		<div ref={ref} className={`hidden lg:block ${className ?? ""}`} aria-hidden="true">
 			{TRIANGLES.map((t, i) => (
 				<span

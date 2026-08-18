@@ -900,7 +900,7 @@ export const content: Record<Locale, {
 				"We engineer software, AI, and infrastructure for organizations that can't afford to gamble on a vendor — across healthcare, government, manufacturing, education, media, and non-profit work.",
 			specs: [
 				{ label: "Based in", value: "Czech Republic" },
-				{ label: "Founded", value: "2024" },
+				{ label: "Founded", value: "2019" },
 				{ label: "Disciplines", value: "Six" },
 			],
 			ctaPrimary: {
@@ -1013,7 +1013,7 @@ export const content: Record<Locale, {
 			},
 			team: {
 				title: "Who's Building This",
-				body: "Ideacomp was founded in 2024 as a small, senior engineering team — by design, not by size. We stay small enough that the people who scope a project are the people who build it, and the people who build it are who you talk to when something needs a decision. As the team grows, that's the one thing we're not willing to trade away.",
+				body: "Ideacomp was founded in 2019 as a small, senior engineering team — by design, not by size. We stay small enough that the people who scope a project are the people who build it, and the people who build it are who you talk to when something needs a decision. As the team grows, that's the one thing we're not willing to trade away.",
 			},
 			compliance: {
 				title: "Security & Compliance",
@@ -1045,7 +1045,7 @@ export const content: Record<Locale, {
 				"Vyvíjíme software, AI a infrastrukturu pro organizace, které si nemohou dovolit riskovat výběr dodavatele — ve zdravotnictví, veřejné správě, výrobě, vzdělávání, médiích i neziskovém sektoru.",
 			specs: [
 				{ label: "Sídlo", value: "Česká republika" },
-				{ label: "Založeno", value: "2024" },
+				{ label: "Založeno", value: "2019" },
 				{ label: "Obory", value: "Šest" },
 			],
 			ctaPrimary: {
@@ -1155,7 +1155,7 @@ export const content: Record<Locale, {
 			},
 			team: {
 				title: "Kdo za tím stojí",
-				body: "Ideacomp vznikl v roce 2024 jako malý, seniorní vývojářský tým — malý záměrně, ne z nouze. Zůstáváme dost malí na to, aby projekt navrhovali ti samí lidé, kteří ho pak vyvíjejí, a aby to byli právě oni, s kým mluvíte, když je potřeba se rozhodnout. Ať už tým poroste jakkoli, tohle je jediná věc, které se vzdát nechceme.",
+				body: "Ideacomp vznikl v roce 2019 jako malý, seniorní vývojářský tým — malý záměrně, ne z nouze. Zůstáváme dost malí na to, aby projekt navrhovali ti samí lidé, kteří ho pak vyvíjejí, a aby to byli právě oni, s kým mluvíte, když je potřeba se rozhodnout. Ať už tým poroste jakkoli, tohle je jediná věc, které se vzdát nechceme.",
 			},
 			compliance: {
 				title: "Bezpečnost a compliance",

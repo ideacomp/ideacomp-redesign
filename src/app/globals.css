@@ -141,10 +141,8 @@
 	   single value was only ever right at one viewport.
 
 	   Below 1024 the copy fills essentially the whole width, so there is nowhere to
-	   open out to and the field stays deep edge to edge — the facets and triangles
-	   carry the hero there, and the ribbon switches itself off for the same reason
-	   (`MAX_COPY_EDGE` in `wave-field.tsx`). Keep these steps and `copyEdge()` in
-	   step. */
+	   open out to and the field stays deep edge to edge — the facets carry the hero
+	   there alone, the triangles having switched themselves off at `lg`. */
 	--field-hold: 100%;
 }
 
@@ -166,8 +164,12 @@
  * capped at `max-w-2xl`. The interior pages' banners floated a shrink-to-fit
  * column in the centre instead and their copy finished at 73% of 1440, out over
  * the open end — so they were moved onto the hero's column rather than each
- * getting a `--field-hold` of its own. `copyEdge()` in `wave-field.tsx` reads
- * the same layout; the two are one number in two places.
+ * getting a `--field-hold` of its own.
+ *
+ * `copyEdge()` in `backgrounds/wave-field.tsx` derives the same number from the
+ * layout instead of stating it. That component is currently unmounted, but it is
+ * still the one place the derivation is written down — read it before changing
+ * these steps, and keep the two in agreement.
  */
 
 @layer base {

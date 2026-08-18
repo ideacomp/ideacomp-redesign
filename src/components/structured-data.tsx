@@ -19,7 +19,7 @@ export default function StructuredData() {
 		description:
 			"Ideacomp engineers custom software, AI & machine learning, cybersecurity, and cloud/DevOps systems for healthcare, government, manufacturing, education, media, and non-profit organizations.",
 		slogan: "Driven by Ideas",
-		foundingDate: "2024",
+		foundingDate: "2019",
 		numberOfEmployees: "2-10",
 		industry: "Software Development",
 		naics: "541511",
