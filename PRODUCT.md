@@ -26,14 +26,14 @@ Precise, grounded, quietly ambitious. The voice reads like a senior engineer exp
 
 ## Anti-references
 
-Generic AI-SaaS landing pages (centered hero, blue-to-cyan gradient text, three identical icon cards, tiny uppercase eyebrows above every section) — this is what the previous version of this exact site looked like, and it must not recur. Also avoid: Webflow-agency clichés, glassmorphism as decoration, emoji used as section iconography, stock photography of people shaking hands or pointing at laptops, testimonial/logo walls (no real proof exists yet — don't fake it with placeholders).
+Generic AI-SaaS landing pages (centered hero, blue-to-cyan gradient text, three identical icon cards, tiny uppercase eyebrows above every section) — this is what the previous version of this exact site looked like, and it must not recur. Also avoid: Webflow-agency clichés, glassmorphism as decoration, emoji used as section iconography, stock photography of people shaking hands or pointing at laptops, testimonial/logo walls. There are still no testimonials and no client logos; the shipped sites in `references` are the only real proof the site has, and the ban is on *fabricating* the rest, not on showing what exists.
 
 ## Design Principles
 
 - Engineering confidence over sales enthusiasm: copy and visuals earn trust through specificity (real capabilities, real process) rather than superlatives.
 - Show the system, not a stock photo of a person near a system: prefer generated schematics/diagrams over generic imagery.
 - One earned sequence: reserve numbered steps for the one place it's real (the delivery process); never decorate unrelated sections with 01/02/03.
-- Design without borrowed proof: build credibility from process rigor and technical depth since no testimonials or client logos exist yet; never fabricate placeholder quotes or logos.
+- Design without borrowed proof: credibility comes from process rigor, technical depth, and the handful of things we can actually show — the shipped sites in `references` and our own GITEX photos. No testimonials or client logos exist yet; never fabricate placeholder quotes or logos to stand in for them.
 - Every industry named gets real specificity, not an emoji and a label.
 
 ## Accessibility & Inclusion

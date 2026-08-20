@@ -166,6 +166,124 @@ export const processSteps: Record<Locale, ProcessStep[]> = {
 	],
 };
 
+/**
+ * A site we built and shipped, shown in `<ReferenceShowcase>` on the home page.
+ *
+ * This is the first genuinely earned proof on the site — everything else either
+ * describes capability (`solutionsData`) or is explicitly illustrative
+ * (`caseStudies`). PRODUCT.md forbids fabricated proof, not proof; the bar for
+ * anything added here is that we built it and it is publicly reachable.
+ */
+export interface ReferenceProject {
+	/** Matches `public/portfolio/<slug>.jpg`, so a capture and the record that
+	 *  points at it cannot drift apart — same rule as the /solutions panels.
+	 *  It is also the per-site key in `docs/portfolio/capture.mjs`. */
+	slug: string;
+	name: string;
+	/** The live site. Opens in a new tab. */
+	href: string;
+	/** Bare host — the visible half of the link, set in mono under the rule. */
+	domain: string;
+	/** A hero capture from `docs/portfolio/capture.mjs`. 16:10, in the site's
+	 *  own colour; see docs/photo-sources.md before replacing one. */
+	image: {
+		src: string;
+		alt: string;
+	};
+}
+
+/**
+ * Names and domains are identical in both locales — only `alt` is translated.
+ * The duplication is deliberate: it keeps the shape identical to every other
+ * collection here, so TypeScript catches a locale that falls behind.
+ */
+export const references: Record<Locale, ReferenceProject[]> = {
+	en: [
+		{
+			slug: "autoskola-necas",
+			name: "Autoškola Nečas",
+			href: "https://www.autoskolanecas.cz",
+			domain: "autoskolanecas.cz",
+			image: {
+				src: "/portfolio/autoskola-necas.jpg",
+				alt: "Home page of autoskolanecas.cz: a dark hero with a motorcyclist cornering on a mountain road, the headline Řiď svou budoucnost, and course and contact buttons",
+			},
+		},
+		{
+			slug: "spf-group",
+			name: "SPF Group",
+			href: "https://www.spfgroup.org",
+			domain: "spfgroup.org",
+			image: {
+				src: "/portfolio/spf-group.jpg",
+				alt: "Home page of spfgroup.org: a deep blue hero over a meeting-room photograph, the headline Plánujeme budoucnost, která dává smysl, and a row of consulting-field tags",
+			},
+		},
+		{
+			slug: "acord",
+			name: "ACoRD CZ",
+			href: "https://acord-redesign.vercel.app",
+			domain: "acord-redesign.vercel.app",
+			image: {
+				src: "/portfolio/acord.jpg",
+				alt: "Home page of the ACoRD CZ redesign: a dark green hero headlined Sociální služby v území, beside a panel of figures for projects delivered, regions covered, and period",
+			},
+		},
+		{
+			slug: "artiphy",
+			name: "Artiphy.ai",
+			href: "https://artiphy-ai.vercel.app",
+			domain: "artiphy-ai.vercel.app",
+			image: {
+				src: "/portfolio/artiphy.jpg",
+				alt: "Home page of artiphy-ai.vercel.app: a full-bleed portrait photograph behind the headline Create beyond imagination, with translucent feature cards down the right",
+			},
+		},
+	],
+	cs: [
+		{
+			slug: "autoskola-necas",
+			name: "Autoškola Nečas",
+			href: "https://www.autoskolanecas.cz",
+			domain: "autoskolanecas.cz",
+			image: {
+				src: "/portfolio/autoskola-necas.jpg",
+				alt: "Úvodní stránka autoskolanecas.cz: tmavá hlavička s motorkářem v zatáčce horské silnice, nadpisem Řiď svou budoucnost a tlačítky na kurzy a kontakt",
+			},
+		},
+		{
+			slug: "spf-group",
+			name: "SPF Group",
+			href: "https://www.spfgroup.org",
+			domain: "spfgroup.org",
+			image: {
+				src: "/portfolio/spf-group.jpg",
+				alt: "Úvodní stránka spfgroup.org: tmavě modrá hlavička nad fotografií jednací místnosti, nadpis Plánujeme budoucnost, která dává smysl, a řada štítků s obory poradenství",
+			},
+		},
+		{
+			slug: "acord",
+			name: "ACoRD CZ",
+			href: "https://acord-redesign.vercel.app",
+			domain: "acord-redesign.vercel.app",
+			image: {
+				src: "/portfolio/acord.jpg",
+				alt: "Úvodní stránka redesignu ACoRD CZ: tmavě zelená hlavička s nadpisem Sociální služby v území a panelem s počtem projektů, krajů a obdobím",
+			},
+		},
+		{
+			slug: "artiphy",
+			name: "Artiphy.ai",
+			href: "https://artiphy-ai.vercel.app",
+			domain: "artiphy-ai.vercel.app",
+			image: {
+				src: "/portfolio/artiphy.jpg",
+				alt: "Úvodní stránka artiphy-ai.vercel.app: přes celou plochu portrétní fotografie za nadpisem Create beyond imagination, vpravo poloprůhledné karty s funkcemi",
+			},
+		},
+	],
+};
+
 // Solutions data (the required "Our Solutions" content)
 export interface Solution {
 	slug: string;
@@ -858,6 +976,12 @@ export const content: Record<Locale, {
 	};
 	home: {
 		capabilities: AccentTitle & { subtitle: string; watermark: string };
+		references: AccentTitle & {
+			subtitle: string;
+			watermark: string;
+			/** Names the whole showcase for assistive tech. */
+			label: string;
+		};
 		focus: AccentTitle & {
 			body: string;
 			bodyStrong: string;
@@ -917,6 +1041,13 @@ export const content: Record<Locale, {
 				subtitle:
 					"Three disciplines, one delivery standard.",
 				watermark: "Disciplines",
+			},
+			references: {
+				title: "Shipped and",
+				accent: "Live",
+				subtitle: "Four sites we designed, built, and handed over.",
+				watermark: "Built",
+				label: "Sites built by Ideacomp",
 			},
 			focus: {
 				title: "Engineered to Hold",
@@ -1062,6 +1193,13 @@ export const content: Record<Locale, {
 				subtitle:
 					"Tři obory, jeden standard dodávky.",
 				watermark: "Obory",
+			},
+			references: {
+				title: "Hotovo a",
+				accent: "v provozu",
+				subtitle: "Čtyři weby, které jsme navrhli, postavili a předali.",
+				watermark: "Reference",
+				label: "Weby, které jsme vytvořili",
 			},
 			focus: {
 				title: "Navržené tak, aby to",

@@ -11,9 +11,15 @@ import { cn } from "@/lib/utils";
  *
  * Two deliberate departures from that source file:
  *
- * - **The mark is #37c4e8**, the brand cyan, which is also what
- *   `landscape_logo.png` uses. `logo.png` — the file both headers used to show
- *   — is a brightened #46d7ff variant and the odd one out of the three.
+ * - **The mark is `--brand`, #00a3ff.** It reads the token rather than carrying
+ *   its own hex so that the mark, `text-signal` on graphite, and the hero field
+ *   can never drift apart again — which is exactly what had happened: this file
+ *   said #37c4e8, `landscape_logo.png` agreed, and `logo.png` (the favicon, of
+ *   all things) was a brightened #46d7ff. `--brand` and not `--signal`:
+ *   `.surface-signal` re-points `--signal` to near-white, which would turn the
+ *   mark white if the lockup ever landed on the hero field. The literal fallback
+ *   is load-bearing too — `docs/logo/render.mjs` rasterises these paths outside
+ *   the app's CSS, where no custom property resolves.
  * - **The overlap shadow is dropped.** The source composites a 35x37 raster
  *   under the crossing arcs with `mix-blend-mode: multiply`. It is drawn for a
  *   white background, so it turns into a dark smudge on the graphite header, and
@@ -31,7 +37,7 @@ const Logo = ({ className }: { className?: string }) => (
 		aria-label="Ideacomp"
 		className={cn("w-auto", className)}
 	>
-		<g fill="#37c4e8" transform="translate(-442.68 -338.77)">
+		<g fill="var(--brand, #00a3ff)" transform="translate(-442.68 -338.77)">
 				<path d="M569.66,453.24c-.15,3.6-1.94,6.79-4.58,9.03-1.11.95-2.36,1.73-3.71,2.29-1.88.8-3.94,1.17-6.01,1.03-12.25-.73-22.92-7.75-32.82-14.35-15.09-10.8-29.13-23.08-41.83-36.61-3.65-3.88-7.19-7.87-10.6-11.95-4.03-4.81-7.9-9.76-11.59-14.83-7.12-10.3-14.75-21.32-15.75-34.19-.46-3.76.87-7.47,3.27-10.24,1.71-1.98,3.96-3.48,6.5-4.19.97-.28,1.98-.44,3.03-.46,9.23-.02,18.25,3.75,25.63,9.1,3.43,2.48,3.22,7.38.95,10.48-1.1,1.5-2.69,2.58-4.58,2.76-.69.07-1.43.01-2.2-.19-3.39-.99-6.64-2.36-9.88-3.71-2.4-.99-4.8-1.97-7.26-2.79.8,2.32,1.7,4.59,2.69,6.81,5.03,11.28,12.39,21.32,20.45,30.74,3.47,4.05,7.06,7.99,10.65,11.87.9.96,1.79,1.92,2.67,2.87,15.45,15.21,31.68,30.96,51.52,40.18,2.56,1.2,5.18,2.28,7.87,3.24-.6-1.96-1.33-3.86-2.13-5.74-2.24-5.25-5.02-10.28-6.7-15.74.08-1.18.44-2.25.99-3.18,1.26-2.11,3.52-3.52,5.9-3.89,2.65-.42,5.42.44,7.08,3.04,5.75,8.35,10.77,18.2,10.42,28.62Z" />
 				<path d="M487.9,451.98c-9.07,6.82-19.92,12.74-31.52,12.77-8.52.05-14.34-8.75-12.7-16.72,1.82-11.31,7.73-21.14,14.33-30.41h0c2.11-2.97,4.29-5.87,6.43-8.75.37-.43.77-.88,1.18-1.35.27-.3.54-.61.82-.92,3.45,4.08,7.01,8.06,10.69,11.95-2.48,2.8-4.85,5.71-6.93,8.65-1.36,1.93-2.61,3.86-3.66,5.78-.01.02-.02.04-.03.06-3.14,5.2-5.91,10.6-7.89,16.4,8-2.4,15.02-7.02,22.65-10.25,7.02-2.67,12.77,8.4,6.62,12.8Z" />
 				<path d="M504.08,390.65l-8.6,8.63-10.66-11.96,8.24-7.99c2.82-2.74,7.36-2.58,9.98.35l1.31,1.46c2.45,2.74,2.33,6.91-.26,9.51Z" />

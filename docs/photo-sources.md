@@ -219,24 +219,96 @@ These are choices, already flagged and accepted. Do not "fix" them:
   paragraph and its "Meet the team" CTA carry the connection. If this ever grates,
   the fix is the copy or moving the carousel to `/about`, not swapping in stock.
 
-## The hero has no photograph and no decorative shapes
+## The portfolio captures are screenshots of other people's sites
 
-The home hero is the Grainient shader, the bottom fade, and the typed headline.
-Nothing else. Two additions were built there and both were removed on request:
+`public/portfolio/*.jpg` are hero captures of the four sites we have built,
+shown in `<ReferenceShowcase>` on the home page. They are generated, not
+collected by hand:
+
+```
+node docs/portfolio/capture.mjs                  # all four
+node docs/portfolio/capture.mjs spf-group        # one, while iterating
+```
+
+Same pipeline as the panels — Playwright at `deviceScaleFactor: 2`, downscaled
+through `sips`, run by hand and never part of `npm run build`. Three ways it
+deliberately differs:
+
+- **JPEG, not PNG.** The PNG rule above is about 3px strokes and mono type in
+  synthetic line art, where JPEG rings. These are photographs inside a browser
+  window; as PNGs they came out 1.0–1.5 MB each, three to seven times anything
+  else in `public/`. At q90 from a 2x render they land at 195–400 KB, in line
+  with the GITEX photos, and the UI text still holds up.
+- **16:10 at 1600×1000**, because that is a browser window. Every card in the
+  row shares it, so `crop` is asserted to be 16:10 at runtime. An earlier pass
+  used 2:1 and it cut one site's subhead off mid-sentence.
+- **Never depends on the build.** Four third-party origins must not be able to
+  fail a deploy.
+
+**These carry third-party branding, and that is the point.** The rule further up
+bans it in the drawn panels, where it would be borrowed credibility for a
+capability claim. Here the client's own masthead is the evidence. Same reasoning
+as the GITEX deviation: the ban is on *fabricated* or *borrowed* proof, not on
+proof.
+
+### Per-site tuning
+
+The output must be one shared aspect, so what varies is how a hero is made to
+fill it. Two cases, both already in the script:
+
+- A **full-height hero** grows with the window: raise `viewport.height` above
+  the crop and whatever follows it is pushed out of frame.
+  `autoskola-necas` needs 1040, or the top row of its marquee band lands inside
+  the crop, clipped mid-word.
+- A **fixed-height hero** does not: shrink the whole window to it instead,
+  keeping 16:10. `acord` is 699px of hero at any width, so it shoots at
+  1118×699 — still well above the 1024px breakpoint, so nothing stacks.
+
+Do not crop off-aspect and expect `sips -z` to sort it out: that flag resamples
+to exact dimensions without preserving ratio, so it squashes silently.
+
+There is also a `hide` array per site, for cookie banners and chat widgets. None
+of the four needed it, but they are other people's sites and can grow one at any
+time. The loop is: capture, open the image, add the selector, capture again.
+
+### Re-capturing
+
+These go stale when a client redesigns. Re-run the script, then **look at all
+four** — a redesign that moves the hero will not fail, it will just quietly
+produce a screenshot of the wrong thing. Alt text in `references` describes what
+is in the frame, so it has to be rewritten alongside a materially changed
+capture.
+
+## The hero has no photograph, and its one image is generated
+
+The home hero is the cyan field, a baked terrace raster, the drifting triangles,
+the bottom fade and the typed headline.
+
+**`public/hero/plateau-*.{avif,webp}` is the one image on this site that is not
+photography and has no provenance to record — it is generated.** `docs/hero/`
+holds the scene and the renderer; re-run `node docs/hero/plateau.mjs` rather than
+editing the files in `public/`. Same arrangement as `public/solutions/` and
+`public/portfolio/`, which come from `docs/diagrams/render.mjs` and
+`docs/portfolio/capture.mjs`.
+
+Older revisions of this section claimed the hero was the Grainient shader with
+"no decorative shapes". That has been wrong since 2026-08-17, when the client
+asked for the drifting triangles by name. Two things WERE built there and removed
+on request, and both remain out:
 
 - a photographic focal object — a radiating burst of lit optical fibres on black,
-  `photo-1597733336794-12d05021d510`, composited with `mix-blend-screen` so the
-  black vanished against the shader;
-- a set of drifting outline triangles and quads on pointer parallax, which is why
-  `src/components/parallax-layer.tsx` no longer exists.
+  `photo-1597733336794-12d05021d510`, composited with `mix-blend-screen`;
+- an earlier set of drifting outline triangles and quads, which is why
+  `src/components/parallax-layer.tsx` no longer exists. The triangles in the hero
+  today are a different, later component.
 
-Recorded so the work is recoverable, not as a suggestion. Don't add either back
-without being asked.
+Recorded so the work is recoverable, not as a suggestion.
 
 ## Checking a change
 
 ```
 node docs/diagrams/render.mjs
+node docs/portfolio/capture.mjs
 npm run build
 npm run dev          # then /solutions and / at 375, 768, 1440, 1920
 ```

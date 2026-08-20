@@ -11,6 +11,8 @@ import HeroBackdrop from "@/components/hero";
 import TextType from "@/components/text-type";
 import AccentHeading from "@/components/accent-heading";
 import FocusBand from "@/components/focus-band";
+// Portfolio, temporarily commented out — see the note further down in this file.
+// import ReferenceShowcase from "@/components/reference-showcase";
 import ScrollCue from "@/components/scroll-cue";
 import SectionWatermark from "@/components/section-watermark";
 import { Reveal } from "@/components/reveal";
@@ -247,6 +249,18 @@ const Home = () => {
 					</div>
 				</div>
 			</section>
+
+			{/* PORTFOLIO — TEMPORARILY COMMENTED OUT (2026-08-20, client's request).
+			    Uncomment this line and the import at the top of the file to restore;
+			    `reference-showcase.tsx`, `public/portfolio/*`, `docs/portfolio/capture.mjs`
+			    and the `references` data in `lib/sitemap.ts` are all left in place.
+
+			    Real shipped work, straight after the claim it backs up. Dark, so the
+			    run of surfaces stays light / dark / light / dark through the page —
+			    NOTE that while this is out, the section above it and `FocusBand` below
+			    are both light, so the page runs light / light / dark here. Restoring
+			    this fixes the alternation; don't "fix" it by re-toning FocusBand. */}
+			{/* <ReferenceShowcase /> */}
 
 			<FocusBand />
 

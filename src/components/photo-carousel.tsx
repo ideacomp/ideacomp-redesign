@@ -30,8 +30,12 @@ const DRAG_DISTANCE = 40;
 const DRAG_VELOCITY = 400;
 
 /** Shared look for the arrow and pause buttons. 32px is the visible circle; the
- *  row's gap keeps neighbouring targets from crowding each other on touch. */
-const CONTROL =
+ *  row's gap keeps neighbouring targets from crowding each other on touch.
+ *
+ *  Exported because `<ReferenceShowcase>` renders the same cluster of arrows and
+ *  dots over a different kind of slide, and two copies of this string would
+ *  drift the moment one of them is retuned. */
+export const CAROUSEL_CONTROL =
 	"flex size-8 shrink-0 items-center justify-center rounded-full border border-foreground/30 " +
 	"text-foreground/80 transition-colors motion-safe:duration-300 " +
 	"hover:border-signal hover:bg-signal hover:text-signal-foreground " +
@@ -238,7 +242,7 @@ const PhotoCarousel = ({
 							type="button"
 							onClick={() => go(index - 1)}
 							aria-label={dict.common.previousSlide}
-							className={CONTROL}
+							className={CAROUSEL_CONTROL}
 						>
 							<ChevronLeft size={16} aria-hidden="true" />
 						</button>
@@ -246,7 +250,7 @@ const PhotoCarousel = ({
 							type="button"
 							onClick={() => go(index + 1)}
 							aria-label={dict.common.nextSlide}
-							className={CONTROL}
+							className={CAROUSEL_CONTROL}
 						>
 							<ChevronRight size={16} aria-hidden="true" />
 						</button>
@@ -294,7 +298,7 @@ const PhotoCarousel = ({
 								type="button"
 								onClick={() => setUserPaused((p) => !p)}
 								aria-label={userPaused ? dict.common.playSlideshow : dict.common.pauseSlideshow}
-								className={cn(CONTROL, "ml-1")}
+								className={cn(CAROUSEL_CONTROL, "ml-1")}
 							>
 								{userPaused ? (
 									<Play size={13} aria-hidden="true" />

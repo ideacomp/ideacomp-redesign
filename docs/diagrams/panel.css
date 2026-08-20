@@ -34,10 +34,21 @@
 	--ink-mid: #93a0ad;
 	--ink-lo: #6d7b88;
 
-	--signal: #36c3e7;
-	--signal-soft: #7fd0e8;
-	--signal-dim: #4f8396;
-	--signal-line: #5f93a6;
+	/* The brand hue, 245. Hex and not `oklch(… var(--brand-h))` because this
+	   stylesheet is loaded by Playwright in `render.mjs`, outside the app, where
+	   globals.css does not exist — this is the third independent copy of the brand
+	   colour and the only one that has to stay a literal. Keep it in step with
+	   `--brand` in globals.css by hand.
+
+	   `--signal` is #00a3ff exactly; the other three are the old ladder's own
+	   lightnesses moved onto 245, with chroma lifted toward the brand's C/L ratio
+	   so they stay recognisably the same family. The luminance ORDER is what
+	   ranks things here and it is unchanged: soft > signal > line > dim. On
+	   `--panel` they measure 5.66 / 8.77 / 3.66 / 4.53 to 1. */
+	--signal: #00a3ff;
+	--signal-soft: #8ac9ff;
+	--signal-dim: #4d80aa;
+	--signal-line: #5d90ba;
 
 	--mono: "Spline Sans Mono", monospace;
 	--display: "Big Shoulders Display", sans-serif;
@@ -149,7 +160,7 @@ svg#wires {
 	font-size: 13px;
 	letter-spacing: 0.12em;
 	text-transform: uppercase;
-	border: 2px solid #3f8fa6;
+	border: 2px solid #4089c3;
 	border-radius: 999px;
 	padding: 3px 12px;
 	color: var(--signal-soft);
@@ -279,7 +290,7 @@ svg#wires {
 }
 
 .chip.on {
-	border-color: #3f8fa6;
+	border-color: #4089c3;
 	color: var(--signal-soft);
 }
 
@@ -329,7 +340,7 @@ svg#wires {
 }
 
 .step.active {
-	border-color: #3f8fa6;
+	border-color: #4089c3;
 	background: var(--panel-2);
 }
 

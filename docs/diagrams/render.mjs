@@ -43,7 +43,7 @@ const PANELS = [
 
 const WIDTH = 1600;
 const HEIGHT = 1067;
-const WIRE = "#4f8396";
+const WIRE = "#4d80aa"; /* --signal-dim in panel.css; keep the two in step */
 
 const only = process.argv[2];
 const queue = only ? PANELS.filter((p) => p.slug === only) : PANELS;

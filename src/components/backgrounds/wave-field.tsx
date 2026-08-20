@@ -243,7 +243,7 @@ const hexToRgb = (hex: string) => {
  * in step with the palette.
  */
 const WaveField: FC<WaveFieldProps> = ({
-	color = "#37c4e8",
+	color = "#00a3ff", /* --brand; a literal because Canvas 2D cannot read var() */
 	lineCount = 100,
 	speed = 1,
 	intensity = 1,

@@ -33,6 +33,15 @@ export interface Dictionary {
 		nextSlide: string;
 		pauseSlideshow: string;
 		playSlideshow: string;
+		/** The showcase below has its own set rather than reusing the four
+		 *  above: those name their subject ("Previous photo"), and announcing a
+		 *  client site as a photo is wrong. */
+		showcaseRoleDescription: string;
+		goToProject: string;
+		previousProject: string;
+		nextProject: string;
+		visitSite: string;
+		opensInNewTab: string;
 	};
 	contactInfo: {
 		address: string;
@@ -228,6 +237,12 @@ export const dictionaries: Record<Locale, Dictionary> = {
 			nextSlide: "Next photo",
 			pauseSlideshow: "Pause the photo carousel",
 			playSlideshow: "Resume the photo carousel",
+			showcaseRoleDescription: "Project showcase",
+			goToProject: "Go to project",
+			previousProject: "Previous project",
+			nextProject: "Next project",
+			visitSite: "Visit site",
+			opensInNewTab: "opens in a new tab",
 		},
 		contactInfo: {
 			address: "Prague, Czech Republic",
@@ -484,6 +499,12 @@ export const dictionaries: Record<Locale, Dictionary> = {
 			nextSlide: "Další fotografie",
 			pauseSlideshow: "Pozastavit fotogalerii",
 			playSlideshow: "Spustit fotogalerii",
+			showcaseRoleDescription: "Přehled projektů",
+			goToProject: "Přejít na projekt",
+			previousProject: "Předchozí projekt",
+			nextProject: "Další projekt",
+			visitSite: "Otevřít web",
+			opensInNewTab: "otevře se v novém okně",
 		},
 		contactInfo: {
 			address: "Praha, Česká republika",

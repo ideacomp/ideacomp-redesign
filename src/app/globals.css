@@ -48,6 +48,31 @@
 :root {
 	--radius: 0.375rem;
 
+	/* The brand colour, and the only place it is written down. #00a3ff, the same
+	   value the logo mark carries. Every brand-coloured token on the site is this
+	   hue at a different lightness, so a rebrand is one number — before this the
+	   hue was an independently written literal in eleven places, plus four hex
+	   copies outside this file, and they had already drifted apart.
+
+	   `--brand` is NEVER re-pointed by `.dark` or `.surface-signal`. That is what
+	   makes it safe for the logo mark, which has to keep its own colour on any
+	   surface. The re-pointable accent is `--signal`, which `.surface-signal`
+	   turns near-white.
+
+	   Written as a HEX on purpose. The client specified an exact value, and every
+	   other colour here is oklch, so the temptation is to "harmonise" it to
+	   `oklch(0.691 0.174 245)` — which is what it converts to, and which Chrome
+	   does render as exactly #00a3ff. Don't. That exactness then rests on one
+	   engine's rounding at the 8-bit boundary, and a brand colour is the one
+	   value that must be byte-identical to what the client gave us and to the
+	   baked rasters in `public/`. Nothing is lost: `--brand` is only ever used
+	   whole (`var(--brand)`), and `--brand-h` below is what the derived tokens
+	   actually read. */
+	--brand: #00a3ff;
+	/* oklch hue of #00a3ff (L 0.691, C 0.174). Every derived brand token is this
+	   hue at a different lightness. */
+	--brand-h: 245;
+
 	/* Datasheet surface (light) */
 	--background: oklch(0.985 0.003 255);
 	--foreground: oklch(0.19 0.016 255);
@@ -63,14 +88,18 @@
 	--muted-foreground: oklch(0.4 0.018 255);
 	--accent: oklch(0.7 0.11 260);
 	--accent-foreground: oklch(0.14 0.02 260);
-	--signal: oklch(0.53 0.09 219.4);
-	--signal-foreground: oklch(0.99 0.01 219.4);
+	/* The brand hue, dark enough to carry as text on the datasheet: 5.02:1 on
+	   `--background`. Chroma tracks the brand's own C/L ratio (~0.25) rather than
+	   staying at the 0.09 the old cyan used — at this hue 0.09 reads as a muted
+	   slate that does not look related to the mark. */
+	--signal: oklch(0.53 0.13 var(--brand-h));
+	--signal-foreground: oklch(0.99 0.01 var(--brand-h));
 	--telemetry: oklch(0.45 0.1 260);
 	--telemetry-foreground: oklch(0.99 0.01 260);
 	--destructive: oklch(0.55 0.2 25);
 	--border: oklch(0.85 0.008 255);
 	--input: oklch(0.85 0.008 255);
-	--ring: oklch(0.53 0.09 219.4);
+	--ring: var(--signal);
 }
 
 .dark {
@@ -92,46 +121,82 @@
 	--muted-foreground: oklch(0.73 0.02 255);
 	--accent: oklch(0.7 0.11 260);
 	--accent-foreground: oklch(0.14 0.02 260);
-	--signal: oklch(0.76 0.125 219.4);
-	--signal-foreground: oklch(0.15 0.03 219.4);
+	/* On graphite the accent IS the brand colour, unmodified — 7.09:1 on
+	   `--background` and 6.54:1 on `--card`, so it carries as text. This is also
+	   the pairing the logo relies on: the mark in the header is the same #00a3ff
+	   as every `text-signal` word below it. */
+	--signal: var(--brand);
+	--signal-foreground: oklch(0.15 0.03 var(--brand-h));
 	--telemetry: oklch(0.72 0.1 260);
 	--telemetry-foreground: oklch(0.15 0.02 260);
 	--destructive: oklch(0.68 0.2 25);
 	--border: oklch(1 0 0 / 12%);
 	--input: oklch(1 0 0 / 14%);
-	--ring: oklch(0.76 0.125 219.4);
+	--ring: var(--signal);
 	color: var(--foreground);
 }
 
 /*
  * Hero canvas: the one surface on the site that is a saturated field of the
- * brand cyan rather than graphite. Taken from the reference hero the client
- * picked, where the whole block is flat brand colour under the wave ribbon —
- * there the colour is a royal blue, here it is our cyan.
+ * brand colour rather than graphite. Taken from the reference hero the client
+ * picked, where the whole block is flat brand colour under the wave ribbon.
  *
  * Layered on top of `.dark`, and re-points only the tokens the hero reads.
  *
- * The field is a gradient, not the reference's flat block, and that is forced
- * by the hue. Blue can be both saturated and dark, so the reference can be one
- * vivid colour edge to edge; cyan cannot, and a cyan deep enough to carry white
- * copy reads as teal. So the deep end sits under the copy — `--background`, at
- * the lightness where 70%-opacity white still clears 4.5:1, about two steps
- * before it stops — and the field opens out to `--canvas-far` under the ribbon,
- * where nothing but decoration sits and the colour can actually be cyan.
+ * The field is a gradient rather than the reference's flat block, and the
+ * reason changed when the brand moved from cyan to #00a3ff. It used to be
+ * forced: cyan cannot be both saturated and dark, and a cyan deep enough to
+ * carry white copy reads as teal, so the gradient was how the surface got to be
+ * cyan anywhere at all. At the blue hue that constraint is gone — sRGB allows
+ * about 40% more chroma at the deep end here than it did at 219.4.
+ *
+ * It stays a gradient for a better reason: the open end is now `--brand` itself,
+ * so the hero terminates in the logo's exact colour and the field visibly comes
+ * from the mark. The deep end still has to be dark enough to carry white copy,
+ * which is what `--field-hold` exists to guarantee — see below, and note the
+ * open end is far too light for copy (70%-opacity white over it is 2.22:1), so
+ * that guarantee is now load-bearing rather than a comfortable margin.
  */
 .surface-signal {
-	/* 0.35, not 0.38: `FacetField` lays up to 6% white over the copy column, and
-	   this is that light paid back so the paragraph lands where it already
-	   passed (4.5:1). The two move together — raise a facet panel's alpha over
-	   the copy and this has to come down with it. */
-	--background: oklch(0.35 0.14 219.4);
-	--canvas-far: oklch(0.56 0.15 205);
-	/* Near-white. On a field that is already cyan, a cyan accent is mush — this
-	   is what makes the CTA fill, the eyebrow rule and the headline's period
-	   still read as the accent. Matches the reference's white primary button. */
-	--signal: oklch(0.97 0.03 205);
-	--signal-foreground: oklch(0.28 0.07 219.4);
-	--ring: oklch(0.97 0.03 205);
+	/* 0.35, and the number is measured rather than reasoned.
+
+	   THIS IS COUPLED TO `FacetField`. That layer lays up to 6% white over the
+	   copy column, and 0.35 is precisely that light paid back — the field is
+	   authored dark enough that the composite lands where a bare field at ~0.38
+	   would. Raise a facet panel's alpha over the copy and this has to come down
+	   with it; the two only ever move together.
+
+	   The coupling is easy to lose, and it was lost once: a `Platform` terrace
+	   briefly replaced the facets, laid nothing light over the column, and the
+	   field went up to 0.36 because the debt had lost its creditor. That layer
+	   was cut on 2026-08-20 and the facets came back, so this came back to 0.35
+	   with them. Don't "restore" 0.36 without re-running the harness — and note
+	   0.38 was never verified as a bare value either; it was only ever true as a
+	   composite.
+
+	   The move from hue 219.4 to the brand's 245 did not disturb any of this.
+	   Both values are outside sRGB at C 0.14, so the engine clamps and what
+	   actually paints is #00475e before and #003b7b now — those are the numbers
+	   to reason about. Relative luminance went DOWN, so the field got safer
+	   rather than riskier. Verified end to end by `docs/hero/contrast.mjs`, which
+	   samples the composited pixels rather than trusting any of this arithmetic. */
+	--background: oklch(0.35 0.14 var(--brand-h));
+
+	/* The open end, and it is the brand colour exactly — the gradient terminates
+	   in the same #00a3ff the logo mark carries. Nothing but decoration ever sits
+	   here: 70%-opacity white over it is 2.22:1, so `--field-hold` clearing the
+	   copy column is what keeps this legal. If the harness ever fails, lower
+	   `--field-hold` at the failing width first; only pull this down (toward
+	   `oklch(0.62 0.16 var(--brand-h))`) if that starves the gradient. */
+	--canvas-far: var(--brand);
+
+	/* Near-white. On a field that is already saturated brand blue, a blue accent
+	   is mush — this is what makes the CTA fill, the eyebrow rule and the
+	   headline's period still read as the accent. Matches the reference's white
+	   primary button. */
+	--signal: oklch(0.97 0.03 var(--brand-h));
+	--signal-foreground: oklch(0.28 0.07 var(--brand-h));
+	--ring: var(--signal);
 	--border: oklch(1 0 0 / 26%);
 
 	/* How far across the hero the field holds its deep end before opening out to
@@ -148,12 +213,14 @@
 
 @media (min-width: 1024px) {
 	.surface-signal {
+		/* From here up there is a free column right of the copy. */
 		--field-hold: 76%;
 	}
 }
 
 @media (min-width: 1280px) {
 	.surface-signal {
+		/* 40% free past the column from here up. */
 		--field-hold: 58%;
 	}
 }
