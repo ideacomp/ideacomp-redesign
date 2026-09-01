@@ -13,6 +13,18 @@ import {
 import { gsap } from "gsap";
 import { cn } from "@/lib/utils";
 
+/**
+ * Shared typing rhythm. Lives here rather than at a call site because the hero
+ * headline and the section headings have to read as the same machine writing:
+ * if these drift apart the page gets two different typists.
+ */
+/** ms per character. */
+export const TYPING_SPEED = 95;
+/** ms before the first character appears, once the line is due to start. */
+export const LEAD_DELAY = 200;
+/** Beat between two chained segments, plus slack for per-character overhead. */
+export const LINE_GAP = 140;
+
 interface TextTypeProps {
 	text: string | string[];
 	as?: ElementType;

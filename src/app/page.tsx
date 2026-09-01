@@ -8,7 +8,9 @@ import { processSteps, content } from "@/lib/sitemap";
 import Header from "@/components/header";
 import Footer from "@/components/footer";
 import HeroBackdrop from "@/components/hero";
-import TextType from "@/components/text-type";
+// The typing rhythm is shared with every section heading below, so it lives
+// with the component rather than here — see `text-type.tsx`.
+import TextType, { TYPING_SPEED, LEAD_DELAY, LINE_GAP } from "@/components/text-type";
 import AccentHeading from "@/components/accent-heading";
 import FocusBand from "@/components/focus-band";
 // Portfolio, temporarily commented out — see the note further down in this file.
@@ -27,13 +29,6 @@ const heroItem = {
 	hidden: { opacity: 0, y: 24 },
 	shown: { opacity: 1, y: 0 },
 };
-
-/** ms per character, shared by both headline lines so the two read as one pass. */
-const TYPING_SPEED = 95;
-/** ms before the first character of the first line appears. */
-const LEAD_DELAY = 200;
-/** Beat between the two lines, and the slack that absorbs per-character overhead. */
-const LINE_GAP = 140;
 
 const Home = () => {
 	const { dict, locale } = useLocale();
@@ -233,6 +228,7 @@ const Home = () => {
 							title={pageContent.home.process.title}
 							accent={pageContent.home.process.accent}
 							rule
+							type
 						/>
 						<p className="mt-8 text-lg leading-relaxed text-foreground/70">
 							{pageContent.home.process.subtitle}
@@ -248,6 +244,7 @@ const Home = () => {
 				accent={pageContent.home.industries.accent}
 				subtitle={pageContent.home.industries.subtitle}
 				watermark={pageContent.home.industries.watermark}
+				typeHeading
 			/>
 
 			<CtaSection

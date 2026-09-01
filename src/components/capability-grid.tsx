@@ -97,6 +97,7 @@ export function CapabilityGrid({
 						title={title}
 						accent={accent}
 						rule
+						type
 					/>
 					<p className="mt-8 max-w-sm text-base leading-relaxed text-muted-foreground">
 						{subtitle}

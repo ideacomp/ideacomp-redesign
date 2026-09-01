@@ -33,7 +33,13 @@ const FocusBand = () => {
 
 			<div className="relative mx-auto max-w-6xl">
 				<Reveal className="lg:max-w-[46%]">
-					<AccentHeading id="focus-heading" title={focus.title} accent={focus.accent} rule />
+					<AccentHeading
+						id="focus-heading"
+						title={focus.title}
+						accent={focus.accent}
+						rule
+						type
+					/>
 					<p className="mt-8 leading-relaxed text-muted-foreground">{focus.body}</p>
 					<p className="mt-4 font-medium text-foreground">{focus.bodyStrong}</p>
 					<Button asChild variant="outline" size="lg" className="mt-8">

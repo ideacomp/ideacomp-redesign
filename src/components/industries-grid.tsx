@@ -11,11 +11,14 @@ export function IndustriesGrid({
 	accent,
 	/** Oversized background word. Omitted on pages that already have one nearby. */
 	watermark,
+	/** Type the heading out on scroll. Home page only. */
+	typeHeading = false,
 }: {
 	title: string;
 	subtitle: string;
 	accent?: string;
 	watermark?: string;
+	typeHeading?: boolean;
 }) {
 	const { locale } = useLocale();
 	return (
@@ -27,7 +30,13 @@ export function IndustriesGrid({
 
 			<div className="relative mx-auto max-w-6xl">
 				<Reveal className="max-w-2xl">
-					<AccentHeading id="industries-heading" title={title} accent={accent} rule />
+					<AccentHeading
+						id="industries-heading"
+						title={title}
+						accent={accent}
+						rule
+						type={typeHeading}
+					/>
 					<p className="mt-8 text-lg leading-relaxed text-muted-foreground">{subtitle}</p>
 				</Reveal>
 
