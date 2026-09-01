@@ -46,63 +46,12 @@ export interface LegalLink {
 
 export const legalLinks: LegalLink[] = [{ key: "privacy", href: "/privacy" }];
 
-// Capability overview data (Home page). `slug` matches a `solutionsData`
-// entry so each card can link straight to its section on /solutions.
-export interface Capability {
-	icon: ComponentType<{ className?: string; size?: number }>;
-	title: string;
-	description: string;
-	slug: string;
-}
-
-export const capabilities: Record<Locale, Capability[]> = {
-	en: [
-		{
-			icon: Brain,
-			title: "AI & Machine Learning",
-			description:
-				"We turn operational data into forecasting, automation, and decision-support systems your team can audit and trust.",
-			slug: "ai-ml",
-		},
-		{
-			icon: Code,
-			title: "Custom Software Development",
-			description:
-				"Production-grade web and mobile applications, architected for the constraints of your industry, not a generic template.",
-			slug: "web-development",
-		},
-		{
-			icon: Braces,
-			title: "Outsourcing & Team Augmentation",
-			description:
-				"Engineers who integrate with your existing workflow and delivery process, so your roadmap keeps moving.",
-			slug: "outsourcing",
-		},
-	],
-	cs: [
-		{
-			icon: Brain,
-			title: "AI a strojové učení",
-			description:
-				"Provozní data proměníme v předpovědi, automatizaci a podporu rozhodování — v systémy, které si váš tým může sám ověřit, a proto jim může věřit.",
-			slug: "ai-ml",
-		},
-		{
-			icon: Code,
-			title: "Vývoj softwaru na míru",
-			description:
-				"Produkčně nasaditelné webové a mobilní aplikace navržené podle omezení vašeho oboru, ne podle obecné šablony.",
-			slug: "web-development",
-		},
-		{
-			icon: Braces,
-			title: "Outsourcing a rozšíření týmu",
-			description:
-				"Inženýři, kteří se zapojí do vašich stávajících procesů a nástrojů, aby se vývoj nezastavil.",
-			slug: "outsourcing",
-		},
-	],
-};
+// NOTE: there used to be a separate `capabilities` array here, holding three
+// hand-picked disciplines with home-only titles and blurbs. It drifted from
+// `solutionsData` below (it said "Custom Software Development" where /solutions
+// says "Custom Web Development"), so the home page grid now reads
+// `solutionsData` directly and renders its short `description` field. One
+// source of truth; adding a seventh solution puts it on both pages at once.
 
 // Delivery process (Home page — the one legitimate numbered sequence)
 export interface ProcessStep {
@@ -1039,7 +988,7 @@ export const content: Record<Locale, {
 				title: "Where We",
 				accent: "Build",
 				subtitle:
-					"Three disciplines, one delivery standard.",
+					"Six disciplines, one delivery standard.",
 				watermark: "Disciplines",
 			},
 			references: {
@@ -1191,7 +1140,7 @@ export const content: Record<Locale, {
 				title: "Co",
 				accent: "vyvíjíme",
 				subtitle:
-					"Tři obory, jeden standard dodávky.",
+					"Šest oborů, jeden standard dodávky.",
 				watermark: "Obory",
 			},
 			references: {

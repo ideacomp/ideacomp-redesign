@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
 import { motion, useReducedMotion } from "motion/react";
-import { capabilities, processSteps, content } from "@/lib/sitemap";
+import { processSteps, content } from "@/lib/sitemap";
 import Header from "@/components/header";
 import Footer from "@/components/footer";
 import HeroBackdrop from "@/components/hero";
@@ -16,6 +16,7 @@ import FocusBand from "@/components/focus-band";
 import ScrollCue from "@/components/scroll-cue";
 import SectionWatermark from "@/components/section-watermark";
 import { Reveal } from "@/components/reveal";
+import { CapabilityGrid } from "@/components/capability-grid";
 import { IndustriesGrid } from "@/components/industries-grid";
 import { CtaSection } from "@/components/cta-section";
 import { ProcessTimeline } from "@/components/process-timeline";
@@ -196,59 +197,13 @@ const Home = () => {
 				</div>
 			</section>
 
-			{/* Capabilities */}
-			<section
-				id="capabilities"
-				className="relative scroll-mt-20 overflow-hidden px-4 py-24 sm:px-6 lg:px-8"
-				aria-labelledby="capabilities-heading"
-			>
-				<SectionWatermark word={pageContent.home.capabilities.watermark} />
-
-				<div className="relative mx-auto grid max-w-6xl gap-12 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.6fr)]">
-					<Reveal>
-						<AccentHeading
-							id="capabilities-heading"
-							title={pageContent.home.capabilities.title}
-							accent={pageContent.home.capabilities.accent}
-							rule
-						/>
-						<p className="mt-8 max-w-sm text-base leading-relaxed text-muted-foreground">
-							{pageContent.home.capabilities.subtitle}
-						</p>
-					</Reveal>
-
-					<div className="flex flex-col">
-						{capabilities[locale].map((capability, i) => (
-							<Reveal key={capability.title} delay={i * 0.08}>
-								<Link
-									href={`/solutions#${capability.slug}`}
-									className="group flex items-start gap-6 border-t border-border py-8 transition-colors first:border-t-0 hover:border-signal/40 lg:first:border-t"
-								>
-									<capability.icon
-										className="mt-1 size-7 shrink-0 text-signal transition-transform motion-safe:duration-300 motion-safe:group-hover:scale-110"
-										aria-hidden="true"
-									/>
-									<div>
-										<h3 className="eyebrow-heading flex items-center gap-2 text-foreground transition-colors motion-safe:duration-300 group-hover:text-signal">
-											{capability.title}
-											<ArrowRight
-												// Down from 16 with the title: at 14px type a 16px
-												// arrow outweighs the words it belongs to.
-												size={14}
-												className="shrink-0 transition-transform motion-safe:duration-300 group-hover:translate-x-1"
-												aria-hidden="true"
-											/>
-										</h3>
-										<p className="mt-2 max-w-xl leading-relaxed text-muted-foreground">
-											{capability.description}
-										</p>
-									</div>
-								</Link>
-							</Reveal>
-						))}
-					</div>
-				</div>
-			</section>
+			{/* Capabilities — all six disciplines, as cards */}
+			<CapabilityGrid
+				title={pageContent.home.capabilities.title}
+				accent={pageContent.home.capabilities.accent}
+				subtitle={pageContent.home.capabilities.subtitle}
+				watermark={pageContent.home.capabilities.watermark}
+			/>
 
 			{/* PORTFOLIO — TEMPORARILY COMMENTED OUT (2026-08-20, client's request).
 			    Uncomment this line and the import at the top of the file to restore;
