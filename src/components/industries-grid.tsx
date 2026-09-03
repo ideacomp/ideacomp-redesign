@@ -26,7 +26,11 @@ export function IndustriesGrid({
 			className="relative overflow-hidden px-4 py-24 sm:px-6 lg:px-8"
 			aria-labelledby="industries-heading"
 		>
-			{watermark ? <SectionWatermark word={watermark} /> : null}
+			{/* Inset rather than flush: the three sections above this one already
+			    start their word on the rail or end it there, and the reference gives
+			    every one of its marks a different offset for exactly this reason —
+			    identical placement is what makes them read as one repeated part. */}
+			{watermark ? <SectionWatermark word={watermark} placement="inset" /> : null}
 
 			<div className="relative mx-auto max-w-6xl">
 				<Reveal className="max-w-2xl">

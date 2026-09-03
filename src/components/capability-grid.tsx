@@ -88,7 +88,10 @@ export function CapabilityGrid({
 			className="relative scroll-mt-20 overflow-hidden px-4 py-24 sm:px-6 lg:px-8"
 			aria-labelledby="capabilities-heading"
 		>
-			{watermark ? <SectionWatermark word={watermark} /> : null}
+			{/* Lifted level with the last card row and pushed out into the margin:
+			    the left column is empty below its subtitle, so the word reads there
+			    and then runs behind the cards. */}
+			{watermark ? <SectionWatermark word={watermark} placement="cards" /> : null}
 
 			<div className="relative mx-auto grid max-w-6xl gap-12 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.6fr)]">
 				<Reveal>

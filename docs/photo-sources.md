@@ -60,17 +60,27 @@ substantial share of viewers and reads as decoration in a monochrome panel.
 `panel.css` exposes the ladder as `--ink-hi` / `--ink-mid` / `--ink-lo` and
 `.bar-fill.t1/.t2/.t3`, so it is a token rather than a judgement call per panel.
 
-**The delivered width is 552px.** The grid caps at `max-w-6xl` (1152px) with
-`gap-12`, so a column never exceeds 552px. Source is 1600px, a 2.9x downscale:
+**The delivered width is 552px in the bands and 408px in the orbit.** The bands
+(`<SolutionBands>` — what anything under 1280px and every reduced-motion visitor
+gets) cap at `max-w-6xl` (1152px) with `gap-12`, so a column never exceeds 552px.
+`<SolutionsOrbit>` centres the frame in a 680px stage at `IMAGE_PCT` 60, which is
+408px. Source is 1600px, so the downscale runs 2.9x to 3.9x:
 
-| in source | on the card | use for |
-|---|---|---|
-| 92px `.stat` | 32px | the anchor the eye lands on first |
-| 40-64px `.name` / `.step-name` | 14-22px | load-bearing copy |
-| 15-22px `.meta` / `.kind` | 5-8px | texture, never something that must be read |
+| in source | at 552px | at 408px | use for |
+| --- | --- | --- | --- |
+| 92px `.stat` | 32px | 23px | the anchor the eye lands on first |
+| 40-64px `.name` / `.step-name` | 14-22px | 10-16px | load-bearing copy |
+| 15-22px `.meta` / `.kind` | 5-8px | 4-6px | texture, never something that must be read |
 
 Nothing below 15px. An earlier version used 11px labels; they resolved to 4px and
 vanished.
+
+The ladder was calibrated for 552px and the orbit squeezes it a further 26%. It
+was checked against the rendered stage and holds — `.name` copy is still legible
+at 10px — but there is no margin left. **Read any new panel at 408px**, not only
+at 552px. Widening the orbit's frame to buy that margin back is not free either:
+`IMAGE_PCT` is pinned against the label clearances, see the arithmetic in
+`src/components/solutions-orbit.tsx`.
 
 **Each panel shows its slot's three `features`,** the ones in `solutionsData` that
 render as the bullet list beside it. That is the constraint that matters most and
@@ -78,8 +88,10 @@ the one the old set got wrong. `docs/diagrams/*.html` each open with a comment
 naming which region covers which feature — keep that comment true.
 
 **Mid-to-dark tonality.** `ai-ml`, `web-development` and `mobile-development` sit
-on the *light* surface (`isDark = index % 2 === 1` in `src/app/solutions/page.tsx`),
-so on those three a dark panel is a dark card on paper. That used to be a real
+on the *light* surface (`isDark = index % 2 === 1`, now in
+`src/components/solution-bands.tsx` — the orbit puts every panel on the dark
+surface, so this only holds in the bands), so on those three a dark panel is a
+dark card on paper. That used to be a real
 hazard — a baked-dark image read as a hole punched in the light surface, which is
 what the duotone existed to prevent. With the duotone gone the panels are simply
 dark, deliberately and consistently, and the border plus the surrounding whitespace
@@ -311,14 +323,18 @@ node docs/diagrams/render.mjs
 node docs/portfolio/capture.mjs
 npm run build
 npm run dev          # then /solutions and / at 375, 768, 1440, 1920
+node docs/solutions/orbit.mjs   # geometry, contrast and fallbacks on /solutions
 ```
 
-- **Read it at 552px, not at 1600.** Screenshot the card at its delivered width and
-  read the header, the load-bearing labels and the big numbers. Anything that was
-  meant to be readable and is not gets bigger in the source — the card does not
-  get bigger.
+- **Read it at 408px, not at 1600 and not only at 552.** Screenshot the card at
+  both delivered widths and read the header, the load-bearing labels and the big
+  numbers. 408 is the tighter of the two and the one that fails first. Anything
+  that was meant to be readable and is not gets bigger in the source — the card
+  does not get bigger. `docs/solutions/orbit.mjs` writes the orbit's stage to
+  `docs/solutions/shots/`.
 - **Check the light bands.** `ai-ml`, `web-development` and `mobile-development` sit
-  on the light surface and must read as cards, not as holes.
+  on the light surface — in the bands, which is the layout under 1280px and under
+  reduced motion — and must read as cards, not as holes.
 - **Desaturate it.** Convert the PNG to greyscale and look again. If two things
   that were meant to be distinguishable merge, they were carrying meaning in hue
   and have to be redone in luminance. Nothing greyscales these panels for you any

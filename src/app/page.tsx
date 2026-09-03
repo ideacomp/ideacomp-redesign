@@ -219,7 +219,11 @@ const Home = () => {
 				className="dark relative overflow-hidden bg-background px-4 py-24 sm:px-6 lg:px-8"
 				aria-labelledby="process-heading"
 			>
-				<SectionWatermark word={pageContent.home.process.watermark} />
+				{/* Right, against the run of left-hung watermarks around it: the
+				    timeline hangs everything off a rail on the left, so the right half
+				    of this band is the one place on the page with nothing printed over
+				    the word at all. */}
+				<SectionWatermark word={pageContent.home.process.watermark} placement="right" />
 
 				<div className="relative mx-auto max-w-6xl">
 					<Reveal className="max-w-2xl">

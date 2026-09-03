@@ -29,7 +29,10 @@ const FocusBand = () => {
 			className="relative overflow-hidden px-4 py-24 sm:px-6 lg:px-8"
 			aria-labelledby="focus-heading"
 		>
-			<SectionWatermark word={focus.watermark} />
+			{/* Out into the margin, and staying on the bottom edge: from `lg` the
+			    photo covers the right half, so the word already disappears behind it
+			    — lifting it as well would only bury it under the body copy. */}
+			<SectionWatermark word={focus.watermark} placement="margin" />
 
 			<div className="relative mx-auto max-w-6xl">
 				<Reveal className="lg:max-w-[46%]">

@@ -40,6 +40,14 @@ export interface Dictionary {
 		goToProject: string;
 		previousProject: string;
 		nextProject: string;
+		/** Same reasoning again for the solutions orbit: it announces a service,
+		 *  not a photo or a client site. */
+		solutionsRoleDescription: string;
+		goToSolution: string;
+		previousSolution: string;
+		nextSolution: string;
+		pauseSolutions: string;
+		playSolutions: string;
 		visitSite: string;
 		opensInNewTab: string;
 	};
@@ -241,6 +249,12 @@ export const dictionaries: Record<Locale, Dictionary> = {
 			goToProject: "Go to project",
 			previousProject: "Previous project",
 			nextProject: "Next project",
+			solutionsRoleDescription: "Solutions carousel",
+			goToSolution: "Go to solution",
+			previousSolution: "Previous solution",
+			nextSolution: "Next solution",
+			pauseSolutions: "Pause the solutions carousel",
+			playSolutions: "Resume the solutions carousel",
 			visitSite: "Visit site",
 			opensInNewTab: "opens in a new tab",
 		},
@@ -503,6 +517,12 @@ export const dictionaries: Record<Locale, Dictionary> = {
 			goToProject: "Přejít na projekt",
 			previousProject: "Předchozí projekt",
 			nextProject: "Další projekt",
+			solutionsRoleDescription: "Přehled řešení",
+			goToSolution: "Přejít na řešení",
+			previousSolution: "Předchozí řešení",
+			nextSolution: "Další řešení",
+			pauseSolutions: "Pozastavit přehled řešení",
+			playSolutions: "Spustit přehled řešení",
 			visitSite: "Otevřít web",
 			opensInNewTab: "otevře se v novém okně",
 		},
