@@ -1,0 +1,293 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8">
+<title>AI &amp; ML — agent story</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@600&family=Spline+Sans+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="motion.css">
+<style>
+  /* The ai-ml slot as a five-scene piece about one AI agent run:
+
+       1  One email in            the request arrives and types itself out
+       2  The agent makes a plan  the email shrinks into a node, the core forms
+       3  It works your systems   four tools spring out, the camera visits each
+       4  You stay in charge      tools collapse into a drafted reply; a person sends it
+       5  4 systems. 8 seconds. 1 human click.
+
+     Scenes hand objects to each other rather than cutting: the email card
+     becomes the trigger node, the tools collapse into the core, the core opens
+     into the reply. The piece starts and ends on the empty field, which is what
+     makes the loop seamless.
+
+     Every frame is a pure function of `t` — see render(). */
+
+  /* 1 — email */
+  #mail{left:0;top:0;width:940px;height:330px;padding:34px 42px;transform-origin:0 0}
+  .inbox{display:flex;align-items:center;gap:14px;font-family:var(--mono);font-size:22px;
+    letter-spacing:.16em;text-transform:uppercase;color:var(--ink-mid)}
+  .inbox .new{width:14px;height:14px;border-radius:50%;background:var(--accent)}
+  .from{font-family:var(--mono);font-size:26px;color:var(--ink-mid);margin-top:22px}
+  .typed{font-family:var(--sans);font-weight:500;font-size:50px;line-height:1.3;color:var(--ink-hi);margin-top:18px}
+
+  /* 2 — core + plan */
+  #core{position:absolute;left:600px;top:345px;width:400px;height:400px;z-index:3;overflow:visible}
+  #plan{position:absolute;left:1060px;top:360px;z-index:3}
+  #plan .head{font-family:var(--mono);font-size:24px;letter-spacing:.18em;text-transform:uppercase;color:rgba(255,255,255,.8);margin-bottom:20px}
+  #plan .mask > span{font-family:var(--sans);font-weight:500;font-size:46px;line-height:1.55;color:#fff}
+  #plan .mask > span em{font-style:normal;color:rgba(255,255,255,.55);margin-right:18px}
+
+  /* 3 — tools */
+  .tool{width:420px;height:160px;padding:22px 28px;transform-origin:center}
+  .tool .name{font-size:62px;margin-top:8px}
+  .tool .res{display:flex;align-items:baseline;gap:16px}
+  .tool .meta{font-family:var(--sans);font-weight:500;font-size:27px;color:var(--accent-soft)}
+
+  /* 4 — reply */
+  #reply{left:290px;top:310px;width:1020px;height:430px;padding:38px 46px;transform-origin:center}
+  #reply .kind{font-size:22px}
+  #reply .lines{margin-top:34px;display:flex;flex-direction:column;gap:18px}
+  #reply .mask > span{font-family:var(--sans);font-weight:500;font-size:52px;color:var(--ink-hi)}
+  #reply .mask > span b{font-weight:500;color:var(--accent-soft)}
+  .actions{position:absolute;right:44px;bottom:40px;display:flex;gap:16px}
+  .rbtn{height:84px;padding:0 40px;border-radius:12px;display:flex;align-items:center;gap:14px;
+    font-family:var(--mono);font-size:26px;letter-spacing:.16em;text-transform:uppercase}
+  .rbtn.ghost{border:2px solid var(--line);color:var(--ink-mid)}
+  .rbtn.send{background:var(--accent);color:#04203a;font-weight:500;min-width:250px;justify-content:center}
+
+</style></head>
+<body>
+<div class="field"></div>
+<div class="tris" id="tris"></div>
+
+<div id="cam">
+  <svg id="scene-wires" viewBox="0 0 1600 1067"></svg>
+
+  <!-- core: disc, rotating dashed ring, progress arc -->
+  <svg id="core" viewBox="0 0 400 400">
+    <circle id="ring-o" cx="200" cy="200" r="172" fill="none" stroke="rgba(255,255,255,.22)" stroke-width="4"/>
+    <circle id="ring-p" cx="200" cy="200" r="172" fill="none" stroke="#fff" stroke-width="6" stroke-linecap="round" transform="rotate(-90 200 200)"/>
+    <circle id="ring-d" cx="200" cy="200" r="142" fill="none" stroke="#8ccfff" stroke-width="3" stroke-dasharray="6 16"/>
+    <circle id="disc" cx="200" cy="200" r="112" fill="#111924" stroke="#00a3ff" stroke-width="4"/>
+    <text x="200" y="214" text-anchor="middle" font-family="Big Shoulders Display" font-weight="600" font-size="92" fill="#f2f6fb">AI</text>
+    <text id="core-l" x="200" y="262" text-anchor="middle" font-family="Spline Sans Mono" font-size="20" letter-spacing="3" fill="#9aabbd">AGENT</text>
+  </svg>
+
+  <div class="card" id="mail">
+    <div class="inbox"><span class="new"></span><span data-cs="Doručená pošta &middot; nová">Inbox &middot; new</span></div>
+    <div class="from">buyer@acme.cz</div>
+    <div class="typed"><span id="typed"></span><span class="caret" id="caret"></span></div>
+    <span class="port r"></span>
+  </div>
+
+  <div id="plan">
+    <div class="head mask"><span data-cs="Plán">Plan</span></div>
+    <div class="mask"><span data-cs="<em>1</em>najít zákazníka"><em>1</em>find the customer</span></div>
+    <div class="mask"><span data-cs="<em>2</em>ověřit sklad"><em>2</em>check the stock</span></div>
+    <div class="mask"><span data-cs="<em>3</em>domluvit hovor"><em>3</em>book a call</span></div>
+    <div class="mask"><span data-cs="<em>4</em>napsat odpověď"><em>4</em>write a reply</span></div>
+  </div>
+
+  <div class="card tool" id="t0" style="left:120px;top:250px">
+    <div class="hdr"><span class="kind" data-cs="Zákazníci &middot; CRM">Customers &middot; CRM</span><span class="badge"></span></div>
+    <div class="res"><span class="name">Acme s.r.o.</span><span class="meta" data-cs="stálý">regular</span></div>
+  </div>
+  <div class="card tool" id="t1" style="left:1060px;top:250px">
+    <div class="hdr"><span class="kind" data-cs="Sklad &middot; ERP">Warehouse &middot; ERP</span><span class="badge"></span></div>
+    <div class="res"><span class="name" data-cs="340 skladem">340 in stock</span></div>
+  </div>
+  <div class="card tool" id="t2" style="left:120px;top:700px">
+    <div class="hdr"><span class="kind" data-cs="Kalendář">Calendar</span><span class="badge"></span></div>
+    <div class="res"><span class="name" data-cs="Út 10:00">Tue 10:00</span><span class="meta" data-cs="zapsáno">booked</span></div>
+  </div>
+  <div class="card tool" id="t3" style="left:1060px;top:700px">
+    <div class="hdr"><span class="kind" data-cs="E-mail">Email</span><span class="badge"></span></div>
+    <div class="res"><span class="name" data-cs="Odpověď hotová">Reply ready</span></div>
+  </div>
+
+  <div class="card" id="reply">
+    <div class="hdr"><span class="kind" data-cs="Návrh odpovědi &middot; buyer@acme.cz">Draft reply &middot; to buyer@acme.cz</span></div>
+    <div class="lines">
+      <div class="mask"><span data-cs="340 kusů odešleme v <b>6. týdnu</b>.">340 units ship in <b>week 6</b>.</span></div>
+      <div class="mask"><span data-cs="Hovor máme v <b>út v 10:00</b>.">Call booked: <b>Tue 10:00</b>.</span></div>
+    </div>
+    <div class="actions"><div class="rbtn ghost" data-cs="upravit">edit</div><div class="rbtn send" id="send">send</div></div>
+  </div>
+</div>
+
+<div class="cap" id="caps">
+  <div class="mask"><span data-cs="Zákazník vám napíše.">A customer emails you.</span></div>
+</div>
+<div class="cap"><div class="mask"><span data-cs="AI ho přečte a naplánuje.">AI reads it and makes a plan.</span></div></div>
+<div class="cap"><div class="mask"><span data-cs="Všechno za vás dohledá.">It looks everything up for you.</span></div></div>
+<div class="cap"><div class="mask"><span data-cs="Vy jen kliknete na Odeslat.">You just click send.</span></div></div>
+
+<div id="payoff">
+  <div class="mask"><span data-cs="4 <s>úkoly hotové.</s>">4 <s>tasks done.</s></span></div>
+  <div class="mask"><span data-cs="8 <s>sekund.</s>">8 <s>seconds.</s></span></div>
+  <div class="mask"><span data-cs="1 <s>vaše kliknutí.</s>">1 <s>click from you.</s></span></div>
+</div>
+
+<div class="chapters" id="chapters"><i><b></b></i><i><b></b></i><i><b></b></i><i><b></b></i><i><b></b></i></div>
+
+<svg id="cursor" viewBox="0 0 24 24"><path d="M4 2 L4 20 L9 15.5 L12.2 22 L15 20.8 L11.9 14.4 L18 14.4 Z" fill="#f2f6fb" stroke="#0b1220" stroke-width="1.4" stroke-linejoin="round"/></svg>
+
+<script src="motion.js"></script>
+<script>
+const DURATION = 17;
+
+/* Scene boundaries — also drive the chapter ticks. */
+const SCENES = [[0, 3.2], [3.2, 6.6], [6.6, 11.4], [11.4, 14.6], [14.6, 17]];
+
+/* Tool calls in scene 3: start time of each, and the phases inside one. */
+const CALL0 = 7.0, CALL = 1.0;
+const PH = { out: [0, 0.3], work: [0.3, 0.55], back: [0.55, 0.85] };
+
+const CORE = { x: 800, y: 545 };
+const TOOLS = [0, 1, 2, 3].map((i) => {
+  const el = $("t" + i);
+  return { el, x: el.offsetLeft + 210, y: el.offsetTop + 80 };
+});
+
+/* Camera keyframes [t, x, y, scale]. Consecutive keys ease into each other;
+   a repeated key is a hold. Scene 3 (the four tool calls, 6.6–11.4) holds a
+   locked-off frame: the camera used to pan toward each tool as it was called,
+   and the client asked for the packets to move while the picture stays still. */
+const CAM = [
+  [0, 0, 0, 1], [3.2, 0, 0, 1],
+  [4.0, 0, 0, 1.05], [6.2, 0, 0, 1.05],
+  [6.6, 0, 0, 1], [11.4, 0, 0, 1],
+  [14.0, 0, 0, 1.0], [14.6, 0, 0, 1.03], [17, 0, 0, 1],
+];
+const camAt = camera(CAM);
+
+/* ---------- static setup ---------- */
+triangles($("tris"), [
+  { x: -4, y: 52, s: 520, r: -12, tone: "dark", a: 0.10, dx: 22, dy: 12, ph: 0.0 },
+  { x: 30, y: -14, s: 300, r: 26, tone: "dark", a: 0.10, dx: 16, dy: 14, ph: 1.3 },
+  { x: 60, y: 70, s: 220, r: -34, tone: "dark", a: 0.12, dx: 18, dy: 10, ph: 2.1 },
+  { x: 74, y: 8, s: 560, r: 18, tone: "light", a: 0.08, dx: 24, dy: 16, ph: 0.7 },
+  { x: 90, y: 64, s: 160, r: -24, tone: "light", a: 0.16, dx: 14, dy: 12, ph: 3.4 },
+  { x: 46, y: 84, s: 130, r: -8, tone: "light", a: 0.12, dx: 12, dy: 10, ph: 4.2 },
+]);
+
+const MAIL_TEXT = tr("Need 340 units by week 7. Can we talk?", "Potřebujeme 340 kusů do 7. týdne. Zavoláme si?");
+const MAIL_START = { x: 330, y: 380 };
+const MAIL_NODE = { x: 120, y: 480, s: 0.38 };          // where the email lands in scene 2
+const NODE_PORT = { x: MAIL_NODE.x + 940 * MAIL_NODE.s, y: MAIL_NODE.y + 165 * MAIL_NODE.s };
+
+// Wires: 0 = email node → core; 1..4 = core → each tool.
+const LINES = [[NODE_PORT, { x: CORE.x - 112, y: CORE.y }]].concat(TOOLS.map((tl) => [CORE, tl]));
+const line = makeLines($("scene-wires"), LINES, "w");
+
+const RO = 2 * Math.PI * 172;
+$("ring-p").style.strokeDasharray = RO;
+
+const caps = [...document.querySelectorAll(".cap .mask > span")];
+const planLines = [...document.querySelectorAll("#plan .mask > span")];
+const replyLines = [...document.querySelectorAll("#reply .mask > span")];
+const payLines = [...document.querySelectorAll("#payoff .mask > span")];
+
+/* ---------- the frame ---------- */
+function draw(t) {
+  drift($("tris"), t, DURATION);
+
+  const [cx, cy, cs] = camAt(t);
+  $("cam").style.transform = `translate(${cx}px, ${cy}px) scale(${cs})`;
+
+  chapters($("chapters"), SCENES, t, DURATION);
+
+  /* captions */
+  const CAPS = [[0.2, 2.7], [3.3, 6.2], [6.7, 10.9], [11.5, 14.1]];
+  CAPS.forEach(([a, b], i) => mask(caps[i], span(t, a, a + 0.6), span(t, b, b + 0.45)));
+
+  /* ---- 1: the email ---- */
+  const mail = $("mail");
+  const enter = out(span(t, 0.7, 1.4));
+  const morph = inOut(span(t, 2.7, 3.4));
+  const absorb = inOut(span(t, 6.0, 6.5));
+  const mx = MAIL_START.x + (MAIL_NODE.x - MAIL_START.x) * morph + (CORE.x - MAIL_NODE.x - 180) * absorb;
+  const my = MAIL_START.y + (MAIL_NODE.y - MAIL_START.y) * morph + (CORE.y - MAIL_NODE.y - 60) * absorb;
+  const ms = (1 + (MAIL_NODE.s - 1) * morph) * (1 - 0.8 * absorb);
+  mail.style.left = "0px";
+  mail.style.top = "0px";
+  mail.style.transform = `translate(${mx + (1 - enter) * 260}px, ${my}px) scale(${ms})`;
+  mail.style.opacity = enter * (1 - absorb);
+  const chars = Math.round(MAIL_TEXT.length * span(t, 1.2, 2.3));
+  $("typed").textContent = MAIL_TEXT.slice(0, chars);
+  $("caret").style.opacity = t < 2.3 || Math.floor(t * 3) % 2 === 0 ? (t < 2.6 ? 1 : 0) : 0;
+  mail.classList.toggle("on", t >= 0.7 && t < 2.6);
+
+  /* ---- 2: the core forms, the plan writes itself ---- */
+  const coreIn = out(span(t, 3.3, 4.1));
+  const coreOut = inOut(span(t, 11.0, 11.4));
+  const core = $("core");
+  core.style.opacity = coreIn * (1 - coreOut);
+  core.style.transform = `scale(${(0.6 + 0.4 * coreIn) * (1 + 1.6 * coreOut)})`;
+  $("ring-d").setAttribute("transform", `rotate(${t * 40} 200 200)`);
+  $("ring-d").style.opacity = coreIn;
+  const working = t >= 6.9 && t < 11.0;
+  const pulse = working ? 0.5 + 0.5 * Math.sin(t * 8) : 0;
+  $("disc").setAttribute("stroke-width", 4 + pulse * 4);
+  $("core-l").textContent = t >= 10.85 ? tr("DONE", "HOTOVO") : tr("ASSISTANT", "ASISTENT");
+
+  // email node → core
+  const w0 = inOut(span(t, 3.7, 4.1));
+  const p0 = glide(span(t, 3.95, 4.5));
+  line(0, span(t, 3.5, 3.7) * (1 - span(t, 5.9, 6.2)), w0, p0 > 0 && p0 < 1 ? p0 : null);
+  // A packet arriving is the cue for the plan.
+  planLines.forEach((s, i) => mask(s, span(t, 4.45 + i * 0.3, 4.45 + i * 0.3 + 0.55), span(t, 6.05 + i * 0.05, 6.5 + i * 0.05)));
+
+  /* ---- 3: tools ---- */
+  let calls = 0;
+  TOOLS.forEach((tl, i) => {
+    const s = CALL0 + i * CALL;
+    const pop = back(span(t, 6.6 + i * 0.09, 7.05 + i * 0.09));
+    const fly = inOut(span(t, 10.9 + i * 0.04, 11.35 + i * 0.04));
+    const dx = (CORE.x - tl.x) * fly, dy = (CORE.y - tl.y) * fly;
+    tl.el.style.transform = `translate(${dx}px, ${dy}px) scale(${Math.max(0, pop) * (1 - 0.8 * fly)})`;
+    tl.el.style.opacity = clamp(pop * 2) * (1 - fly);
+
+    node(tl.el, t, [s + PH.work[0], s + PH.work[1]], 0);
+    const res = out(span(t, s + PH.work[1] - 0.1, s + PH.work[1] + 0.25));
+    const r = tl.el.querySelector(".res");
+    r.style.opacity = 0.25 + 0.75 * res;
+    r.style.transform = `translateY(${(1 - res) * 12}px)`;
+
+    const o = glide(span(t, s + PH.out[0], s + PH.out[1]));
+    const [pk, dir] = roundTrip(t, s + PH.out[0], s + PH.out[1], s + PH.back[0], s + PH.back[1]);
+    const base = clamp(pop) * (1 - span(t, 10.8, 11.0));
+    line(i + 1, base, o, pk, dir);
+    if (t >= s + PH.back[1]) calls++;
+  });
+  $("ring-p").style.strokeDashoffset = RO * (1 - calls / 4);
+  $("ring-p").style.opacity = coreIn;
+
+  /* ---- 4: the reply, and a person sends it ---- */
+  // Starts only once the core has cleared, so the two never overlap.
+  const rIn = out(span(t, 11.4, 12.0));
+  const rFly = inOut(span(t, 14.0, 14.6));
+  const reply = $("reply");
+  reply.style.opacity = rIn * (1 - rFly);
+  reply.style.transform =
+    `translate(${rFly * 720}px, ${-rFly * 520}px) rotate(${-8 * rFly}deg) scale(${(0.45 + 0.55 * rIn) * (1 - 0.7 * rFly)})`;
+  replyLines.forEach((s, i) => mask(s, span(t, 11.95 + i * 0.3, 12.5 + i * 0.3), 0));
+
+  const SEND = { x: 290 + 1020 - 46 - 125, y: 310 + 430 - 40 - 42 };
+  const cm = inOut(span(t, 12.7, 13.4));
+  const press = span(t, 13.45, 13.55) - span(t, 13.55, 13.65);
+  const sent = t >= 13.6;
+  const curX = 1520 + (SEND.x + 20 - 1520) * cm, curY = 1100 + (SEND.y + 6 - 1100) * cm;
+  $("cursor").style.transform = `translate(${curX + cx}px, ${curY + cy}px) scale(${1 - press * 0.15})`;
+  $("cursor").style.opacity = cm > 0 ? 1 - span(t, 13.75, 14.0) : 0;
+  const send = $("send");
+  send.textContent = sent ? tr("sent ✓", "odesláno ✓") : tr("send", "odeslat");
+  send.style.transform = `scale(${1 - press * 0.06})`;
+  send.style.background = sent ? "#f2f6fb" : "";
+
+  /* ---- 5: payoff ---- */
+  payLines.forEach((s, i) => mask(s, span(t, 14.75 + i * 0.22, 15.35 + i * 0.22), span(t, 16.25 + i * 0.1, 16.75 + i * 0.1)));
+}
+
+// Authored at 17s, played at 1.6x slower — the first cut moved too fast to
+// follow on the card.
+paced(draw, DURATION, 1.6);
+</script>
+</body></html>

@@ -48,6 +48,7 @@ export interface Dictionary {
 		nextSolution: string;
 		pauseSolutions: string;
 		playSolutions: string;
+		restartVideo: string;
 		visitSite: string;
 		opensInNewTab: string;
 	};
@@ -253,8 +254,9 @@ export const dictionaries: Record<Locale, Dictionary> = {
 			goToSolution: "Go to solution",
 			previousSolution: "Previous solution",
 			nextSolution: "Next solution",
-			pauseSolutions: "Pause the solutions carousel",
-			playSolutions: "Resume the solutions carousel",
+			pauseSolutions: "Pause video",
+			playSolutions: "Play video",
+			restartVideo: "Play from the start",
 			visitSite: "Visit site",
 			opensInNewTab: "opens in a new tab",
 		},
@@ -521,8 +523,9 @@ export const dictionaries: Record<Locale, Dictionary> = {
 			goToSolution: "Přejít na řešení",
 			previousSolution: "Předchozí řešení",
 			nextSolution: "Další řešení",
-			pauseSolutions: "Pozastavit přehled řešení",
-			playSolutions: "Spustit přehled řešení",
+			pauseSolutions: "Pozastavit video",
+			playSolutions: "Přehrát video",
+			restartVideo: "Přehrát od začátku",
 			visitSite: "Otevřít web",
 			opensInNewTab: "otevře se v novém okně",
 		},

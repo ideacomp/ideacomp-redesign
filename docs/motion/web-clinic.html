@@ -1,0 +1,377 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8">
+<title>Web development — Medara clinic</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@600&family=Spline+Sans+Mono:wght@400;500&family=Onest:wght@400;500;600;700&family=Newsreader:opsz,wght@6..72,500;6..72,600&display=swap">
+<link rel="stylesheet" href="motion.css">
+<style>
+  /* The web-development slot, rebuilt 2026-10-14 for a non-technical viewer:
+     the earlier cut (blueprint → API console → abstract blocks) read as a
+     mock-up. This one shows a real-looking website for a fictional clinic,
+     "Medara", and the one thing anyone wants from it — booking a visit.
+
+       1  Your idea, sketched.          a hand-drawn layout draws itself
+       2  Turned into a real website.   a scan line wipes the sketch into the site
+       3  Booking takes a minute.       pick a day, a time, confirm
+       4  Works on every phone.         the site reflows to tablet and phone
+       5  Designed for people. Works everywhere. Even on a phone.
+
+     Medara, its doctor and its numbers are fictional. The site has its own
+     palette (deep harbour blue on white, Newsreader + Inter) so it reads as a
+     client's product, not as Ideacomp's own UI. Every text has a Czech twin
+     in data-cs; ?lang=cs renders the Czech cut. */
+
+  .site{
+    --p: oklch(0.47 0.11 232); --p-ink: oklch(1 0 0); --p-soft: oklch(0.95 0.025 232);
+    --ink: oklch(0.21 0.02 240); --mut: oklch(0.46 0.02 240); --line: oklch(0.91 0.01 232);
+    --surf: oklch(0.97 0.006 232); --acc: oklch(0.92 0.07 162); --acc-ink: oklch(0.33 0.08 162);
+    font-family: Onest, system-ui, sans-serif; color: var(--ink);
+  }
+  #frame{position:absolute;z-index:4;background:oklch(1 0 0);border-radius:14px;overflow:hidden;
+    box-shadow:0 50px 90px -30px rgba(0,8,24,.65),0 0 0 1px rgba(0,8,24,.18)}
+  .chrome{position:absolute;left:0;right:0;top:0;height:52px;background:oklch(0.955 0.004 240);display:flex;align-items:center;gap:9px;padding:0 18px;
+    border-bottom:1px solid oklch(0.9 0.005 240)}
+  .chrome i{width:12px;height:12px;border-radius:50%;background:oklch(0.82 0.01 240);flex:none}
+  .url{margin:0 auto;width:46%;height:32px;border-radius:9px;background:oklch(1 0 0);display:flex;align-items:center;justify-content:center;gap:8px;
+    font-size:15px;color:var(--mut);font-family:Onest,sans-serif}
+  .mchrome{position:absolute;left:0;right:0;top:0;height:76px;background:oklch(1 0 0);opacity:0}
+  .mstat{height:40px;display:flex;align-items:center;justify-content:space-between;padding:4px 26px 0;font:600 16px/1 system-ui,sans-serif;color:var(--ink)}
+  .murl{margin:0 14px;height:30px;border-radius:9px;background:oklch(0.955 0.004 240);display:flex;align-items:center;justify-content:center;gap:6px;font-size:13px;color:var(--mut)}
+  .page{position:absolute;left:0;right:0;bottom:0;overflow:hidden;background:oklch(1 0 0)}
+  .b{position:absolute}
+
+  .logo{display:flex;align-items:center;gap:10px;font-weight:700;font-size:22px;letter-spacing:-.01em}
+  .logo svg{width:34px;height:34px}
+  #b-links{display:flex;gap:30px;font-size:16px;color:var(--mut);font-weight:500}
+  .btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;border-radius:10px;font-weight:600;white-space:nowrap}
+  .btn.pri{background:var(--p);color:var(--p-ink)}
+  .btn.gho{border:1.5px solid var(--line);color:var(--ink);background:oklch(1 0 0)}
+  #b-navbtn{height:42px;padding:0 18px;font-size:15px}
+  #b-burger{width:26px;height:20px;display:flex;flex-direction:column;justify-content:space-between}
+  #b-burger i{height:2.5px;border-radius:2px;background:var(--ink)}
+  #b-tag{display:inline-flex;align-items:center;gap:.5em;font-size:1em;font-weight:500;color:var(--acc-ink);background:var(--acc);border-radius:999px;
+    padding:.35em .9em;white-space:nowrap}
+  #b-tag i{width:.5em;height:.5em;border-radius:50%;background:var(--acc-ink)}
+  #b-h1{font-family:Newsreader,serif;font-weight:600;line-height:1.04;letter-spacing:-.02em;text-wrap:balance}
+  #b-lede{line-height:1.5;color:var(--mut);text-wrap:pretty}
+  #b-ctas{display:flex;gap:12px}
+  #b-ctas .btn{height:3.2em;padding:0 1.4em}
+  #b-rating{display:flex;align-items:center;gap:10px;font-size:15px;color:var(--mut);white-space:nowrap}
+  #b-rating .st{color:oklch(0.72 0.15 75);letter-spacing:2px;font-size:17px}
+  #b-rating b{color:var(--ink);font-weight:600}
+  #b-photo{border-radius:18px;overflow:hidden;background:var(--surf)}
+  #b-photo img{width:100%;height:100%;object-fit:cover;display:block}
+  #b-photo .pchip{position:absolute;left:16px;bottom:16px;background:oklch(1 0 0);border-radius:12px;padding:10px 14px;display:flex;gap:10px;align-items:center;
+    font-size:14px;box-shadow:0 10px 30px -10px rgba(0,10,30,.35)}
+  #b-photo .pchip b{display:block;font-weight:600}
+  #b-photo .pchip span{color:var(--mut)}
+  .dot{width:10px;height:10px;border-radius:50%;background:oklch(0.62 0.15 150)}
+  #b-services{display:flex;gap:16px;overflow:hidden}
+  .svc{flex:1;min-width:330px;border:1px solid var(--line);border-radius:14px;padding:16px 18px;display:flex;align-items:center;gap:14px;background:oklch(1 0 0)}
+  .svc .ic{width:44px;height:44px;border-radius:12px;background:var(--p-soft);display:flex;align-items:center;justify-content:center;flex:none}
+  .svc .ic svg{width:24px;height:24px}
+  .svc b{display:block;font-weight:600;font-size:16px}
+  .svc span{font-size:14px;color:var(--mut)}
+  #b-sticky{height:52px;font-size:16px;border-radius:12px;box-shadow:0 12px 26px -10px oklch(0.47 0.11 232 / .6)}
+
+  /* booking panel */
+  #shade{position:absolute;inset:0;background:oklch(0.21 0.02 240 / .32);opacity:0;z-index:5}
+  #panel{position:absolute;right:0;top:0;bottom:0;width:500px;background:oklch(1 0 0);z-index:6;padding:30px 32px;
+    box-shadow:-30px 0 60px -30px rgba(0,10,30,.4);transform:translateX(105%)}
+  #panel h2{font-size:26px;font-weight:600;letter-spacing:-.01em}
+  #panel .step{font-size:14px;color:var(--mut);margin-top:4px}
+  #panel .x{position:absolute;right:28px;top:30px;width:34px;height:34px;border-radius:50%;background:var(--surf);display:flex;align-items:center;justify-content:center;color:var(--mut);font-size:18px}
+  .lbl{font-size:13px;font-weight:600;letter-spacing:.04em;color:var(--mut);margin:24px 0 10px}
+  .seg{display:flex;background:var(--surf);border-radius:11px;padding:4px;gap:4px}
+  .seg span{flex:1;text-align:center;padding:9px 4px;border-radius:8px;font-size:14px;font-weight:500;color:var(--mut)}
+  .seg span.on{background:oklch(1 0 0);color:var(--ink);box-shadow:0 1px 3px rgba(0,10,30,.15)}
+  .days{display:flex;gap:8px}
+  .day{flex:1;border:1.5px solid var(--line);border-radius:12px;padding:10px 0;text-align:center}
+  .day small{display:block;font-size:13px;color:var(--mut)}
+  .day b{display:block;font-size:20px;font-weight:600;margin-top:2px}
+  .day.on{background:var(--p);border-color:var(--p);color:var(--p-ink)}
+  .day.on small{color:oklch(0.9 0.03 232)}
+  .times{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+  .tm{border:1.5px solid var(--line);border-radius:10px;padding:10px 0;text-align:center;font-size:16px;font-weight:500}
+  .tm.off{color:oklch(0.75 0.01 240);text-decoration:line-through;background:var(--surf);border-color:var(--surf)}
+  .tm.on{background:var(--p);border-color:var(--p);color:var(--p-ink)}
+  .doc{display:flex;align-items:center;gap:12px;margin-top:22px;padding:12px;border-radius:12px;background:var(--surf)}
+  .mono{width:42px;height:42px;border-radius:50%;background:oklch(0.86 0.06 232);color:oklch(0.3 0.08 232);display:flex;align-items:center;justify-content:center;font-weight:600;font-size:15px}
+  .doc b{display:block;font-size:15px;font-weight:600}
+  .doc span{font-size:13px;color:var(--mut)}
+  #confirm{position:absolute;left:32px;right:32px;bottom:30px;height:54px;font-size:16px}
+  #done{position:absolute;inset:0;background:oklch(1 0 0);display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;opacity:0;padding:40px}
+  #done svg{width:96px;height:96px}
+  #done h3{font-family:Newsreader,serif;font-weight:600;font-size:40px;margin-top:22px;letter-spacing:-.01em}
+  #done .when{font-size:20px;font-weight:600;margin-top:12px}
+  #done p{font-size:15px;color:var(--mut);margin-top:6px}
+  #done .btn{margin-top:26px;height:48px;padding:0 22px;font-size:15px}
+
+  /* sketch */
+  #sketch{position:absolute;inset:0;width:1600px;height:1067px;z-index:5;pointer-events:none}
+  #scan{position:absolute;top:0;width:6px;margin-left:-3px;background:#fff;z-index:7;opacity:0;
+    box-shadow:0 0 24px 8px rgba(255,255,255,.7),0 0 80px 20px rgba(0,163,255,.5)}
+
+  .pills{position:absolute;z-index:5;display:flex;gap:12px}
+  .pill{font-family:var(--sans);font-weight:500;font-size:26px;color:#fff;border:2px solid rgba(255,255,255,.6);border-radius:999px;padding:8px 18px;
+    background:rgba(0,20,50,.32);white-space:nowrap}
+</style></head>
+<body>
+<div class="field"></div>
+<div class="tris" id="tris"></div>
+
+<div id="cam">
+  <div id="frame" class="site">
+    <div class="chrome" id="chrome"><i></i><i></i><i></i>
+      <span class="url"><svg width="12" height="14" viewBox="0 0 12 14"><rect x="1" y="6" width="10" height="7.5" rx="2" fill="currentColor"/><path d="M3.2 6V4.2a2.8 2.8 0 0 1 5.6 0V6" fill="none" stroke="currentColor" stroke-width="1.6"/></svg>medara.cz</span></div>
+    <div class="mchrome" id="mchrome">
+      <div class="mstat"><span>9:41</span><span style="display:flex;gap:6px;align-items:center">
+        <svg width="18" height="12" viewBox="0 0 18 12"><rect x="0" y="8" width="3" height="4" rx="1" fill="currentColor"/><rect x="5" y="5.5" width="3" height="6.5" rx="1" fill="currentColor"/><rect x="10" y="3" width="3" height="9" rx="1" fill="currentColor"/><rect x="15" y="0" width="3" height="12" rx="1" fill="currentColor"/></svg>
+        <svg width="16" height="12" viewBox="0 0 16 12"><path d="M1 4.2a10 10 0 0 1 14 0M3.6 6.9a6.3 6.3 0 0 1 8.8 0M6.2 9.5a2.6 2.6 0 0 1 3.6 0" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+        <svg width="26" height="12" viewBox="0 0 26 12"><rect x=".75" y=".75" width="21.5" height="10.5" rx="3" fill="none" stroke="currentColor" stroke-width="1.5" opacity=".45"/><rect x="2.5" y="2.5" width="15" height="7" rx="1.6" fill="currentColor"/><rect x="23.5" y="4" width="1.8" height="4" rx=".9" fill="currentColor" opacity=".45"/></svg></span></div>
+      <div class="murl"><svg width="10" height="12" viewBox="0 0 12 14"><rect x="1" y="6" width="10" height="7.5" rx="2" fill="currentColor"/><path d="M3.2 6V4.2a2.8 2.8 0 0 1 5.6 0V6" fill="none" stroke="currentColor" stroke-width="1.6"/></svg>medara.cz</div>
+    </div>
+    <div class="page" id="page">
+      <div class="b logo" id="b-logo"><svg viewBox="0 0 34 34"><rect width="34" height="34" rx="10" fill="oklch(0.47 0.11 232)"/><path d="M17 9v16M9 17h16" stroke="#fff" stroke-width="4" stroke-linecap="round"/><circle cx="25" cy="9" r="3.5" fill="oklch(0.92 0.07 162)"/></svg>Medara</div>
+      <div class="b" id="b-links"><span data-cs="Služby">Services</span><span data-cs="Lékaři">Doctors</span><span data-cs="Ceník">Prices</span><span data-cs="Kontakt">Contact</span></div>
+      <div class="b btn pri" id="b-navbtn" data-cs="Objednat se">Book a visit</div>
+      <div class="b" id="b-burger"><i></i><i></i><i></i></div>
+      <div class="b" id="b-tag"><i></i><span data-cs="Praha 2 · dnes do 19:00">Prague 2 · open today until 19:00</span></div>
+      <div class="b" id="b-h1" data-cs="Péče, která se vejde do&nbsp;vašeho dne.">Care that fits into your day.</div>
+      <div class="b" id="b-lede" data-cs="Objednejte se online za minutu. Termíny ještě tento týden, bez front v čekárně.">Book a visit online in under a minute. Same-week appointments, no queue in the waiting room.</div>
+      <div class="b" id="b-ctas"><span class="btn pri" data-cs="Objednat se">Book a visit</span><span class="btn gho" data-cs="Naši lékaři">Meet our doctors</span></div>
+      <div class="b" id="b-rating"><span class="st">&#9733;&#9733;&#9733;&#9733;&#9733;</span><span><b data-cs="4,9">4.9</b> &middot; <span data-cs="2&nbsp;300 hodnocení">2,300 reviews</span></span></div>
+      <div class="b" id="b-photo"><img src="assets/clinic-waiting.jpg" alt="">
+        <div class="pchip"><span class="dot"></span><div><b data-cs="Volný termín dnes">Free slot today</b><span>14:30 &middot; MUDr. Králová</span></div></div></div>
+      <div class="b" id="b-services">
+        <div class="svc"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="oklch(0.47 0.11 232)" stroke-width="2" stroke-linecap="round"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"/></svg></span>
+          <div><b data-cs="Praktický lékař">General practice</b><span data-cs="návštěva od 15 min">visits from 15 min</span></div></div>
+        <div class="svc"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="oklch(0.47 0.11 232)" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="8" r="4"/><path d="M5 21c1-4 4-6 7-6s6 2 7 6"/></svg></span>
+          <div><b data-cs="Dětský lékař">Paediatrics</b><span data-cs="termín ještě tento týden">seen this week</span></div></div>
+        <div class="svc"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="oklch(0.47 0.11 232)" stroke-width="2" stroke-linecap="round"><path d="M3 12h4l3-7 4 14 3-7h4"/></svg></span>
+          <div><b data-cs="Fyzioterapie">Physiotherapy</b><span data-cs="i večer po práci">evenings too</span></div></div>
+      </div>
+      <div class="b btn pri" id="b-sticky" data-cs="Objednat se">Book a visit</div>
+
+      <div id="shade"></div>
+      <div id="panel">
+        <h2 data-cs="Objednat se">Book a visit</h2><div class="step" data-cs="Krok 1 ze 2">Step 1 of 2</div><span class="x">&times;</span>
+        <div class="lbl" data-cs="SLUŽBA">SERVICE</div>
+        <div class="seg"><span class="on" data-cs="Praktický lékař">General practice</span><span data-cs="Dětský">Paediatrics</span><span data-cs="Fyzio">Physio</span></div>
+        <div class="lbl" data-cs="DEN">DAY</div>
+        <div class="days" id="days"></div>
+        <div class="lbl" data-cs="ČAS">TIME</div>
+        <div class="times" id="times"></div>
+        <div class="doc"><span class="mono">EK</span><div><b>MUDr. Eva Králová</b><span data-cs="praktická lékařka">General practitioner</span></div></div>
+        <div class="btn pri" id="confirm" data-cs="Potvrdit objednávku">Confirm booking</div>
+        <div id="done">
+          <svg viewBox="0 0 96 96"><circle cx="48" cy="48" r="44" fill="oklch(0.92 0.07 162)"/><path id="tick" d="M30 49 L43 62 L67 36" fill="none" stroke="oklch(0.33 0.08 162)" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          <h3 data-cs="Máte objednáno">You're booked</h3>
+          <div class="when" data-cs="St 16. 10. · 10:00">Wed 16 Oct · 10:00</div>
+          <p>MUDr. Eva Králová</p>
+          <p data-cs="Potvrzení jsme poslali na váš e-mail.">Confirmation sent to your email.</p>
+          <span class="btn gho" data-cs="Přidat do kalendáře">Add to calendar</span>
+        </div>
+      </div>
+    </div>
+  </div>
+  <svg id="sketch" viewBox="0 0 1600 1067"><defs><clipPath id="skclip"><rect id="skrect" x="0" y="0" width="1600" height="1067"/></clipPath></defs><g id="skg" clip-path="url(#skclip)"></g></svg>
+  <div id="scan"></div>
+  <div class="pills" id="pills"><span class="pill" data-cs="Načte se za 0,8 s">Loads in 0.8 s</span><span class="pill" data-cs="Čitelné pro každého">Easy to read for everyone</span></div>
+  <svg id="cursor" viewBox="0 0 24 24"><path d="M4 2 L4 20 L9 15.5 L12.2 22 L15 20.8 L11.9 14.4 L18 14.4 Z" fill="#f2f6fb" stroke="#0b1220" stroke-width="1.4" stroke-linejoin="round"/></svg>
+</div>
+
+<div class="cap"><div class="mask"><span data-cs="Váš nápad jako náčrt.">Your idea, sketched.</span></div></div>
+<div class="cap"><div class="mask"><span data-cs="A z něj skutečný web.">Turned into a real website.</span></div></div>
+<div class="cap"><div class="mask"><span data-cs="Objednání za minutu.">Booking takes a minute.</span></div></div>
+<div class="cap"><div class="mask"><span data-cs="Funguje i v mobilu.">Works on every phone.</span></div></div>
+
+<div id="payoff">
+  <div class="mask"><span data-cs="Navržený <s>pro lidi.</s>">Designed <s>for people.</s></span></div>
+  <div class="mask"><span data-cs="Funguje <s>všude.</s>">Works <s>everywhere.</s></span></div>
+  <div class="mask"><span data-cs="I <s>v mobilu.</s>">Even <s>on a phone.</s></span></div>
+</div>
+
+<div class="chapters" id="chapters"><i><b></b></i><i><b></b></i><i><b></b></i><i><b></b></i><i><b></b></i></div>
+
+<script src="motion.js"></script>
+<script>
+const DURATION = 27;
+const SCENES = [[0, 5.6], [5.6, 10.8], [10.8, 17.6], [17.6, 23.4], [23.4, 27]];
+const CAPS = [[0.4, 5.2], [5.8, 10.4], [11.0, 17.2], [17.9, 23.0]];
+const lerp = (a, b, p) => a + (b - a) * p;
+
+/* ---------- booking content ---------- */
+const DAYS = tr(["Mon", "Tue", "Wed", "Thu", "Fri"], ["Po", "Út", "St", "Čt", "Pá"]);
+$("days").innerHTML = DAYS.map((d, i) => `<div class="day"><small>${d}</small><b>${14 + i}</b></div>`).join("");
+const TIMES = ["08:30", "09:15", "10:00", "11:30", "14:00", "15:45"];
+$("times").innerHTML = TIMES.map((x, i) => `<div class="tm${i === 3 ? " off" : ""}">${x}</div>`).join("");
+
+/* ---------- layouts: [x, y, w, fontSize, opacity]; photo/sticky/services use w,h ---------- */
+const F = {
+  desk: { r: [210, 214, 1180, 700], rad: 14, bar: 52, phone: 0 },
+  tab: { r: [480, 196, 640, 760], rad: 22, bar: 52, phone: 0 },
+  ph: { r: [610, 184, 380, 776], rad: 44, bar: 76, phone: 1 },
+};
+const B = {
+  desk: { logo: [40, 23, 0, 22, 1], links: [430, 32, 0, 16, 1], navbtn: [1002, 19, 0, 15, 1], burger: [1120, 26, 0, 0, 0],
+    tag: [40, 104, 0, 14, 1], h1: [40, 146, 560, 56, 1], lede: [40, 284, 500, 18, 1], ctas: [40, 372, 0, 16, 1], rating: [40, 450, 0, 15, 1],
+    photo: [640, 96, 500, 392, 1], services: [40, 516, 1100, 104, 1], sticky: [16, 680, 348, 52, 0] },
+  tab: { logo: [28, 23, 0, 22, 1], links: [430, 32, 0, 16, 0], navbtn: [420, 19, 0, 15, 1], burger: [584, 30, 0, 0, 1],
+    tag: [28, 98, 0, 14, 1], h1: [28, 140, 560, 46, 1], lede: [28, 256, 520, 17, 1], ctas: [28, 336, 0, 16, 1], rating: [28, 408, 0, 15, 1],
+    photo: [28, 448, 584, 230, 1], services: [28, 700, 584, 104, 0], sticky: [16, 640, 348, 52, 0] },
+  ph: { logo: [18, 18, 0, 20, 1], links: [430, 32, 0, 16, 0], navbtn: [240, 14, 0, 14, 0], burger: [328, 24, 0, 0, 1],
+    tag: [18, 268, 0, 12.5, 1], h1: [18, 304, 344, 34, 1], lede: [18, 392, 344, 15, 1], ctas: [18, 760, 0, 15, 0], rating: [18, 484, 0, 15, 1],
+    photo: [16, 62, 348, 192, 1], services: [18, 528, 344, 80, 1], sticky: [16, 630, 348, 52, 1] },
+};
+const KEYS = [[0, "desk"], [18.0, "desk"], [18.9, "tab"], [19.5, "tab"], [20.4, "ph"], [27, "ph"]];
+function layoutAt(t) {
+  for (let i = 0; i < KEYS.length - 1; i++) {
+    const [a, A] = KEYS[i], [b, Bk] = KEYS[i + 1];
+    if (t >= a && t <= b) {
+      const p = A === Bk ? 0 : inOut(span(t, a, b));
+      const f = { r: F[A].r.map((v, j) => lerp(v, F[Bk].r[j], p)), rad: lerp(F[A].rad, F[Bk].rad, p),
+        bar: lerp(F[A].bar, F[Bk].bar, p), phone: lerp(F[A].phone, F[Bk].phone, p), b: {} };
+      for (const k in B[A]) f.b[k] = B[A][k].map((v, j) => lerp(v, B[Bk][k][j], p));
+      return f;
+    }
+  }
+}
+const BOX = ["photo", "services", "sticky"];   // [x, y, w, h, o]
+function applyLayout(L) {
+  const fr = $("frame");
+  const [x, y, w, h] = L.r;
+  Object.assign(fr.style, { left: x + "px", top: y + "px", width: w + "px", height: h + "px", borderRadius: L.rad + "px" });
+  $("chrome").style.opacity = 1 - L.phone;
+  $("mchrome").style.opacity = L.phone;
+  $("page").style.top = L.bar + "px";
+  for (const k in L.b) {
+    const [bx, by, bw, v, o] = L.b[k];
+    const el = $("b-" + k);
+    el.style.left = bx + "px"; el.style.top = by + "px"; el.style.opacity = o;
+    if (BOX.includes(k)) { el.style.width = bw + "px"; el.style.height = v + "px"; }
+    else { if (bw) el.style.width = bw + "px"; if (v) el.style.fontSize = v + "px"; }
+  }
+}
+
+/* ---------- measure click targets on the desktop layout ---------- */
+applyLayout(layoutAt(0));
+const at = (el) => { const r = el.getBoundingClientRect(); return { x: r.x + r.width * 0.55, y: r.y + r.height * 0.55 }; };
+// The panel parks off-screen by default; measure it where it lands.
+$("panel").style.transform = "none";
+const TGT = { nav: at($("b-navbtn")), day: at($("days").children[2]), time: at($("times").children[2]), ok: at($("confirm")) };
+$("panel").style.transform = "";
+const FRAME_R = $("frame").getBoundingClientRect();
+
+/* ---------- the sketch: wobbly pencil strokes over the desktop layout ---------- */
+let seed = 11;
+const rnd = () => ((seed = (seed * 16807) % 2147483647) / 2147483647) - 0.5;
+const ox = 210, oy = 214 + 52;
+const wob = (pts) => "M" + pts.map(([x, y]) => `${(ox + x + rnd() * 3).toFixed(1)},${(oy + y + rnd() * 3).toFixed(1)}`).join(" L");
+const box = (x, y, w, h) => wob([[x, y], [x + w / 2, y + 1], [x + w, y], [x + w + 1, y + h / 2], [x + w, y + h], [x + w / 2, y + h - 1], [x, y + h], [x - 1, y + h / 2], [x, y]]);
+const scrib = (x, y, w) => wob([...Array(9)].map((_, i) => [x + (w * i) / 8, y + (i % 2 ? -5 : 5)]));
+const SK = [
+  [wob([[-ox + 210, -52], [1180, -52], [1180, 648], [0, 648], [0, -52]]), 4],
+  [wob([[0, 72], [1180, 72]]), 3],
+  [box(40, 22, 30, 30), 3], [scrib(84, 37, 70), 3], [scrib(430, 37, 300), 2.5], [box(1002, 19, 140, 42), 3],
+  [scrib(40, 175, 480), 9], [scrib(40, 235, 380), 9],
+  [scrib(40, 300, 460), 3], [scrib(40, 330, 380), 3],
+  [box(40, 372, 160, 52), 3], [box(214, 372, 200, 52), 3],
+  [box(640, 96, 500, 392), 3], [wob([[640, 96], [1140, 488]]), 2.5], [wob([[1140, 96], [640, 488]]), 2.5],
+  [box(40, 516, 352, 104), 3], [box(414, 516, 352, 104), 3], [box(788, 516, 352, 104), 3],
+];
+$("skg").innerHTML = SK.map(([d, w], i) => `<path id="sk${i}" d="${d}" fill="none" stroke="#fff" stroke-width="${w}" stroke-linecap="round" stroke-linejoin="round"/>`).join("");
+const SKLEN = SK.map((_, i) => $("sk" + i).getTotalLength());
+SKLEN.forEach((l, i) => { $("sk" + i).style.strokeDasharray = l; });
+
+triangles($("tris"), TRIS);
+const caps = [...document.querySelectorAll(".cap .mask > span")];
+const pay = [...document.querySelectorAll("#payoff .mask > span")];
+const TICK = $("tick").getTotalLength();
+$("tick").style.strokeDasharray = TICK;
+
+const camAt = camera([
+  [0, 0, 0, 1], [5.4, 0, 0, 1.02], [6.0, 0, 0, 1], [10.6, 0, 0, 1.04], [11.2, 0, 0, 1.0],
+  [12.2, ...focus({ x: 800, y: 560 }, { x: 1080, y: 560 }, 1.08)], [16.8, ...focus({ x: 800, y: 560 }, { x: 1080, y: 560 }, 1.08)],
+  [17.6, 0, 0, 1], [22.9, 0, 0, 1.03], [27, 0, 0, 1],
+]);
+
+/* cursor path: [time, target] — it glides between targets and clicks on arrival */
+const CUR = [[11.0, { x: 1300, y: 1100 }], [11.7, TGT.nav], [12.6, TGT.day], [13.5, TGT.time], [14.5, TGT.ok], [15.4, { x: 1450, y: 1150 }]];
+const CLICKS = [11.75, 12.65, 13.55, 14.55];
+
+/* ---------- the frame ---------- */
+function draw(t) {
+  drift($("tris"), t, DURATION);
+  const [cx, cy, cs] = camAt(t);
+  $("cam").style.transform = `translate(${cx}px, ${cy}px) scale(${cs})`;
+  chapters($("chapters"), SCENES, t, DURATION);
+  captions(caps, CAPS, t);
+
+  const L = layoutAt(t);
+  applyLayout(L);
+
+  /* ---- 1: sketch, then the wipe ---- */
+  SK.forEach((_, i) => {
+    const s = 0.5 + i * 0.18;
+    $("sk" + i).style.strokeDashoffset = SKLEN[i] * (1 - out(span(t, s, s + 0.55)));
+  });
+  const wipe = inOut(span(t, 4.1, 5.3));
+  const edge = 210 + 1180 * wipe;
+  $("skrect").setAttribute("x", edge);
+  $("sketch").style.opacity = t < 5.4 ? 1 : 0;
+  const fr = $("frame");
+  fr.style.clipPath = t < 5.4 ? `inset(0 ${100 - 100 * wipe}% 0 0 round 14px)` : "none";
+  const fOut = inOut(span(t, 22.9, 23.3));
+  fr.style.opacity = (wipe > 0 ? 1 : 0) * (1 - fOut);
+  fr.style.transform = `scale(${1 - 0.05 * fOut})`;
+  const scan = $("scan");
+  Object.assign(scan.style, { left: edge + "px", top: 214 - 10 + "px", height: 720 + "px" });
+  scan.style.opacity = wipe > 0 && wipe < 1 ? 1 : 0;
+
+  /* ---- 2: the real site; two plain-language facts under it ---- */
+  const pl = $("pills");
+  pl.style.left = "210px"; pl.style.top = 214 + 700 + 26 + "px";
+  [...pl.children].forEach((c, i) => {
+    const p = back(span(t, 6.6 + i * 0.35, 7.1 + i * 0.35));
+    c.style.opacity = clamp(p * 2) * (1 - span(t, 10.4, 10.8));
+    c.style.transform = `scale(${0.7 + 0.3 * p})`;
+  });
+
+  /* ---- 3: booking ---- */
+  const open = inOut(span(t, 11.85, 12.35)) * (1 - inOut(span(t, 16.9, 17.4)));
+  $("panel").style.transform = `translateX(${(1 - open) * 105}%)`;
+  $("shade").style.opacity = open;
+  const pressed = (s) => Math.max(0, 1 - Math.abs(t - s) / 0.1);
+  $("b-navbtn").style.transform = `scale(${1 - 0.05 * pressed(CLICKS[0])})`;
+  [...$("days").children].forEach((d, i) => d.classList.toggle("on", i === 2 && t >= CLICKS[1]));
+  [...$("times").children].forEach((d, i) => d.classList.toggle("on", i === 2 && t >= CLICKS[2]));
+  $("confirm").style.transform = `scale(${1 - 0.04 * pressed(CLICKS[3])})`;
+  const ok = out(span(t, 14.65, 15.0));
+  $("done").style.opacity = t < 17.45 ? ok : 0;
+  $("tick").style.strokeDashoffset = TICK * (1 - inOut(span(t, 14.8, 15.4)));
+
+  // cursor (canvas coords, inside the camera)
+  let cp = null;
+  for (let i = 0; i < CUR.length - 1; i++) {
+    const [a, A] = CUR[i], [b, Bt] = CUR[i + 1];
+    if (t >= a && t <= b) { const p = inOut(span(t, a, a + Math.min(0.6, b - a))); cp = { x: lerp(A.x, Bt.x, p), y: lerp(A.y, Bt.y, p) }; }
+  }
+  const cur = $("cursor");
+  if (cp) {
+    const press = CLICKS.reduce((m, s) => Math.max(m, pressed(s)), 0);
+    cur.style.transform = `translate(${cp.x - 6}px, ${cp.y - 4}px) scale(${1 - 0.15 * press})`;
+    cur.style.opacity = 1;
+  } else cur.style.opacity = 0;
+
+  /* ---- 4: the sticky button breathes once the phone layout lands ---- */
+  const st = $("b-sticky");
+  const pulse = t > 20.6 && t < 22.6 ? Math.max(0, Math.sin((t - 20.6) * Math.PI)) : 0;
+  st.style.transform = `scale(${1 + 0.03 * pulse})`;
+
+  /* ---- payoff ---- */
+  pay.forEach((s, i) => mask(s, span(t, 23.55 + i * 0.25, 24.2 + i * 0.25), span(t, 26.2 + i * 0.1, 26.7 + i * 0.1)));
+}
+
+paced(draw, DURATION, 1);
+</script>
+</body></html>

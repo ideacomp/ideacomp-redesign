@@ -60,6 +60,10 @@ substantial share of viewers and reads as decoration in a monochrome panel.
 `panel.css` exposes the ladder as `--ink-hi` / `--ink-mid` / `--ink-lo` and
 `.bar-fill.t1/.t2/.t3`, so it is a token rather than a judgement call per panel.
 
+> **Superseded 2026-10-15:** the orbit was replaced by `<SolutionsTour>`, which shows each
+> panel at ~744px (3:2), and all six panels are now videos (`docs/motion/`). The orbit notes
+> below are kept as history.
+
 **The delivered width is 552px in the bands and 408px in the orbit.** The bands
 (`<SolutionBands>` — what anything under 1280px and every reduced-motion visitor
 gets) cap at `max-w-6xl` (1152px) with `gap-12`, so a column never exceeds 552px.
@@ -323,7 +327,7 @@ node docs/diagrams/render.mjs
 node docs/portfolio/capture.mjs
 npm run build
 npm run dev          # then /solutions and / at 375, 768, 1440, 1920
-node docs/solutions/orbit.mjs   # geometry, contrast and fallbacks on /solutions
+# (docs/solutions/orbit.mjs was removed with the orbit on 2026-10-15)
 ```
 
 - **Read it at 408px, not at 1600 and not only at 552.** Screenshot the card at

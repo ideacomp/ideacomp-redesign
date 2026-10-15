@@ -1,0 +1,324 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8">
+<title>Cybersecurity — a night in the SOC</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@600&family=Spline+Sans+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="motion.css">
+<style>
+  /* The cybersecurity slot as one night in the SOC (chosen by the client from
+     four scripts, 2026-10-14):
+
+       1  03:12. Everyone's asleep.   quiet monitoring, the field goes to night
+       2  Something's off.            failed sign-ins spike; the camera pushes in
+       3  The runbook kicks in.       the alert becomes the incident runbook,
+                                      steps run against the clock, on-call acks
+       4  07:30. Report's waiting.    day comes back; the runbook becomes the report
+       5  03:13 detected. 1:40 to contain. 0 bytes out.
+
+     Lighting is part of the story: a night overlay falls in the first second
+     and lifts in scene 4, so the loop starts and ends in daylight.
+
+     Every timestamp on screen comes from one clock function, so the runbook,
+     the report and the payoff can't disagree. */
+
+  #night{position:absolute;inset:0;background:rgba(0,6,22,.64);opacity:0}
+
+  #dash{left:120px;top:236px;width:1360px;height:610px;padding:34px 40px;transform-origin:0 0}
+  #dash .name{font-size:62px}
+  #dclock{position:absolute;right:40px;top:26px;font-family:var(--display);font-weight:600;font-size:104px;
+    line-height:1;color:var(--ink-hi);font-variant-numeric:tabular-nums}
+  #chart{position:absolute;left:40px;top:176px;width:860px;height:390px}
+  .side{position:absolute;left:960px;top:176px;width:360px}
+  .side .k{font-family:var(--mono);font-size:20px;letter-spacing:.16em;text-transform:uppercase;color:var(--ink-mid)}
+  #val{font-family:var(--display);font-weight:600;font-size:200px;line-height:.86;color:var(--ink-hi);
+    font-variant-numeric:tabular-nums;margin-top:10px}
+  #state{display:inline-flex;align-items:center;gap:12px;margin-top:22px;height:56px;padding:0 22px;border-radius:999px;
+    border:2px solid var(--line);font-family:var(--mono);font-size:22px;letter-spacing:.16em;text-transform:uppercase;color:var(--ink-mid)}
+  #state i{width:14px;height:14px;border-radius:50%;background:#3d4f63}
+  #src{font-family:var(--mono);font-size:23px;line-height:1.5;color:var(--ink-mid);margin-top:22px}
+  #src b{font-weight:500;color:var(--ink-hi)}
+
+  #alert{left:560px;top:290px;width:420px;height:250px;padding:26px 30px;z-index:4}
+  .tag{display:inline-block;font-family:var(--mono);font-size:18px;letter-spacing:.16em;text-transform:uppercase;
+    background:#fff;color:#04203a;border-radius:6px;padding:4px 12px;font-weight:500}
+  #alert .tag{align-self:flex-start}
+  #alert .name{font-size:58px;margin-top:14px}
+  #alert .kv{font-family:var(--sans);font-size:29px;color:var(--ink-mid);margin-top:10px;line-height:1.45}
+  #alert .kv b{font-weight:500;color:var(--ink-hi)}
+
+  #rb{left:740px;top:230px;width:760px;height:490px;padding:30px 36px;transform-origin:0 0;z-index:4}
+  #rb .name{font-size:62px;margin-top:6px}
+  .steps{display:flex;flex-direction:column;gap:26px;margin-top:34px}
+  .st{display:flex;align-items:center;gap:20px;font-family:var(--sans);font-weight:500;font-size:38px;color:var(--ink-mid)}
+  .st .ic{width:40px;height:40px;border-radius:50%;border:3px solid #2c3a4b;position:relative;flex:none}
+  .st .ic .spin{position:absolute;inset:-3px;border-radius:50%;border:3px solid transparent;
+    border-top-color:var(--accent);border-right-color:var(--accent)}
+  .st .ic svg{position:absolute;inset:4px;width:26px;height:26px}
+  .st .ts{margin-left:auto;font-size:25px;color:var(--accent-soft);font-variant-numeric:tabular-nums}
+  .st.lit{color:var(--ink-hi)}
+
+  #phone{left:1050px;top:690px;width:450px;height:250px;padding:24px 28px;border-radius:34px;
+    background:#0b1220;z-index:6}
+  #phone .top{display:flex;justify-content:space-between;font-family:var(--mono);font-size:18px;
+    letter-spacing:.14em;text-transform:uppercase;color:var(--ink-mid)}
+  #phone .name{font-size:46px;margin-top:10px}
+  #ack{position:relative;overflow:hidden;margin-top:18px;height:66px;border-radius:14px;background:var(--accent);
+    color:#04203a;display:flex;align-items:center;justify-content:center;font-family:var(--mono);font-size:22px;
+    font-weight:500;letter-spacing:.16em;text-transform:uppercase}
+  #ripple{position:absolute;border-radius:50%;background:rgba(255,255,255,.7);opacity:0}
+
+  #rep{left:300px;top:250px;width:1000px;height:530px;padding:36px 44px;z-index:5}
+  #rep .name{font-size:66px;margin-top:8px}
+  #rclock{position:absolute;right:44px;top:26px;font-family:var(--display);font-weight:600;font-size:104px;
+    line-height:1;color:var(--ink-hi);font-variant-numeric:tabular-nums}
+  .kvs{margin-top:40px;display:flex;flex-direction:column;gap:20px}
+  .kvs .mask > span{display:flex;font-family:var(--sans);font-weight:500;font-size:38px;color:var(--ink-hi)}
+  .kvs .mask > span em{font-style:normal;color:var(--ink-mid);width:290px;flex:none}
+  .kvs .mask > span b{font-weight:400}
+  #stamp{position:absolute;right:44px;bottom:40px;font-size:22px;padding:8px 18px}
+</style></head>
+<body>
+<div class="field"></div>
+<div class="tris" id="tris"></div>
+<div id="night"></div>
+
+<div id="cam">
+  <div class="card" id="dash">
+    <div class="hdr"><span class="kind" data-cs="Bezpečnostní dohled &middot; živě">Security watch &middot; live</span></div>
+    <div class="name" data-cs="Pokusy se špatným heslem">Wrong-password attempts</div>
+    <div id="dclock">03:12:04</div>
+    <svg id="chart" viewBox="0 0 860 390">
+      <defs><linearGradient id="area" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0" stop-color="#00a3ff" stop-opacity=".45"/><stop offset="1" stop-color="#00a3ff" stop-opacity="0"/>
+      </linearGradient></defs>
+      <g stroke="#1f2a38" stroke-width="2">
+        <line x1="0" y1="30" x2="860" y2="30"/><line x1="0" y1="150" x2="860" y2="150"/>
+        <line x1="0" y1="270" x2="860" y2="270"/><line x1="0" y1="388" x2="860" y2="388"/>
+      </g>
+      <path id="carea" fill="url(#area)"/>
+      <polyline id="cline" fill="none" stroke="#f2f6fb" stroke-width="5" stroke-linejoin="round" stroke-linecap="round"/>
+      <circle id="cdot" r="10" fill="#fff" style="filter:drop-shadow(0 0 12px #fff)"/>
+    </svg>
+    <div class="side">
+      <div class="k" data-cs="za minutu">per minute</div>
+      <div id="val">2</div>
+      <div id="state"><i></i><span id="statel">normal</span></div>
+      <div id="src" data-cs="z <b>neznámé adresy</b><br>na <b>účet správce</b>">from <b>an unknown address</b><br>on <b>the admin account</b></div>
+    </div>
+  </div>
+
+  <div class="card" id="alert">
+    <span class="tag" data-cs="poplach">alert</span>
+    <div class="name" data-cs="Útok na heslo">Password attack</div>
+    <div class="kv" data-cs="<b>40</b> špatných hesel/min<br>někdo hádá heslo"><b>40</b> wrong passwords/min<br>someone is guessing</div>
+  </div>
+
+  <div class="card" id="rb">
+    <div class="hdr"><span class="kind" data-cs="Automatická reakce">Automatic response</span></div>
+    <div class="name" data-cs="Útok na heslo">Password attack</div>
+    <div class="steps" id="steps">
+      <div class="st"><span class="ic"></span><span data-cs="zablokovat útočníka">block the attacker</span><span class="ts"></span></div>
+      <div class="st"><span class="ic"></span><span data-cs="zamknout účet">lock the account</span><span class="ts"></span></div>
+      <div class="st"><span class="ic"></span><span data-cs="vynutit nové heslo">require a new password</span><span class="ts"></span></div>
+      <div class="st"><span class="ic"></span><span data-cs="upozornit technika">alert the on-call expert</span><span class="ts"></span></div>
+    </div>
+  </div>
+
+  <div class="card" id="phone">
+    <div class="top"><span data-cs="Bezpečnostní tým">Security team</span><span id="ptime">03:14</span></div>
+    <div class="name" data-cs="Útok zastaven">Attack stopped</div>
+    <div id="ack"><span id="ackl">acknowledge</span><span id="ripple"></span></div>
+  </div>
+
+  <div class="card" id="rep">
+    <div class="hdr"><span class="kind" data-cs="Ranní report &middot; INC-0412">Morning report &middot; INC-0412</span></div>
+    <div class="name" data-cs="Vyřešeno. Nic neuniklo.">Closed. Nothing was stolen.</div>
+    <div id="rclock">03:15</div>
+    <div class="kvs" id="kvs">
+      <div class="mask"><span><em data-cs="odhaleno">spotted</em><b id="r-det"></b></span></div>
+      <div class="mask"><span><em data-cs="zastaveno">stopped</em><b id="r-con"></b></span></div>
+      <div class="mask"><span data-cs="<em>uniklá data</em>žádná"><em>data stolen</em>none</span></div>
+      <div class="mask"><span data-cs="<em>další krok</em>přihlášení přes mobil"><em>next step</em>two-step login for admins</span></div>
+    </div>
+    <span class="tag" id="stamp" data-cs="vyřešeno &check;">closed &check;</span>
+  </div>
+</div>
+
+<div class="cap"><div class="mask"><span data-cs="03:12. Všichni spí.">03:12. Everyone&rsquo;s asleep.</span></div></div>
+<div class="cap"><div class="mask"><span data-cs="Někdo zkouší hesla.">Someone is guessing passwords.</span></div></div>
+<div class="cap"><div class="mask"><span data-cs="Automaticky zastaveno.">Stopped automatically.</span></div></div>
+<div class="cap"><div class="mask"><span data-cs="07:30. Ráno čeká report.">07:30. The report is waiting.</span></div></div>
+
+<div id="payoff">
+  <div class="mask"><span><b id="pay0">03:13</b> <s data-cs="odhaleno.">spotted.</s></span></div>
+  <div class="mask"><span><b id="pay1">1:40</b> <s data-cs="do zastavení.">to stop it.</s></span></div>
+  <div class="mask"><span data-cs="Nic <s>neuniklo.</s>">Nothing <s>stolen.</s></span></div>
+</div>
+
+<div class="chapters" id="chapters"><i><b></b></i><i><b></b></i><i><b></b></i><i><b></b></i><i><b></b></i></div>
+
+<script src="motion.js"></script>
+<script>
+const DURATION = 26;
+const SCENES = [[0, 5.6], [5.6, 10.8], [10.8, 17.8], [17.8, 22.5], [22.5, 26]];
+const CAPS = [[0.6, 5.3], [5.9, 10.5], [11.0, 17.4], [18.4, 22.1]];
+
+/* ---------- the one clock ---------- */
+// Story time runs RATE x real time, chosen so detection → containment reads
+// as about 1:40 on screen.
+const RATE = 10.75;
+const CLOCK0 = 3 * 3600 + 12 * 60 + 4;
+const clockAt = (t) => CLOCK0 + t * RATE;
+const hms = (s) => [s / 3600, (s / 60) % 60, s % 60].map((v) => String(Math.floor(v)).padStart(2, "0")).join(":");
+const hm = (s) => hms(s).slice(0, 5);
+const DETECT = 6.0;
+const STEPS = [11.9, 12.9, 13.9, 14.9];       // each runs STEP_RUN seconds
+const STEP_RUN = 0.75;
+const CONTAIN = STEPS[3] + STEP_RUN;
+const mmss = (s) => `${Math.floor(s / 60)}:${String(Math.floor(s % 60)).padStart(2, "0")}`;
+
+/* ---------- the signal ---------- */
+const smooth = (p) => p * p * (3 - 2 * p);
+function signal(x) {
+  const base = 2 + 0.9 * Math.sin(1.7 * x) + 0.6 * Math.sin(4.3 * x + 1);
+  const up = smooth(span(x, 5.6, 6.6)), down = smooth(span(x, 12.6, 13.8));
+  return base + (38 + 2 * Math.sin(9 * x)) * up * (1 - down);
+}
+const WINDOW = 8, NPTS = 161, YMAX = 50;
+
+/* ---------- camera ---------- */
+const camAt = camera([
+  [0, 0, 0, 1], [5.6, 0, 0, 1.025],
+  [7.0, ...focus({ x: 800, y: 545 }, { x: 990, y: 470 }, 1.3)],
+  [10.3, ...focus({ x: 800, y: 545 }, { x: 990, y: 470 }, 1.3)],
+  [11.3, 0, 0, 1], [17.6, 0, 0, 1.025], [18.4, 0, 0, 1], [22.3, 0, 0, 1.03], [26, 0, 0, 1],
+]);
+
+/* ---------- setup ---------- */
+triangles($("tris"), TRIS);
+const caps = [...document.querySelectorAll(".cap .mask > span")];
+const pay = [...document.querySelectorAll("#payoff .mask > span")];
+const stepEls = [...$("steps").children];
+const kvEls = [...document.querySelectorAll("#kvs .mask > span")];
+
+const TTC = mmss((CONTAIN - DETECT) * RATE);
+$("r-det").textContent = hms(clockAt(DETECT));
+$("r-con").textContent = `${hms(clockAt(CONTAIN))} · ${TTC}`;
+$("pay0").textContent = hm(clockAt(DETECT));
+$("pay1").textContent = TTC;
+
+const ALERT_R = { x: 560, y: 290, w: 420, h: 250 };
+const RB_R = { x: 740, y: 230, w: 760, h: 490 };
+const REP_R = { x: 300, y: 250, w: 1000, h: 530 };
+
+/* ---------- the frame ---------- */
+function draw(t) {
+  drift($("tris"), t, DURATION);
+  const [cx, cy, cs] = camAt(t);
+  $("cam").style.transform = `translate(${cx}px, ${cy}px) scale(${cs})`;
+  chapters($("chapters"), SCENES, t, DURATION);
+  captions(caps, CAPS, t);
+
+  // night falls, then lifts for the morning
+  $("night").style.opacity = inOut(span(t, 0.3, 1.8)) * (1 - inOut(span(t, 17.9, 19.4)));
+
+  /* ---- dashboard ---- */
+  const dIn = out(span(t, 0.8, 1.7));
+  const shift = inOut(span(t, 10.6, 11.5));
+  const dOut = inOut(span(t, 17.6, 18.2));
+  const dash = $("dash");
+  dash.style.opacity = dIn * (1 - 0.5 * shift) * (1 - dOut);
+  dash.style.transform = `translate(${-200 * shift}px, ${(1 - dIn) * 40 + 30 * shift}px) scale(${1 - 0.2 * shift})`;
+  $("dclock").textContent = hms(clockAt(t));
+
+  // chart: an 8s history window that scrolls; new data enters on the right
+  const pts = [];
+  for (let k = 0; k < NPTS; k++) {
+    const x = (k / (NPTS - 1)) * 860;
+    const v = signal(t - WINDOW + (k / (NPTS - 1)) * WINDOW);
+    pts.push(`${x.toFixed(1)},${(380 - (v / YMAX) * 350).toFixed(1)}`);
+  }
+  $("cline").setAttribute("points", pts.join(" "));
+  $("carea").setAttribute("d", `M0,388 L${pts.join(" L")} L860,388 Z`);
+  const v = signal(t);
+  $("cdot").setAttribute("cx", 860);
+  $("cdot").setAttribute("cy", 380 - (v / YMAX) * 350);
+
+  $("val").textContent = Math.max(0, Math.round(v));
+  const alerting = t >= DETECT && t < STEPS[1] + STEP_RUN;
+  const contained = t >= STEPS[1] + STEP_RUN;
+  const st = $("state");
+  $("statel").textContent = alerting ? tr("attack", "útok") : contained ? tr("stopped", "zastaveno") : tr("all calm", "vše v klidu");
+  const pulse = alerting ? 0.5 + 0.5 * Math.sin(t * 7) : 0;
+  st.style.background = alerting ? "#fff" : "transparent";
+  st.style.color = alerting ? "#04203a" : contained ? "var(--accent-soft)" : "var(--ink-mid)";
+  st.style.borderColor = alerting ? "#fff" : contained ? "var(--accent)" : "var(--line)";
+  st.style.boxShadow = alerting ? `0 0 0 ${6 + 10 * pulse}px rgba(255,255,255,${0.25 * (1 - pulse)})` : "none";
+  st.querySelector("i").style.background = alerting ? "#04203a" : contained ? "var(--accent)" : "#3d4f63";
+  $("src").style.opacity = out(span(t, 6.6, 7.2));
+
+  /* ---- alert → runbook → report ---- */
+  const aIn = back(span(t, 7.1, 7.6));
+  const alert = $("alert");
+  alert.style.transform = `scale(${0.85 + 0.15 * aIn})`;
+  alert.style.opacity = clamp(aIn * 2) * (1 - span(t, 10.6, 10.85));
+
+  const rb = $("rb");
+  const toRb = inOut(span(t, 10.6, 11.4));
+  const toRep = inOut(span(t, 17.9, 18.7));
+  if (toRep > 0) morph(rb, RB_R, REP_R, toRep);
+  else morph(rb, ALERT_R, RB_R, toRb);
+  rb.style.opacity = span(t, 10.65, 10.85) * (1 - span(t, 18.5, 18.7));
+  const rbBody = out(span(t, 11.3, 11.7)) * (1 - span(t, 17.8, 18.0));
+  [...rb.children].forEach((c) => { c.style.opacity = rbBody; });
+
+  STEPS.forEach((s, i) => {
+    const el = stepEls[i];
+    const done = t >= s + STEP_RUN, run = t >= s && !done;
+    el.classList.toggle("lit", done || run);
+    const ic = el.querySelector(".ic");
+    ic.innerHTML = run ? `<span class="spin" style="transform:rotate(${(t - s) * 480}deg)"></span>` : done ? CHECK : "";
+    ic.style.borderColor = done ? "#2f78b4" : run ? "#1f2a38" : "#2c3a4b";
+    const ts = el.querySelector(".ts");
+    ts.textContent = done ? hms(clockAt(s + STEP_RUN)) : "";
+    ts.style.opacity = out(span(t, s + STEP_RUN, s + STEP_RUN + 0.3));
+  });
+
+  // on-call's phone
+  const ph = $("phone");
+  const pIn = out(span(t, 15.6, 16.3));
+  const pOut = inOut(span(t, 17.6, 18.1));
+  ph.style.opacity = pIn * (1 - pOut);
+  ph.style.transform = `translateY(${(1 - pIn) * 120 + pOut * 60}px)`;
+  $("ptime").textContent = hm(clockAt(Math.min(t, 17.6)));
+  const tap = span(t, 16.9, 17.5);
+  const rip = $("ripple");
+  const rr = 30 + 300 * out(tap);
+  rip.style.width = rip.style.height = rr * 2 + "px";
+  rip.style.left = 197 - rr + "px"; rip.style.top = 33 - rr + "px";
+  rip.style.opacity = tap > 0 && tap < 1 ? 0.6 * (1 - tap) : 0;
+  const acked = t >= 17.05;
+  $("ackl").textContent = acked ? tr("acknowledged ✓", "potvrzeno ✓") : tr("acknowledge", "potvrdit");
+  $("ack").style.background = acked ? "#f2f6fb" : "";
+  $("ack").style.transform = `scale(${1 - 0.04 * (span(t, 16.85, 16.95) - span(t, 16.95, 17.1))})`;
+
+  // morning: the report
+  const rep = $("rep");
+  const repIn = span(t, 18.5, 18.75);
+  const repOut = inOut(span(t, 22.0, 22.5));
+  rep.style.opacity = repIn * (1 - repOut);
+  rep.style.transform = `scale(${1 - 0.05 * repOut})`;
+  const roll = inOut(span(t, 18.6, 19.9));
+  const from = clockAt(17.8), to = 7 * 3600 + 30 * 60;
+  $("rclock").textContent = hm(from + (to - from) * roll);
+  kvEls.forEach((s, i) => mask(s, span(t, 19.4 + i * 0.3, 20.0 + i * 0.3), 0));
+  const sp = back(span(t, 20.9, 21.3));
+  $("stamp").style.opacity = clamp(sp * 2);
+  $("stamp").style.transform = `scale(${0.6 + 0.4 * sp}) rotate(${-4 * sp}deg)`;
+
+  /* ---- payoff ---- */
+  pay.forEach((s, i) => mask(s, span(t, 22.65 + i * 0.25, 23.3 + i * 0.25), span(t, 25.2 + i * 0.1, 25.7 + i * 0.1)));
+}
+
+paced(draw, DURATION, 1);
+</script>
+</body></html>

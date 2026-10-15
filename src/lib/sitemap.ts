@@ -252,6 +252,18 @@ export interface Solution {
 		src: string;
 		alt: string;
 	};
+	/** Optional motion version of the panel, rendered from `docs/motion/` by
+	 *  `docs/motion/capture.mjs`. Where present it replaces `image` on
+	 *  /solutions; its poster is a settled frame that stands in under reduced
+	 *  motion. `label` describes the run, since the still's `alt` describes a
+	 *  different picture. */
+	video?: {
+		src: string;
+		poster: string;
+		label: string;
+		/** Seconds. The orbit holds the slot for one full run. */
+		duration: number;
+	};
 }
 
 export const solutionsData: Record<Locale, Solution[]> = {
@@ -263,27 +275,31 @@ export const solutionsData: Record<Locale, Solution[]> = {
 			description:
 				"Smart solutions that turn complex, messy data into decisions your team can defend.",
 			detailedDescription:
-				"We design and ship AI and machine learning systems that transform operational data into forecasting, process automation, and decision support — built to be explainable and auditable, not a black box bolted onto your stack.",
+				"AI that takes routine work off your team — and can explain every decision it makes.",
 			features: [
 				{
-					name: "Predictive Analytics",
-					description:
-						"Forecasting models trained on your own operational data, built for measurable business decisions.",
+					name: "Predictions",
+					description: "See demand coming, from your own data.",
 				},
 				{
-					name: "Process Analysis",
-					description:
-						"Instrumentation and analysis pipelines that surface where a workflow is actually losing time or money.",
+					name: "Process analysis",
+					description: "Find where time and money leak.",
 				},
 				{
-					name: "Process Automation",
-					description:
-						"Automation that removes repetitive manual work without removing a human's ability to review and override it.",
+					name: "Automation",
+					description: "Routine runs itself. You keep the final say.",
 				},
 			],
 			image: {
 				src: "/solutions/ai-ml.png",
 				alt: "Forecasting panel: a demand curve of actual figures continues past a “now” marker as a dashed forecast inside an 80% confidence band, beside a ranked list of the drivers behind it and an automated reorder held open for human review",
+			},
+			video: {
+				src: "/solutions/ai-ml.mp4",
+				poster: "/solutions/ai-ml-poster.jpg",
+				duration: 27.2,
+				label:
+					"Animated story: a customer emails asking for 340 units and a call; an AI assistant reads it, plans four steps, looks up the customer, checks the stock, books a call and writes a reply, and a person sends it with one click",
 			},
 		},
 		{
@@ -293,27 +309,31 @@ export const solutionsData: Record<Locale, Solution[]> = {
 			description:
 				"Protecting your systems and data with security built into delivery, not audited in afterward.",
 			detailedDescription:
-				"We design, deploy, and manage security programs that protect your infrastructure and data, keep you audit-ready, and hold up under regulatory scrutiny in healthcare, government, and enterprise environments.",
+				"Attacks stopped before they cost you — and audits you pass without the scramble.",
 			features: [
 				{
-					name: "Firewall & Network Perimeter",
-					description:
-						"Sophos, Fortinet, and Palo Alto deployments configured and managed for your actual traffic patterns, not defaults.",
+					name: "Firewall",
+					description: "Set up for your real traffic, not factory defaults.",
 				},
 				{
-					name: "Security Assessments",
-					description:
-						"Network and application security assessments that identify real exposure and prioritize fixes by impact.",
+					name: "Security audits",
+					description: "Real risks, ranked by what matters most.",
 				},
 				{
-					name: "Incident Response",
-					description:
-						"Response plans and runbooks built before an incident happens, so containment is a procedure, not a scramble.",
+					name: "Incident response",
+					description: "A plan ready in advance, so a breach isn't a crisis.",
 				},
 			],
 			image: {
 				src: "/solutions/cybersecurity.png",
 				alt: "Security console: traffic passes from the internet through a firewall of 412 deny-by-default rules into a DMZ and then a segmented internal network, beside assessment findings ranked by impact and an incident runbook running from detect to recover",
+			},
+			video: {
+				src: "/solutions/cybersecurity.mp4",
+				poster: "/solutions/cybersecurity-poster.jpg",
+				duration: 26,
+				label:
+					"Animated story of one night: at 03:12 someone starts guessing the password of an admin account, the attack is stopped automatically by blocking the attacker, locking the account and requiring a new password, the on-call expert confirms on their phone, and at 07:30 the morning report says nothing was stolen",
 			},
 		},
 		{
@@ -323,27 +343,31 @@ export const solutionsData: Record<Locale, Solution[]> = {
 			description:
 				"Full-cycle web development, from architecture to deployment and maintenance.",
 			detailedDescription:
-				"We build modern, scalable web applications end to end — architecture, frontend, backend, and the infrastructure it runs on — using the stack that fits your requirements, not the one that's trending.",
+				"Websites and web apps that are fast, easy to use and built to last.",
 			features: [
 				{
-					name: "Frontend Engineering",
-					description:
-						"React and Next.js interfaces built for accessibility and performance, not just a pixel-matched comp.",
+					name: "Interfaces",
+					description: "Fast, clear and usable for everyone.",
 				},
 				{
-					name: "Backend & API Architecture",
-					description:
-						"Node.js, Python, and Go backends with API contracts designed to outlive the first integration that uses them.",
+					name: "Backend & API",
+					description: "Solid foundations that grow with you.",
 				},
 				{
-					name: "Responsive & Progressive Web Apps",
-					description:
-						"Interfaces engineered for every viewport and connection quality, including offline-tolerant PWAs.",
+					name: "Every screen",
+					description: "Phone, tablet and desktop — even offline.",
 				},
 			],
 			image: {
 				src: "/solutions/web-development.png",
 				alt: "The same interface laid out at desktop, tablet and phone widths — three columns collapsing to one, with an “offline ready” badge on the phone — above the versioned API endpoints and response times that serve all three",
+			},
+			video: {
+				src: "/solutions/web-development.mp4",
+				poster: "/solutions/web-development-poster.jpg",
+				duration: 27,
+				label:
+					"Animated story of a website for a fictional clinic: a hand-drawn sketch turns into the finished site, a visitor books an appointment for Wednesday at 10:00 in a few clicks, and the same site rearranges itself for a tablet and a phone",
 			},
 		},
 		{
@@ -353,27 +377,31 @@ export const solutionsData: Record<Locale, Solution[]> = {
 			description:
 				"Access experienced engineers who plug into your existing workflow.",
 			detailedDescription:
-				"Scale your delivery capacity with engineers who integrate with your existing tools, standards, and cadence — reporting into your process, not running a parallel one.",
+				"Experienced IT people who join your team and work your way.",
 			features: [
 				{
-					name: "Helpdesk & End-User Support",
-					description:
-						"Responsive first- and second-line support that keeps your internal teams unblocked.",
+					name: "Helpdesk",
+					description: "Quick help, so nobody waits on IT.",
 				},
 				{
-					name: "Network Management",
-					description:
-						"Ongoing monitoring and management of your network estate, including ManageEngine-based tooling.",
+					name: "Network",
+					description: "Watched and kept running, day and night.",
 				},
 				{
-					name: "Server Management",
-					description:
-						"Proactive maintenance and monitoring so infrastructure issues get caught before they become outages.",
+					name: "Servers",
+					description: "Problems caught before they become outages.",
 				},
 			],
 			image: {
 				src: "/solutions/outsourcing.png",
 				alt: "Operations board in three columns: a helpdesk column with 18 open tickets and their time to SLA breach, a network column showing 99.98% link availability across four connected sites, and a server column tracking 126 managed hosts, patch state and verified backups",
+			},
+			video: {
+				src: "/solutions/outsourcing.mp4",
+				poster: "/solutions/outsourcing-poster.jpg",
+				duration: 26,
+				label:
+					"Animated story of one week: on Monday morning a company's IT requests pile up, three of our experts join the team and take requests, problems like a printer or Wi-Fi get solved one by one, and by Friday afternoon only four are left",
 			},
 		},
 		{
@@ -383,27 +411,31 @@ export const solutionsData: Record<Locale, Solution[]> = {
 			description:
 				"Native and cross-platform apps built for real-world usage, not just a demo.",
 			detailedDescription:
-				"We build high-performance mobile applications for iOS and Android, choosing native or cross-platform per project based on performance, budget, and reach — not a one-size-fits-all default.",
+				"Apps for iPhone and Android that work in the real world — even with no signal.",
 			features: [
 				{
-					name: "Native Development",
-					description:
-						"iOS and Android built natively where performance or platform integration genuinely requires it.",
+					name: "Native apps",
+					description: "Full speed where performance matters.",
 				},
 				{
-					name: "Cross-Platform Apps",
-					description:
-						"React Native and Flutter for efficient multi-platform delivery without duplicating engineering effort.",
+					name: "Both platforms",
+					description: "One app for iPhone and Android, built once.",
 				},
 				{
-					name: "Offline-First Functionality",
-					description:
-						"Local-first data handling so the app stays usable in the field, in a hospital basement, or on a factory floor.",
+					name: "Works offline",
+					description: "Keeps working without signal, syncs later.",
 				},
 			],
 			image: {
 				src: "/solutions/mobile-development.png",
 				alt: "One shared codebase branching into two handsets, iOS and Android, both running the same work-order screen with three items queued offline, beside a note that camera, Bluetooth and background sync run natively",
+			},
+			video: {
+				src: "/solutions/mobile-development.mp4",
+				poster: "/solutions/mobile-development-poster.jpg",
+				duration: 28,
+				label:
+					"Animated story of a technician app for a fictional heating company, the same app on iPhone and Android: in a basement boiler room with no signal the technician still ticks off checks, takes a photo and collects a signature, and back outside everything sends itself to the office and the customer",
 			},
 		},
 		{
@@ -413,27 +445,31 @@ export const solutionsData: Record<Locale, Solution[]> = {
 			description:
 				"Infrastructure and automation for systems that need to stay up.",
 			detailedDescription:
-				"We design and operate cloud infrastructure and delivery pipelines so your applications scale predictably, recover from failure automatically, and deploy without drama.",
+				"Infrastructure that stays up, grows with your traffic and updates without downtime.",
 			features: [
 				{
-					name: "Cloud Infrastructure",
-					description:
-						"AWS, Azure, and Google Cloud environments provisioned as code and sized for your actual load.",
+					name: "Cloud",
+					description: "AWS, Azure or Google, sized to your real load.",
 				},
 				{
-					name: "Containerization",
-					description:
-						"Docker and Kubernetes orchestration for workloads that need to scale horizontally and recover automatically.",
+					name: "Containers",
+					description: "Scales up and recovers on its own.",
 				},
 				{
-					name: "CI/CD Automation",
-					description:
-						"Deployment pipelines with automated testing gates, so shipping on a Friday isn't a risk.",
+					name: "Automatic releases",
+					description: "Tested on every change — safe even on a Friday.",
 				},
 			],
 			image: {
 				src: "/solutions/cloud-devops.png",
 				alt: "Deployment pipeline running commit, build, test, stage and production, with the test stage held open as a gate that must pass, above six healthy container replicas and infrastructure declared in code across dev, stage and production",
+			},
+			video: {
+				src: "/solutions/cloud-devops.mp4",
+				poster: "/solutions/cloud-devops-poster.jpg",
+				duration: 28,
+				label:
+					"Animated story of a Friday update to an online shop: the new version is checked automatically, servers switch to it one at a time while the shop stays open, then a server fails and its work moves to the others on its own; customers see zero errors throughout",
 			},
 		},
 	],
@@ -445,27 +481,31 @@ export const solutionsData: Record<Locale, Solution[]> = {
 			description:
 				"Chytrá řešení, která ze složitých a nepřehledných dat udělají rozhodnutí, za kterými si váš tým může stát.",
 			detailedDescription:
-				"Navrhujeme a nasazujeme systémy AI a strojového učení, které proměňují provozní data v předpovědi, automatizaci procesů a podporu rozhodování — vysvětlitelné a auditovatelné, ne černou skříňku přilepenou na váš stávající systém.",
+				"AI, která vašemu týmu ubere rutinu – a\u00a0každé své rozhodnutí umí vysvětlit.",
 			features: [
 				{
-					name: "Prediktivní analytika",
-					description:
-						"Predikční modely natrénované na vašich vlastních provozních datech, stavěné pro měřitelná obchodní rozhodnutí.",
+					name: "Predikce",
+					description: "Poptávku uvidíte dopředu, z\u00a0vlastních dat.",
 				},
 				{
 					name: "Analýza procesů",
-					description:
-						"Měření a analytické pipeline, které odhalí, kde proces doopravdy ztrácí čas nebo peníze.",
+					description: "Odhalí, kde utíkají čas a\u00a0peníze.",
 				},
 				{
-					name: "Automatizace procesů",
-					description:
-						"Automatizace, která odstraní opakující se ruční práci, aniž by člověku vzala možnost výsledek zkontrolovat a zasáhnout.",
+					name: "Automatizace",
+					description: "Rutina běží sama. Poslední slovo máte vy.",
 				},
 			],
 			image: {
 				src: "/solutions/ai-ml.png",
 				alt: "Predikční panel: křivka skutečné poptávky pokračuje za značkou „now“ čárkovanou předpovědí uvnitř 80% intervalu spolehlivosti, vedle seřazeného seznamu faktorů, které ji ovlivňují, a automatické doobjednávky pozdržené ke schválení člověkem",
+			},
+			video: {
+				src: "/solutions/ai-ml-cs.mp4",
+				poster: "/solutions/ai-ml-cs-poster.jpg",
+				duration: 27.2,
+				label:
+					"Animovaný příběh: zákazník napíše, že potřebuje 340 kusů a chce si zavolat; AI asistent e-mail přečte, naplánuje čtyři kroky, najde zákazníka, ověří sklad, domluví hovor a napíše odpověď, kterou člověk jedním kliknutím odešle",
 			},
 		},
 		{
@@ -475,27 +515,31 @@ export const solutionsData: Record<Locale, Solution[]> = {
 			description:
 				"Ochrana vašich systémů a dat. Bezpečnost je součástí vývoje, ne až dodatečného auditu.",
 			detailedDescription:
-				"Navrhujeme, nasazujeme a spravujeme bezpečnostní opatření, která chrání vaši infrastrukturu i data, drží vás připravené na audit a obstojí i při kontrole regulátora — ve zdravotnictví, ve státní správě i ve velkých firmách.",
+				"Útoky zastavíme dřív, než vás něco stojí – a\u00a0audit projdete v\u00a0klidu.",
 			features: [
 				{
-					name: "Firewall a síťový perimetr",
-					description:
-						"Řešení Sophos, Fortinet a Palo Alto nastavená a spravovaná podle vašeho skutečného síťového provozu, ne podle výchozích hodnot.",
+					name: "Firewall",
+					description: "Nastavený na váš skutečný provoz, ne z\u00a0výroby.",
 				},
 				{
-					name: "Bezpečnostní audity",
-					description:
-						"Audity zabezpečení sítě a aplikací, které odhalí reálná rizika a seřadí opravy podle dopadu.",
+					name: "Bezpečnostní audit",
+					description: "Skutečná rizika seřazená podle dopadu.",
 				},
 				{
-					name: "Reakce na incidenty",
-					description:
-						"Plány reakce a postupy připravené dřív, než incident nastane — aby se pak postupovalo podle plánu, ne v panice.",
+					name: "Reakce na incident",
+					description: "Plán připravený předem, aby útok nebyl krize.",
 				},
 			],
 			image: {
 				src: "/solutions/cybersecurity.png",
 				alt: "Bezpečnostní konzole: provoz prochází z internetu firewallem se 412 pravidly v režimu deny-by-default do DMZ a dál do segmentované vnitřní sítě, vedle nálezů z auditu seřazených podle dopadu a postupu pro řešení incidentu od detekce po obnovu",
+			},
+			video: {
+				src: "/solutions/cybersecurity-cs.mp4",
+				poster: "/solutions/cybersecurity-cs-poster.jpg",
+				duration: 26,
+				label:
+					"Animovaný příběh jedné noci: ve 03:12 začne někdo hádat heslo k účtu správce, útok se automaticky zastaví – útočník je zablokován, účet zamčen a vynuceno nové heslo – technik ve službě to potvrdí v telefonu a v 07:30 ranní report hlásí, že nic neuniklo",
 			},
 		},
 		{
@@ -505,27 +549,31 @@ export const solutionsData: Record<Locale, Solution[]> = {
 			description:
 				"Vývoj webových aplikací v celém cyklu — od architektury přes nasazení až po údržbu.",
 			detailedDescription:
-				"Stavíme moderní, škálovatelné webové aplikace od začátku do konce — architekturu, frontend, backend i infrastrukturu, na které běží — s technologiemi, které odpovídají vašim požadavkům, ne těmi, které jsou zrovna v módě.",
+				"Weby a\u00a0webové aplikace, které jsou rychlé, srozumitelné a\u00a0vydrží roky.",
 			features: [
 				{
-					name: "Frontend vývoj",
-					description:
-						"Rozhraní v Reactu a Next.js navržená s ohledem na přístupnost a výkon, ne jen na pixelovou přesnost návrhu.",
+					name: "Rozhraní",
+					description: "Rychlé, přehledné a\u00a0pro každého.",
 				},
 				{
-					name: "Backend a API architektura",
-					description:
-						"Backendy v Node.js, Pythonu a Go s API kontrakty navrženými tak, aby vydržely déle než první integrace, která je použije.",
+					name: "Backend a API",
+					description: "Pevný základ, který s\u00a0vámi poroste.",
 				},
 				{
-					name: "Responzivní a progresivní webové aplikace",
-					description:
-						"Rozhraní navržená pro každou velikost obrazovky a kvalitu připojení, včetně PWA fungujících i offline.",
+					name: "Každé zařízení",
+					description: "Mobil, tablet i\u00a0počítač – i\u00a0offline.",
 				},
 			],
 			image: {
 				src: "/solutions/web-development.png",
 				alt: "Totéž rozhraní v šířce desktopu, tabletu a telefonu — tři sloupce se skládají do jednoho a na telefonu svítí štítek „offline ready“ — nad verzovanými API endpointy a dobami odezvy, které obsluhují všechna tři zařízení",
+			},
+			video: {
+				src: "/solutions/web-development-cs.mp4",
+				poster: "/solutions/web-development-cs-poster.jpg",
+				duration: 27,
+				label:
+					"Animovaný příběh webu fiktivní kliniky: ručně kreslený náčrt se promění v hotový web, návštěvník si pár kliknutími objedná termín na středu v 10:00 a stejný web se přeskládá pro tablet i telefon",
 			},
 		},
 		{
@@ -535,27 +583,31 @@ export const solutionsData: Record<Locale, Solution[]> = {
 			description:
 				"Zkušení inženýři, kteří se zapojí do vašeho zavedeného způsobu práce.",
 			detailedDescription:
-				"Rozšiřte svou vývojovou kapacitu o inženýry, kteří se přizpůsobí vašim nástrojům, standardům i tempu práce — zapojí se do vašeho procesu, místo aby vedli vlastní paralelní.",
+				"Zkušení IT lidé, kteří se zapojí do vašeho týmu a\u00a0pracují po vašem.",
 			features: [
 				{
-					name: "Helpdesk a podpora koncových uživatelů",
-					description:
-						"Pohotová podpora první a druhé úrovně, díky které se vaše interní týmy nezaseknou.",
+					name: "Helpdesk",
+					description: "Rychlá pomoc, nikdo nečeká na IT.",
 				},
 				{
 					name: "Správa sítě",
-					description:
-						"Průběžný dohled a správa vaší síťové infrastruktury, včetně nástrojů postavených na ManageEngine.",
+					description: "Síť pod dohledem a\u00a0v\u00a0chodu, ve dne i\u00a0v\u00a0noci.",
 				},
 				{
 					name: "Správa serverů",
-					description:
-						"Preventivní údržba a dohled, díky kterým se problémy v infrastruktuře odhalí dřív, než z nich bude výpadek.",
+					description: "Problémy zachytíme dřív, než způsobí výpadek.",
 				},
 			],
 			image: {
 				src: "/solutions/outsourcing.png",
 				alt: "Provozní nástěnka ve třech sloupcích: helpdesk s 18 otevřenými tickety a časem do porušení SLA, síť s 99,98% dostupností linek ve čtyřech propojených lokalitách a servery se 126 spravovanými stroji, stavem záplat a ověřenými zálohami",
+			},
+			video: {
+				src: "/solutions/outsourcing-cs.mp4",
+				poster: "/solutions/outsourcing-cs-poster.jpg",
+				duration: 26,
+				label:
+					"Animovaný příběh jednoho týdne: v pondělí ráno firmě přibývají IT požadavky, do týmu se přidají tři naši odborníci a převezmou je, problémy jako tiskárna nebo Wi-Fi mizí jeden po druhém a v pátek odpoledne zbývají jen čtyři",
 			},
 		},
 		{
@@ -565,27 +617,31 @@ export const solutionsData: Record<Locale, Solution[]> = {
 			description:
 				"Nativní i multiplatformní aplikace stavěné pro reálný provoz, ne jen na ukázku.",
 			detailedDescription:
-				"Vyvíjíme výkonné mobilní aplikace pro iOS a Android. U každého projektu volíme mezi nativním a multiplatformním přístupem podle výkonu, rozpočtu a dosahu — ne podle jednoho univerzálního receptu.",
+				"Aplikace pro iPhone i\u00a0Android, které fungují v\u00a0reálném provozu – i\u00a0bez signálu.",
 			features: [
 				{
-					name: "Nativní vývoj",
-					description:
-						"iOS a Android postavené nativně tam, kde to výkon nebo integrace s platformou skutečně vyžadují.",
+					name: "Nativní aplikace",
+					description: "Plný výkon tam, kde na něm záleží.",
 				},
 				{
-					name: "Multiplatformní aplikace",
-					description:
-						"React Native a Flutter pro efektivní vývoj napříč platformami bez zdvojené práce.",
+					name: "Obě platformy",
+					description: "Jedna aplikace pro iPhone i\u00a0Android.",
 				},
 				{
-					name: "Provoz i bez připojení",
-					description:
-						"Data se drží primárně v zařízení, aby aplikace fungovala i v terénu, v suterénu nemocnice nebo ve výrobní hale.",
+					name: "Funguje offline",
+					description: "Bez signálu jede dál, data odešle později.",
 				},
 			],
 			image: {
 				src: "/solutions/mobile-development.png",
 				alt: "Jedna sdílená kódová základna se větví do dvou telefonů, iOS a Androidu, na obou běží tatáž obrazovka pracovního příkazu se třemi položkami ve frontě offline, vedle poznámky, že fotoaparát, Bluetooth a synchronizace na pozadí běží nativně",
+			},
+			video: {
+				src: "/solutions/mobile-development-cs.mp4",
+				poster: "/solutions/mobile-development-cs-poster.jpg",
+				duration: 28,
+				label:
+					"Animovaný příběh aplikace pro techniky fiktivní topenářské firmy, stejná aplikace na iPhonu i Androidu: ve sklepní kotelně bez signálu technik dál odškrtává kontroly, fotí a nechá si podepsat protokol, a venku se vše samo odešle do kanceláře i zákazníkovi",
 			},
 		},
 		{
@@ -595,27 +651,31 @@ export const solutionsData: Record<Locale, Solution[]> = {
 			description:
 				"Infrastruktura a automatizace pro systémy, které musí zůstat v provozu.",
 			detailedDescription:
-				"Navrhujeme a provozujeme cloudovou infrastrukturu i nasazovací pipeline tak, aby se vaše aplikace předvídatelně škálovaly, samy se zotavily z výpadku a jejich nasazení proběhlo bez dramat.",
+				"Infrastruktura, která nepadá, roste s\u00a0provozem a\u00a0aktualizuje se bez výpadku.",
 			features: [
 				{
-					name: "Cloudová infrastruktura",
-					description:
-						"Prostředí AWS, Azure a Google Cloud popsaná kódem a dimenzovaná podle vaší skutečné zátěže.",
+					name: "Cloud",
+					description: "AWS, Azure nebo Google, na míru vaší zátěži.",
 				},
 				{
-					name: "Kontejnerizace",
-					description:
-						"Orchestrace v Dockeru a Kubernetes pro zátěže, které potřebují horizontální škálování a automatické zotavení.",
+					name: "Kontejnery",
+					description: "Škáluje a\u00a0zotavuje se sama.",
 				},
 				{
-					name: "Automatizace CI/CD",
-					description:
-						"Nasazovací pipeline s automatickými testovacími branami, díky kterým není nasazení v pátek riziko.",
+					name: "Automatické nasazení",
+					description: "Každá změna otestovaná – klidně i\u00a0v\u00a0pátek.",
 				},
 			],
 			image: {
 				src: "/solutions/cloud-devops.png",
 				alt: "Nasazovací pipeline s kroky commit, build, test, stage a produkce, kde je testovací krok bránou, kterou je nutné projít, nad šesti běžícími replikami kontejnerů a infrastrukturou popsanou kódem pro dev, stage i produkci",
+			},
+			video: {
+				src: "/solutions/cloud-devops-cs.mp4",
+				poster: "/solutions/cloud-devops-cs-poster.jpg",
+				duration: 28,
+				label:
+					"Animovaný příběh pátečního nasazení nové verze e-shopu: nová verze se automaticky zkontroluje, servery na ni přecházejí jeden po druhém a e-shop zůstává otevřený, pak jeden server spadne a jeho práci samy převezmou ostatní; zákazníci po celou dobu nevidí jedinou chybu",
 			},
 		},
 	],

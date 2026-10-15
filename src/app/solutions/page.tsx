@@ -4,7 +4,7 @@ import { solutionsData, content } from "@/lib/sitemap";
 import Header from "@/components/header";
 import Footer from "@/components/footer";
 import HeroBackdrop from "@/components/hero";
-import SolutionsOrbit from "@/components/solutions-orbit";
+import SolutionsTour from "@/components/solutions-tour";
 import { IndustriesGrid } from "@/components/industries-grid";
 import { CtaSection } from "@/components/cta-section";
 import { useLocale } from "@/lib/i18n/locale-context";
@@ -63,12 +63,12 @@ const Solutions = () => {
 				</div>
 			</section>
 
-			{/* One scene on desktop — the active service unfolded beside its panel
-			    image, the other five orbiting it. Falls back to the alternating
-			    spec-sheet bands below `lg` and under reduced motion; see the
-			    component for why the fallback is a different layout rather than a
-			    slower version of the same one. */}
-			<SolutionsOrbit solutions={solutions} />
+			{/* A guided tour on desktop — the six solutions as a list, the active
+			    one's video large beside it. Falls back to the alternating spec-sheet
+			    bands below 1100px and under reduced motion; see the component for
+			    why the fallback is a different layout rather than a slower version
+			    of the same one. */}
+			<SolutionsTour solutions={solutions} />
 
 			<IndustriesGrid
 				title={pageContent.solutions.industries.title}

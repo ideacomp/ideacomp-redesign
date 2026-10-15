@@ -1,0 +1,3 @@
+# Render scratch: check stills and per-frame PNGs written by capture.mjs.
+.stills/
+.frames-*/

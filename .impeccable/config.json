@@ -1,0 +1,26 @@
+{
+  "detector": {
+    "ignoreRules": [],
+    "ignoreFiles": [],
+    "ignoreValues": [
+      {
+        "rule": "dark-glow",
+        "value": "*",
+        "files": [
+          "docs/motion/*.html"
+        ],
+        "createdAt": "2026-10-14T11:54:18.517Z",
+        "reason": "Claude triage: rgba(0,10,30,.6) is a near-black offset elevation shadow under cards on the blue video field, not a chromatic glow"
+      },
+      {
+        "rule": "radial-halo",
+        "value": "*",
+        "files": [
+          "docs/motion/*.html"
+        ],
+        "createdAt": "2026-10-14T11:54:18.531Z",
+        "reason": "Claude triage: the video field reproduces the /solutions hero's brand gradient; the user asked for a video background matching the page (2026-10-14)"
+      }
+    ]
+  }
+}

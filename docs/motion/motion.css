@@ -1,0 +1,235 @@
+@import url("https://fonts.googleapis.com/css2?family=Public+Sans:wght@400;500;600&display=swap");
+
+/* Shared stylesheet for the /solutions motion panels (docs/motion/*.html).
+ *
+ * The ground is the /solutions HERO, not the old panel graphite: the same
+ * brand field (#003b7b deep end opening to #00a3ff, which is what
+ * `.surface-signal` actually paints) with the same translucent triangles. The
+ * panel sits in the graphite orbit section, so it reads as a window back onto
+ * the hero rather than as a darker rectangle on a dark page.
+ *
+ * Content lives on graphite cards — the page's own `--card` — so everything
+ * inside a card follows the same accent rules as the rest of the dark site:
+ * #00a3ff is the accent there. On the open field itself the accent is white,
+ * as `.surface-signal` does it, because blue on blue is mush.
+ *
+ * Sized for the delivered card, not the canvas: the orbit shows this at 408
+ * CSS px, a 3.9x downscale from 1600. A 60px name lands at ~15px; nothing that
+ * has to be read is under 20px here.
+ *
+ * Hex, not oklch(var(--brand-h)): this is loaded outside the app, where
+ * globals.css does not exist. Keep in step with `--brand` by hand.
+ */
+
+:root {
+	--deep: #003b7b;
+	--brand: #00a3ff;
+
+	--card: #111924;
+	--line: #2c3a4b;
+
+	--ink-hi: #f2f6fb;
+	--ink-mid: #9aabbd;
+	--ink-lo: #6b7d90;
+
+	--accent: #00a3ff;
+	--accent-soft: #8ccfff;
+	--accent-dim: #2f6f9f;
+
+	--mono: "Spline Sans Mono", monospace;
+	/* Anything a non-technical viewer is meant to *read* inside a card uses the
+	   site's own text face, not mono: on a phone the video is ~358px wide and
+	   mono at card sizes was illegible. Mono stays for labels and timestamps. */
+	--sans: "Public Sans", system-ui, sans-serif;
+	--display: "Big Shoulders Display", sans-serif;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+	width: 1600px;
+	height: 1067px;
+	/* Anything on the open field is white; cards set their own ink. Without a
+	   default, unstyled text inherits black onto the blue field. */
+	color: #fff;
+	background: var(--deep);
+	overflow: hidden;
+	position: relative;
+}
+
+/* The hero field: deep end bottom-left, opening to the brand colour top-right. */
+.field {
+	position: absolute;
+	inset: 0;
+	background:
+		radial-gradient(120% 90% at 100% 0%, rgba(0, 163, 255, 0.95) 0%, rgba(0, 163, 255, 0) 62%),
+		linear-gradient(118deg, #002c60 0%, var(--deep) 42%, #0a63b8 78%, var(--brand) 100%);
+}
+
+.tris { position: absolute; inset: 0; overflow: hidden; }
+.tris span {
+	position: absolute;
+	display: block;
+	aspect-ratio: 1 / 1.05;
+	clip-path: polygon(50% 0%, 100% 100%, 0% 100%);
+}
+
+svg#wires { position: absolute; inset: 0; width: 1600px; height: 1067px; z-index: 1; }
+
+/* ---- furniture on the open field: white, per .surface-signal ---- */
+
+.title {
+	position: absolute;
+	left: 64px;
+	top: 70px;
+	font-family: var(--mono);
+	font-size: 24px;
+	letter-spacing: 0.18em;
+	text-transform: uppercase;
+	color: rgba(255, 255, 255, 0.92);
+}
+.title::after {
+	content: "";
+	display: block;
+	width: 150px;
+	height: 4px;
+	background: #fff;
+	margin-top: 18px;
+}
+
+.status {
+	position: absolute;
+	right: 64px;
+	top: 66px;
+	display: flex;
+	align-items: center;
+	gap: 14px;
+	font-family: var(--mono);
+	font-size: 24px;
+	letter-spacing: 0.16em;
+	text-transform: uppercase;
+	color: #fff;
+	background: rgba(0, 20, 50, 0.35);
+	border: 2px solid rgba(255, 255, 255, 0.22);
+	border-radius: 999px;
+	padding: 10px 22px 10px 18px;
+}
+.led { width: 16px; height: 16px; border-radius: 50%; background: rgba(255, 255, 255, 0.3); }
+
+/* ---- card: a workflow node on the field ---- */
+
+.card {
+	position: absolute;
+	z-index: 2;
+	background: var(--card);
+	border: 2px solid var(--line);
+	border-radius: 16px;
+	padding: 26px 28px;
+	display: flex;
+	flex-direction: column;
+	box-shadow: 0 30px 60px -20px rgba(0, 10, 30, 0.6);
+}
+.card.on {
+	border-color: var(--accent);
+	box-shadow: 0 0 0 6px rgba(255, 255, 255, 0.18), 0 30px 70px -16px rgba(0, 10, 30, 0.7);
+}
+.card.done { border-color: #2f78b4; }
+
+.hdr { display: flex; align-items: center; justify-content: space-between; }
+.kind {
+	font-family: var(--mono);
+	font-size: 19px;
+	letter-spacing: 0.16em;
+	text-transform: uppercase;
+	color: var(--ink-mid);
+}
+.badge { width: 34px; height: 34px; border-radius: 50%; border: 3px solid #2c3a4b; position: relative; }
+.badge .spin {
+	position: absolute; inset: -3px; border-radius: 50%;
+	border: 3px solid transparent; border-top-color: var(--accent); border-right-color: var(--accent);
+}
+.badge svg { position: absolute; inset: 3px; width: 22px; height: 22px; }
+
+.name {
+	font-family: var(--display);
+	font-weight: 600;
+	font-size: 64px;
+	line-height: 1;
+	letter-spacing: -0.012em;
+	color: var(--ink-hi);
+	margin-top: 10px;
+}
+.body { flex: 1; margin-top: 26px; position: relative; }
+/* Idle cards dim their content, never the card: a translucent card lets the
+   field and triangles show through and reads as a different object. */
+.card > :not(.port) { opacity: calc(var(--o, 1) * var(--k, 1)); }
+
+.chip {
+	display: inline-block;
+	font-family: var(--mono);
+	font-size: 18px;
+	letter-spacing: 0.12em;
+	text-transform: uppercase;
+	border: 2px solid var(--line);
+	border-radius: 8px;
+	padding: 6px 14px;
+	color: var(--ink-mid);
+}
+.chip.on { border-color: var(--accent); color: var(--accent-soft); }
+
+/* Wires attach to the measured centre of these. */
+.port {
+	position: absolute; width: 20px; height: 20px; border-radius: 50%;
+	background: var(--card); border: 3px solid #5e7590; z-index: 3;
+}
+.port.l { left: -11px; top: 50%; margin-top: -10px; }
+.port.r { right: -11px; top: 50%; margin-top: -10px; }
+
+/* ---- run bar: progress across the whole run, on the open field ---- */
+
+.runbar { position: absolute; left: 64px; right: 64px; top: 900px; }
+.runtrack { height: 10px; border-radius: 5px; background: rgba(0, 20, 50, 0.4); overflow: hidden; }
+.runfill { display: block; height: 100%; background: #fff; border-radius: 5px; width: 0; }
+.runlbl {
+	display: flex; justify-content: space-between; margin-top: 20px;
+	font-family: var(--mono); font-size: 24px; letter-spacing: 0.16em; text-transform: uppercase;
+	color: rgba(255, 255, 255, 0.9);
+}
+.runlbl span:last-child { font-variant-numeric: tabular-nums; }
+
+/* ---- story pieces: shared by every multi-scene panel ---- */
+
+/* The camera. Scene content lives inside it; captions and chapters don't. */
+#cam { position: absolute; inset: 0; transform-origin: 800px 545px; }
+#scene-wires { position: absolute; inset: 0; width: 1600px; height: 1067px; }
+
+/* Masked line: the span rises into its own clip box. */
+.mask { overflow: hidden; display: block; padding-bottom: 0.06em; }
+.mask > span { display: block; will-change: transform; }
+
+/* Captions — one per scene, stacked in the same spot, outside the camera. */
+.cap { position: absolute; left: 96px; top: 70px; z-index: 10; }
+.cap .mask > span {
+	font-family: var(--display); font-weight: 600; font-size: 92px; line-height: 1;
+	letter-spacing: -0.015em; color: #fff;
+}
+
+/* Chapter ticks: one per scene, filling as it plays. */
+.chapters { position: absolute; left: 96px; bottom: 64px; display: flex; gap: 12px; z-index: 10; }
+.chapters i { display: block; width: 64px; height: 6px; border-radius: 3px; background: rgba(0, 20, 50, 0.4); overflow: hidden; }
+.chapters i b { display: block; height: 100%; width: 0; background: #fff; }
+
+/* The closing type. Numbers full white, words a step back. */
+#payoff { position: absolute; left: 96px; top: 270px; z-index: 5; }
+#payoff .mask > span {
+	font-family: var(--display); font-weight: 600; font-size: 170px; line-height: 0.98;
+	letter-spacing: -0.02em; color: #fff;
+}
+#payoff .mask > span s { text-decoration: none; color: rgba(255, 255, 255, 0.62); }
+
+#cursor {
+	position: absolute; left: 0; top: 0; width: 64px; height: 64px; z-index: 20;
+	filter: drop-shadow(0 6px 14px rgba(0, 8, 24, 0.55));
+}
+
+.caret { display: inline-block; width: 5px; height: 1em; background: var(--accent); vertical-align: -0.14em; margin-left: 4px; }

@@ -1,0 +1,402 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8">
+<title>Mobile — Kotlík Servis in the field</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@600&family=Spline+Sans+Mono:wght@400;500&family=Roboto:wght@400;500;700&display=swap">
+<link rel="stylesheet" href="motion.css">
+<style>
+  /* The mobile slot, rebuilt 2026-10-14 for a non-technical viewer. The
+     earlier cut opened on TypeScript and showed a wireframe app; this one
+     shows a real-looking product — "Kotlík Servis", a fictional heating-service
+     company's app for its technicians — and the one thing that makes it
+     worth building: it keeps working with no signal.
+
+       1  One app for iPhone and Android.   same app, each in its native design
+       2  Out on a job.                     today's job, map, "Start job"
+       3  No signal? It keeps working.      checklist, photo, signature, offline
+       4  Back outside, it sends itself.    the queue drains; office + customer get it
+       5  One app. Any phone. Even without signal.
+
+     The app UI is laid out at real phone size (390 pt wide) and scaled into
+     the frames, so type sizes are the platform's own: SF / 17 pt body on iOS,
+     Roboto / Material type scale on Android. Dark theme with an amber tint,
+     because the scene is a basement boiler room.
+     Names, addresses and the company are fictional. */
+
+  .app{--bg: oklch(0.13 0 0); --grp: oklch(0.2 0.004 75); --grp2: oklch(0.255 0.005 75); --sep: oklch(0.32 0.005 75);
+    --lab: oklch(0.97 0.004 75); --lab2: oklch(0.72 0.008 75); --lab3: oklch(0.58 0.008 75);
+    --amb: oklch(0.8 0.15 75); --amb-ink: oklch(0.22 0.04 75); --ok: oklch(0.78 0.15 150); --warn: oklch(0.82 0.13 85)}
+  .ph{position:absolute;width:340px;height:702px;border-radius:54px;background:#000;border:5px solid oklch(0.35 0.01 240);overflow:hidden;
+    z-index:4;box-shadow:0 50px 90px -30px rgba(0,8,24,.75)}
+  .scr{position:absolute;left:0;top:0;width:390px;height:795px;transform:scale(.8462);transform-origin:0 0;background:var(--bg);overflow:hidden;
+    font-family:-apple-system,"SF Pro Text",system-ui,sans-serif;color:var(--lab)}
+  .and .scr{font-family:Roboto,sans-serif}
+  .sb{position:absolute;left:0;right:0;top:0;height:54px;display:flex;align-items:center;justify-content:space-between;padding:8px 30px 0 34px;
+    font-weight:600;font-size:17px;z-index:5}
+  .and .sb{height:40px;padding:4px 22px 0;font-size:14px;font-weight:500}
+  .island{position:absolute;left:50%;top:11px;width:122px;height:36px;margin-left:-61px;border-radius:20px;background:#000;z-index:6}
+  .and .island{width:14px;height:14px;margin-left:-7px;top:13px}
+  .sb .r{display:flex;align-items:center;gap:6px}
+  .bars{display:flex;align-items:flex-end;gap:2px;height:12px}
+  .bars i{width:3.5px;border-radius:1px;background:currentColor}
+  .off{font-size:12px;font-weight:600;letter-spacing:.02em}
+  .screen{position:absolute;inset:0;background:var(--bg)}
+
+  .lt{position:absolute;left:20px;top:96px;font-size:34px;font-weight:700;letter-spacing:.01em}
+  .lsub{position:absolute;left:20px;top:142px;font-size:15px;color:var(--lab2)}
+  .and .lt{top:58px;left:20px;font-size:22px;font-weight:500;letter-spacing:0}
+  .and .lsub{top:90px;left:20px;font-size:14px}
+  .and .appbar{position:absolute;left:0;right:0;top:40px;height:84px;background:oklch(0.17 0.006 75)}
+  .avatar{position:absolute;right:18px;top:96px;width:36px;height:36px;border-radius:50%;background:var(--grp2);color:var(--amb);display:flex;
+    align-items:center;justify-content:center;font-size:14px;font-weight:600}
+  .and .avatar{top:62px}
+  .jobcard{position:absolute;left:16px;right:16px;top:180px;border-radius:16px;background:var(--grp);overflow:hidden}
+  .and .jobcard{top:140px;border-radius:12px;background:oklch(0.21 0.008 75)}
+  .map{height:150px;position:relative;background:oklch(0.24 0.006 240)}
+  .map svg{position:absolute;inset:0;width:100%;height:100%}
+  .jc{padding:14px 16px 16px}
+  .jc .t{font-size:17px;font-weight:600}
+  .jc .a{font-size:15px;color:var(--lab2);margin-top:3px}
+  .jc .eta{display:inline-flex;gap:6px;align-items:center;margin-top:10px;font-size:13px;font-weight:600;color:var(--amb);background:oklch(0.8 0.15 75 / .14);
+    border-radius:8px;padding:4px 9px}
+  .start{margin-top:14px;height:50px;border-radius:12px;background:var(--amb);color:var(--amb-ink);display:flex;align-items:center;justify-content:center;
+    font-size:17px;font-weight:600}
+  .and .start{border-radius:25px;font-size:15px;font-weight:500;letter-spacing:.01em;height:48px}
+  .next{position:absolute;left:16px;right:16px;top:530px;border-radius:16px;background:var(--grp)}
+  .and .next{top:494px;border-radius:12px;background:transparent}
+  .nh{position:absolute;left:20px;top:502px;font-size:13px;color:var(--lab3);letter-spacing:.02em}
+  .and .nh{top:466px}
+  .row{display:flex;align-items:center;gap:12px;padding:12px 16px;border-bottom:.5px solid var(--sep)}
+  .row:last-child{border-bottom:0}
+  .row .tm{font-size:15px;font-weight:600;width:52px;color:var(--lab2)}
+  .row b{display:block;font-size:16px;font-weight:500}
+  .row span{font-size:13px;color:var(--lab3)}
+  .and .row{background:oklch(0.21 0.008 75);border-radius:12px;margin-bottom:8px;border:0}
+  .tabbar{position:absolute;left:0;right:0;bottom:0;height:84px;background:oklch(0.17 0.003 75);border-top:.5px solid var(--sep);display:flex;
+    justify-content:space-around;padding-top:8px}
+  .tab{display:flex;flex-direction:column;align-items:center;gap:3px;font-size:10px;font-weight:500;color:var(--lab3);width:70px}
+  .tab svg{width:26px;height:26px}
+  .tab.on{color:var(--amb)}
+  .and .tabbar{height:80px;background:oklch(0.18 0.008 75);border-top:0;padding-top:12px}
+  .and .tab{font-size:12px;gap:4px}
+  .and .tab .pill{width:64px;height:32px;border-radius:16px;display:flex;align-items:center;justify-content:center}
+  .and .tab .pill svg{width:24px;height:24px}
+  .and .tab.on .pill{background:oklch(0.8 0.15 75 / .22)}
+  .and .tab.on{color:var(--lab)}
+  .fab{position:absolute;right:16px;bottom:96px;width:56px;height:56px;border-radius:16px;background:oklch(0.35 0.06 75);color:var(--amb);display:flex;
+    align-items:center;justify-content:center;font-size:30px}
+
+  .navb{position:absolute;left:0;right:0;top:54px;height:52px;display:flex;align-items:center;justify-content:center;font-size:20px;font-weight:600}
+  .navb .bk{position:absolute;left:10px;color:var(--amb);font-weight:400;display:flex;align-items:center;gap:4px}
+  /* Job-screen type is a step up from iOS defaults (the "Larger Text" setting):
+     the phone is ~150px wide on a phone-sized card, and default 17pt became
+     unreadable there. */
+  .banner{position:absolute;left:16px;right:16px;top:112px;min-height:58px;border-radius:14px;display:flex;align-items:center;gap:10px;padding:10px 14px;
+    font-size:17px;line-height:1.25;font-weight:600;background:oklch(0.82 0.13 85 / .16);color:var(--warn);opacity:0}
+  .sect{position:absolute;left:20px;font-size:15px;font-weight:500;color:var(--lab3);letter-spacing:.02em}
+  .group{position:absolute;left:16px;right:16px;border-radius:12px;background:var(--grp)}
+  .chk{display:flex;align-items:center;gap:14px;padding:0 16px;height:62px;border-bottom:.5px solid var(--sep);font-size:21px;font-weight:500}
+  .chk:last-child{border-bottom:0}
+  .cb{width:30px;height:30px;border-radius:50%;border:2px solid var(--lab3);flex:none;position:relative}
+  .cb.on{background:var(--amb);border-color:var(--amb)}
+  .cb.on::after{content:"";position:absolute;left:9px;top:4px;width:7px;height:14px;border:solid var(--amb-ink);border-width:0 3px 3px 0;transform:rotate(45deg)}
+  .photo{height:150px;display:flex;align-items:center;justify-content:center;gap:10px;color:var(--amb);font-size:19px;font-weight:500;position:relative;overflow:hidden;border-radius:12px}
+  .photo img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:0}
+  .photo .tag{position:absolute;right:10px;bottom:10px;font-size:12px;font-weight:600;background:rgba(0,0,0,.65);color:#fff;border-radius:6px;padding:3px 7px;opacity:0}
+  .sign{position:absolute;left:16px;right:16px;bottom:30px;height:62px;border-radius:14px;background:var(--amb);color:var(--amb-ink);display:flex;align-items:center;
+    justify-content:center;font-size:21px;font-weight:600}
+  .sheet{position:absolute;left:0;right:0;bottom:0;height:400px;background:var(--grp);border-radius:14px 14px 0 0;transform:translateY(100%);z-index:8}
+  .sheet .grab{width:36px;height:5px;border-radius:3px;background:var(--lab3);margin:8px auto 0}
+  .sheet .hd{display:flex;justify-content:space-between;align-items:center;padding:14px 18px 0;font-size:21px;font-weight:600}
+  .sheet .hd span{color:var(--amb);font-weight:600}
+  .sheet .pad{position:absolute;left:18px;right:18px;top:66px;height:240px;border-radius:12px;background:var(--bg)}
+  .sheet .pad svg{width:100%;height:100%}
+  .sheet .ln{position:absolute;left:36px;right:36px;top:240px;height:1px;background:var(--sep)}
+  .sheet .who{position:absolute;left:18px;bottom:40px;font-size:17px;color:var(--lab2)}
+  .shade{position:absolute;inset:0;background:rgba(0,0,0,.45);opacity:0;z-index:7}
+  .flash{position:absolute;inset:0;background:#fff;opacity:0;z-index:9}
+  .rip{position:absolute;border-radius:50%;background:rgba(255,255,255,.5);opacity:0;z-index:9}
+
+  .plat{position:absolute;z-index:5;font-family:var(--mono);font-size:22px;letter-spacing:.14em;text-transform:uppercase;color:#fff;
+    background:rgba(0,20,50,.45);border:2px solid rgba(255,255,255,.55);border-radius:999px;padding:8px 20px;white-space:nowrap}
+  #loc{position:absolute;left:96px;top:420px;z-index:5;display:flex;flex-direction:column;gap:10px;width:420px}
+  #loc .k{font-family:var(--mono);font-size:20px;letter-spacing:.16em;text-transform:uppercase;color:rgba(255,255,255,.8)}
+  #loc .v{font-family:var(--display);font-weight:600;font-size:68px;line-height:1;color:#fff}
+  #loc .sig{display:flex;align-items:flex-end;gap:7px;height:44px;margin-top:8px}
+  #loc .sig i{width:14px;border-radius:3px;background:#fff}
+  #outbox{left:1040px;top:430px;width:440px;height:400px;padding:26px 28px;z-index:3}
+  #outbox .name{font-size:46px}
+  .q{position:absolute;left:28px;right:28px;height:58px;border-radius:12px;background:#18222e;border:2px solid #2a3b50;
+    display:flex;align-items:center;gap:12px;padding:0 16px;font-family:var(--sans);font-weight:500;font-size:25px;color:var(--ink-hi);white-space:nowrap}
+  .q i{width:12px;height:12px;border-radius:50%;background:var(--accent);flex:none}
+  #office{left:1040px;top:196px;width:440px;height:200px;padding:24px 28px;z-index:3}
+  #office .name{font-size:44px}
+  #ostate{position:absolute;right:28px;top:24px;font-family:var(--mono);font-size:18px;letter-spacing:.12em;text-transform:uppercase;
+    border-radius:8px;padding:5px 11px;border:2px solid var(--line);color:var(--ink-mid)}
+  #mail{position:absolute;left:28px;bottom:22px;font-family:var(--mono);font-size:20px;color:var(--accent-soft);display:flex;gap:10px;align-items:center}
+</style></head>
+<body>
+<div class="field"></div>
+<div class="tris" id="tris"></div>
+
+<div id="cam">
+  <svg id="scene-wires" viewBox="0 0 1600 1067"></svg>
+  <div class="ph app ios" id="pi"></div>
+  <div class="ph app and" id="pa"></div>
+  <span class="plat" id="li">iPhone</span>
+  <span class="plat" id="la">Android</span>
+
+  <div id="loc"><span class="k" data-cs="technik je">technician is in the</span><span class="v" id="locv"></span>
+    <span class="sig" id="locsig"><i style="height:12px"></i><i style="height:22px"></i><i style="height:32px"></i><i style="height:44px"></i></span></div>
+
+  <div class="card" id="office">
+    <div class="hdr"><span class="kind" data-cs="kancelář">office</span></div>
+    <div class="name" data-cs="Zakázka #2231">Job #2231</div>
+    <span id="ostate"></span>
+    <span id="mail"><svg width="22" height="16" viewBox="0 0 22 16"><rect x="1" y="1" width="20" height="14" rx="3" fill="none" stroke="currentColor" stroke-width="2"/><path d="M2 3l9 6 9-6" fill="none" stroke="currentColor" stroke-width="2"/></svg><span data-cs="zákazník dostal protokol">customer got the report</span></span>
+  </div>
+  <div class="card" id="outbox">
+    <div class="hdr"><span class="kind" data-cs="v telefonu">on the phone</span></div>
+    <div class="name" id="qn"></div>
+    <div id="qs"></div>
+  </div>
+</div>
+
+<div class="cap"><div class="mask"><span data-cs="Jedna aplikace pro iPhone i&nbsp;Android.">One app for iPhone and Android.</span></div></div>
+<div class="cap"><div class="mask"><span data-cs="Technik vyráží k zakázce.">Out on a job.</span></div></div>
+<div class="cap"><div class="mask"><span data-cs="Bez signálu? Funguje dál.">No signal? It keeps working.</span></div></div>
+<div class="cap"><div class="mask"><span data-cs="Venku se vše samo odešle.">Back outside, it sends itself.</span></div></div>
+
+<div id="payoff">
+  <div class="mask"><span data-cs="Jedna <s>aplikace.</s>">One <s>app.</s></span></div>
+  <div class="mask"><span data-cs="Každý <s>telefon.</s>">Any <s>phone.</s></span></div>
+  <div class="mask"><span data-cs="I <s>bez signálu.</s>">Even <s>without signal.</s></span></div>
+</div>
+
+<div class="chapters" id="chapters"><i><b></b></i><i><b></b></i><i><b></b></i><i><b></b></i><i><b></b></i></div>
+
+<script src="motion.js"></script>
+<script>
+const DURATION = 28;
+const SCENES = [[0, 5.6], [5.6, 10.6], [10.6, 17.6], [17.6, 23.8], [23.8, 28]];
+const CAPS = [[0.4, 5.2], [5.9, 10.2], [10.9, 17.2], [17.9, 23.4]];
+const lerp = (a, b, p) => a + (b - a) * p;
+
+/* ---------- app content ---------- */
+const TX = {
+  today: tr("Today", "Dnes"), date: tr("Tue 15 Oct · 3 jobs", "Út 15. 10. · 3 zakázky"),
+  job: tr("10:30 · Boiler service", "10:30 · Servis kotle"), addr: "Korunní 12, Praha 2",
+  eta: tr("12 min away", "12 min cesty"), start: tr("Start job", "Začít zakázku"), later: tr("LATER TODAY", "DÁL DNES"),
+  n1: [tr("Gas check", "Revize plynu"), "Vinohradská 48"], n2: [tr("Radiator leak", "Únik u radiátoru"), "Slezská 9"],
+  tabs: tr(["Today", "Map", "Messages", "Profile"], ["Dnes", "Mapa", "Zprávy", "Profil"]),
+  back: tr("Today", "Dnes"), title: tr("Job #2231", "Zakázka #2231"),
+  offline: tr("Offline — saved on the phone", "Offline — ukládá se v telefonu"),
+  synced: tr("Back online — all changes sent", "Zpět online — vše odesláno"),
+  checks: tr(["Valve pressure", "Leak test", "Flue gas check", "Safety label"], ["Tlak ventilu", "Zkouška těsnosti", "Kontrola spalin", "Bezpečnostní štítek"]),
+  checklist: tr("CHECKLIST", "KONTROLNÍ SEZNAM"), photoH: tr("PHOTO", "FOTKA"), addPhoto: tr("Add photo", "Přidat fotku"),
+  sign: tr("Customer signature", "Podpis zákazníka"), signBtn: tr("Sign & finish", "Podepsat a dokončit"), signed: tr("Signed ✓", "Podepsáno ✓"),
+  done: tr("Done", "Hotovo"), who: "Jana Dvořáková", saved: tr("saved", "uloženo"), noserv: tr("No service", "Bez signálu"),
+};
+const ICON = {
+  today: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3.5" y="5" width="17" height="15" rx="3"/><path d="M3.5 10h17M8 3v4M16 3v4"/></svg>',
+  map: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"><path d="M9 4 3.5 6v14L9 18l6 2 5.5-2V4L15 6 9 4zM9 4v14M15 6v14"/></svg>',
+  msg: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"><path d="M4 5h16v11H9l-5 4z"/></svg>',
+  me: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="8.5" r="4"/><path d="M4.5 20c1.3-3.6 4-5.4 7.5-5.4s6.2 1.8 7.5 5.4"/></svg>',
+};
+const MAP = `<svg viewBox="0 0 358 150" preserveAspectRatio="xMidYMid slice">
+  <g stroke="oklch(0.33 0.008 240)" stroke-width="10" fill="none" stroke-linecap="round">
+    <path d="M-10 40 L380 70"/><path d="M-10 118 L380 96"/><path d="M60 -10 L90 170"/><path d="M200 -10 L180 170"/><path d="M300 -10 L330 170"/></g>
+  <g stroke="oklch(0.28 0.006 240)" stroke-width="5" fill="none"><path d="M-10 78 L380 82"/><path d="M140 -10 L130 170"/><path d="M250 -10 L262 170"/></g>
+  <rect x="210" y="104" width="70" height="40" rx="6" fill="oklch(0.3 0.04 150)"/>
+  <path d="M70 128 L86 98 L184 92 L190 62 L268 66" fill="none" stroke="oklch(0.8 0.15 75)" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>
+  <circle cx="70" cy="128" r="7" fill="oklch(0.97 0 0)" stroke="oklch(0.8 0.15 75)" stroke-width="4"/>
+  <path d="M268 66 m0 -24 c-9 0 -15 7 -15 15 c0 11 15 24 15 24 s15 -13 15 -24 c0 -8 -6 -15 -15 -15z" fill="oklch(0.8 0.15 75)"/>
+  <circle cx="268" cy="57" r="5" fill="oklch(0.22 0.04 75)"/></svg>`;
+
+function statusBar() {
+  const bars = [4, 6.5, 9, 12].map((h) => `<i style="height:${h}px"></i>`).join("");
+  return `<div class="island"></div><div class="sb"><span>10:24</span><span class="r"><span class="bars">${bars}</span>
+    <svg width="27" height="13" viewBox="0 0 27 13"><rect x=".75" y=".75" width="22.5" height="11.5" rx="3.5" fill="none" stroke="currentColor" stroke-width="1.5" opacity=".5"/><rect x="2.5" y="2.5" width="15" height="8" rx="2" fill="currentColor"/><rect x="24.5" y="4.5" width="2" height="4" rx="1" fill="currentColor" opacity=".5"/></svg></span></div>`;
+}
+function home(android) {
+  const tabs = [["today", 0], ["map", 1], ["msg", 2], ["me", 3]].map(([ic, i]) =>
+    `<div class="tab${i === 0 ? " on" : ""}">${android ? `<span class="pill">${ICON[ic]}</span>` : ICON[ic]}${TX.tabs[i]}</div>`).join("");
+  return `<div class="screen home">
+    ${android ? '<div class="appbar"></div>' : ""}
+    <div class="lt">${TX.today}</div><div class="lsub">${TX.date}</div><div class="avatar">PH</div>
+    <div class="jobcard"><div class="map">${MAP}</div><div class="jc"><div class="t">${TX.job}</div><div class="a">${TX.addr}</div>
+      <span class="eta">● ${TX.eta}</span><div class="start">${TX.start}</div></div></div>
+    <div class="nh">${TX.later}</div>
+    <div class="next"><div class="row"><span class="tm">13:00</span><div><b>${TX.n1[0]}</b><span>${TX.n1[1]}</span></div></div>
+      <div class="row"><span class="tm">15:30</span><div><b>${TX.n2[0]}</b><span>${TX.n2[1]}</span></div></div></div>
+    ${android ? '<div class="fab">+</div>' : ""}
+    <div class="tabbar">${tabs}</div></div>`;
+}
+function job() {
+  return `<div class="screen job">
+    <div class="navb"><span class="bk"><svg width="12" height="20" viewBox="0 0 12 20"><path d="M10 2 2 10l8 8" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg>${TX.back}</span>${TX.title}</div>
+    <div class="banner"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M2 8.5a15 15 0 0 1 20 0M5.5 12a10 10 0 0 1 13 0M9 15.5a5 5 0 0 1 6 0"/></svg><span class="bt">${TX.offline}</span></div>
+    <div class="sect" style="top:186px">${TX.checklist}</div>
+    <div class="group" style="top:212px">${TX.checks.map((c) => `<div class="chk"><span class="cb"></span>${c}</div>`).join("")}</div>
+    <div class="sect" style="top:478px">${TX.photoH}</div>
+    <div class="group" style="top:504px"><div class="photo"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 8h3l2-3h6l2 3h3v11H4z"/><circle cx="12" cy="13" r="3.5"/></svg>${TX.addPhoto}
+      <img src="assets/valve-gauge.jpg" alt=""><span class="tag">10:41 · ${TX.saved}</span></div></div>
+    <div class="sign">${TX.signBtn}</div>
+    <div class="shade"></div>
+    <div class="sheet"><div class="grab"></div><div class="hd">${TX.sign}<span>${TX.done}</span></div>
+      <div class="pad"><svg viewBox="0 0 320 200"><path class="sigp" d="M24,140 C40,60 60,58 66,128 C70,168 92,74 112,96 C126,112 120,146 142,124 C162,104 172,62 188,84 C202,104 192,146 218,130 C238,116 254,92 300,108"
+        fill="none" stroke="oklch(0.97 0.004 75)" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+      <div class="who">${TX.who}</div></div></div>`;
+}
+$("pi").innerHTML = `<div class="scr">${home(false)}${job()}${statusBar()}<div class="flash"></div><span class="rip"></span></div>`;
+$("pa").innerHTML = `<div class="scr">${home(true)}${statusBar()}</div>`;
+const PI = $("pi");
+const sc = PI.querySelector(".scr");
+const sigPath = PI.querySelector(".sigp");
+const SIG_LEN = sigPath.getTotalLength();
+sigPath.style.strokeDasharray = SIG_LEN;
+
+/* ---------- positions ---------- */
+const POS = { i: { x: 300, y: 250 }, a: { x: 960, y: 250 }, field: { x: 630, y: 200 } };
+// In the field the phone grows by this much, so the app reads on a small card.
+const FIELD_SCALE = 1.25;
+// taps in screen (390-pt) coordinates: [time, x, y]
+const TAPS = [[8.3, 195, 455], [11.4, 31, 243], [12.3, 31, 305], [13.4, 195, 579], [14.5, 31, 367], [15.1, 31, 429], [15.7, 195, 734]];
+const CHECK_T = [11.45, 12.35, 14.55, 15.15];
+
+/* outbox rows, in plain words */
+const CHANGES = [[tr("✓ valve pressure OK", "✓ tlak ventilu v pořádku"), 11.5], [tr("✓ leak test passed", "✓ těsnost v pořádku"), 12.4],
+  [tr("photo of the gauge", "fotka manometru"), 13.75], [tr("customer signature", "podpis zákazníka"), 17.0]];
+$("qs").innerHTML = CHANGES.map(([n]) => `<div class="q"><i></i>${n}</div>`).join("");
+const qEls = [...$("qs").children];
+const Q_Y = (k) => 120 + k * 66;
+const SYNC = (k) => 19.9 + k * 0.6;
+const syncLines = makeLines($("scene-wires"), CHANGES.map((_, k) => [{ x: 1260, y: 430 + Q_Y(k) + 29 }, { x: 1260, y: 396 }]), "s");
+
+triangles($("tris"), TRIS);
+const caps = [...document.querySelectorAll(".cap .mask > span")];
+const pay = [...document.querySelectorAll("#payoff .mask > span")];
+
+const camAt = camera([
+  [0, 0, 0, 1], [5.4, 0, 0, 1.03], [6.4, 0, 0, 1],
+  // in close on the phone while the work happens, so the card can read it
+  [8.0, 0, 0, 1], [17.6, 0, 0, 1.02],
+  [18.6, 0, 0, 1], [23.4, 0, 0, 1.03], [28, 0, 0, 1],
+]);
+
+/* ---------- the frame ---------- */
+function draw(t) {
+  drift($("tris"), t, DURATION);
+  const [cx, cy, cs] = camAt(t);
+  $("cam").style.transform = `translate(${cx}px, ${cy}px) scale(${cs})`;
+  chapters($("chapters"), SCENES, t, DURATION);
+  captions(caps, CAPS, t);
+
+  /* ---- 1: two phones, one app ---- */
+  const rise = (d) => out(span(t, 0.5 + d, 1.4 + d));
+  const toField = inOut(span(t, 6.0, 7.0));
+  const leave = inOut(span(t, 6.0, 6.8));
+  const end = inOut(span(t, 23.4, 23.8));
+  const ri = rise(0), ra = rise(0.18);
+  PI.style.left = lerp(POS.i.x, POS.field.x, toField) + "px";
+  PI.style.top = lerp(POS.i.y, POS.field.y, toField) + "px";
+  PI.style.transformOrigin = "50% 0";
+  PI.style.transform = `translateY(${(1 - ri) * 300}px) scale(${(1 + (FIELD_SCALE - 1) * toField) * (1 - 0.04 * end)})`;
+  PI.style.opacity = clamp(ri * 2) * (1 - end);
+  const pa = $("pa");
+  Object.assign(pa.style, { left: POS.a.x + "px", top: POS.a.y + "px" });
+  pa.style.transform = `translate(${leave * 560}px, ${(1 - ra) * 300}px) rotate(${leave * 8}deg)`;
+  pa.style.opacity = clamp(ra * 2) * (1 - leave);
+  const li = $("li"), la = $("la");
+  Object.assign(li.style, { left: POS.i.x + 170 + "px", top: "186px" });
+  Object.assign(la.style, { left: POS.a.x + 170 + "px", top: "186px" });
+  [li, la].forEach((el, k) => {
+    const q = out(span(t, 1.6 + k * 0.2, 2.1 + k * 0.2));
+    el.style.opacity = q * (1 - leave);
+    el.style.transform = `translate(-50%, ${(1 - q) * 14}px)`;
+  });
+
+  /* ---- signal: full, drops on the way down, comes back outside ---- */
+  const down = span(t, 9.4, 10.8), up = span(t, 18.0, 19.0);
+  const bars = Math.round(4 - 4 * down + 4 * up);
+  PI.querySelectorAll(".sb .bars i").forEach((b, i) => { b.style.opacity = i < bars ? 1 : 0.25; });
+  $("locsig").querySelectorAll("i").forEach((b, i) => { b.style.opacity = i < bars ? 1 : 0.22; });
+  const loc = $("loc");
+  const lIn = out(span(t, 8.9, 9.4));
+  loc.style.opacity = lIn * (1 - end);
+  loc.style.transform = `translateX(${(1 - lIn) * -40}px)`;
+  $("locv").textContent = t >= 18.0 ? tr("Back outside", "Zpátky venku") : tr("Basement boiler room", "Sklep, kotelna");
+
+  /* ---- 2: start the job (iOS push) ---- */
+  const push = inOut(span(t, 8.45, 8.95));
+  const hm = sc.querySelector(".home");
+  hm.style.transform = `translateX(${-30 * push}%)`;
+  hm.style.filter = `brightness(${1 - 0.4 * push})`;
+  sc.querySelector(".job").style.transform = `translateX(${100 - 100 * push}%)`;
+
+  /* ---- 3: offline work ---- */
+  const banner = sc.querySelector(".banner");
+  banner.style.opacity = out(span(t, 10.2, 10.6));
+  const synced = t >= 19.1;
+  banner.querySelector(".bt").textContent = synced ? TX.synced : TX.offline;
+  banner.style.background = synced ? "oklch(0.78 0.15 150 / .16)" : "";
+  banner.style.color = synced ? "var(--ok)" : "";
+  sc.querySelectorAll(".cb").forEach((c, i) => c.classList.toggle("on", t >= CHECK_T[i]));
+  const ph = TAPS[3][0];
+  const fl = span(t, ph + 0.1, ph + 0.45);
+  sc.querySelector(".flash").style.opacity = fl > 0 && fl < 1 ? 0.85 * (1 - fl) : 0;
+  sc.querySelector(".photo img").style.opacity = out(span(t, ph + 0.25, ph + 0.6));
+  sc.querySelector(".photo .tag").style.opacity = out(span(t, ph + 0.5, ph + 0.8));
+  const sh = inOut(span(t, 15.85, 16.25)) * (1 - inOut(span(t, 17.0, 17.4)));
+  sc.querySelector(".sheet").style.transform = `translateY(${(1 - sh) * 100}%)`;
+  sc.querySelector(".shade").style.opacity = sh;
+  sigPath.style.strokeDashoffset = SIG_LEN * (1 - inOut(span(t, 16.25, 16.95)));
+  sc.querySelector(".sign").textContent = t >= 17.0 ? TX.signed : TX.signBtn;
+  const rip = sc.querySelector(".rip");
+  rip.style.opacity = 0;
+  TAPS.forEach(([s, x, y]) => {
+    const q = span(t, s, s + 0.45);
+    if (q > 0 && q < 1) {
+      const r = 16 + 56 * out(q);
+      Object.assign(rip.style, { left: x - r + "px", top: y - r + "px", width: 2 * r + "px", height: 2 * r + "px", opacity: 0.6 * (1 - q) });
+    }
+  });
+
+  const ob = $("outbox");
+  const obIn = out(span(t, 11.0, 11.5));
+  ob.style.opacity = obIn * (1 - end);
+  ob.style.transform = `translateX(${(1 - obIn) * 40}px)`;
+  let queued = 0;
+  qEls.forEach((q, k) => {
+    const [, s] = CHANGES[k];
+    const inQ = back(span(t, s, s + 0.45));
+    const gone = inOut(span(t, SYNC(k), SYNC(k) + 0.5));
+    q.style.top = Q_Y(k) + "px";
+    q.style.opacity = clamp(inQ * 2) * (1 - gone);
+    q.style.transform = `translate(${(1 - clamp(inQ)) * -120}px, ${-gone * 30}px) scale(${0.8 + 0.2 * inQ})`;
+    if (t >= s && t < SYNC(k) + 0.5) queued++;
+    syncLines(k, span(t, 19.6, 19.9) * (1 - span(t, 23.0, 23.3)), out(span(t, SYNC(k), SYNC(k) + 0.25)) * (t < 23.0 ? 1 : 0),
+      glide(span(t, SYNC(k) + 0.05, SYNC(k) + 0.65)), 1);
+  });
+  const allSent = t >= SYNC(3) + 0.5;
+  $("qn").textContent = allSent ? tr("All sent", "Vše odesláno") : tr(`${queued} waiting to send`, `${queued} čeká na odeslání`);
+
+  /* ---- 4: office + customer ---- */
+  const of = $("office");
+  const oIn = out(span(t, 19.2, 19.7));
+  of.style.opacity = oIn * (1 - end);
+  of.style.transform = `translateY(${(1 - oIn) * -30}px)`;
+  const doneJob = t >= SYNC(3) + 0.6;
+  const os = $("ostate");
+  os.textContent = doneJob ? tr("done ✓", "hotovo ✓") : tr("in progress", "probíhá");
+  os.style.background = doneJob ? "#fff" : "transparent";
+  os.style.color = doneJob ? "#04203a" : "var(--ink-mid)";
+  os.style.borderColor = doneJob ? "#fff" : "var(--line)";
+  $("mail").style.opacity = out(span(t, SYNC(3) + 0.9, SYNC(3) + 1.3));
+
+  /* ---- payoff ---- */
+  pay.forEach((s, i) => mask(s, span(t, 23.95 + i * 0.25, 24.6 + i * 0.25), span(t, 27.2 + i * 0.1, 27.7 + i * 0.1)));
+}
+
+paced(draw, DURATION, 1);
+</script>
+</body></html>
