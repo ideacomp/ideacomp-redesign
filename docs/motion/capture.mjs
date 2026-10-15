@@ -109,5 +109,14 @@ execFileSync("ffmpeg", [
 	`${out}${slug}${suffix}-poster.jpg`,
 ]);
 
+// Frame 0 as a still: the autoplaying player shows it until the video starts,
+// so playback begins on the same picture instead of cutting from the settled
+// poster (the end of the story) back to an empty opening frame.
+execFileSync("ffmpeg", [
+	"-y", "-loglevel", "error",
+	"-i", `${frames}0000.png`, "-vf", scale, "-q:v", "3",
+	`${out}${slug}${suffix}-start.jpg`,
+]);
+
 rmSync(frames, { recursive: true, force: true });
 console.log(`\nwrote public/solutions/${slug}${suffix}.mp4 and ${slug}${suffix}-poster.jpg (${total} frames, ${duration}s)`);

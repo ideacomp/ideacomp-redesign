@@ -68,6 +68,13 @@ const PanelVideo = ({
 	// null = the viewer hasn't touched the controls; then reduced motion decides.
 	const [userPaused, setUserPaused] = useState<boolean | null>(null);
 	const paused = userPaused ?? reduced;
+	// Which still to show before the video runs. Autoplay shows frame 0
+	// (`-start.jpg`, written by capture.mjs) so playback starts on the same
+	// picture; the settled poster — the end of the story — was a visible cut
+	// back to an empty field the moment the video began. Only reduced motion,
+	// where nothing autoplays, keeps the settled poster as the panel.
+	const [stillPoster, setStillPoster] = useState(false);
+	const shownPoster = stillPoster ? poster : poster.replace(/-poster\.jpg$/, "-start.jpg");
 
 	const setRef = useCallback(
 		(el: HTMLVideoElement | null) => {
@@ -79,7 +86,10 @@ const PanelVideo = ({
 
 	useEffect(() => {
 		const query = window.matchMedia("(prefers-reduced-motion: reduce)");
-		const sync = () => setReduced(query.matches);
+		const sync = () => {
+			setReduced(query.matches);
+			setStillPoster(query.matches);
+		};
 		sync();
 		query.addEventListener("change", sync);
 		return () => query.removeEventListener("change", sync);
@@ -154,7 +164,7 @@ const PanelVideo = ({
 		<>
 			<video
 				ref={setRef}
-				poster={poster}
+				poster={shownPoster}
 				muted
 				loop={loop}
 				playsInline
