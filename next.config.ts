@@ -23,6 +23,13 @@ const nextConfig: NextConfig = {
     
     // Compression for better performance
     compress: true,
+
+    // Render metadata (title, description, OG) into <head> for every client.
+    // By default Next 15 streams it into <body> for anything it doesn't
+    // recognise as a limited bot — Lighthouse flagged "no meta description",
+    // and even Googlebot was served it in <body>. Our pages are static, so
+    // blocking on metadata costs nothing measurable.
+    htmlLimitedBots: /.*/,
     
     // Experimental features for better performance
     experimental: {

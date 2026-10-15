@@ -112,10 +112,9 @@ export function CapabilityGrid({
 						// `h-full` on both the Reveal wrapper and the card: Reveal renders a
 						// motion.div between the grid and the link, and without it that
 						// wrapper shrink-wraps and the cards in a row stop matching height.
-						<Reveal key={solution.slug} delay={i * 0.06} className="h-full">
+						<Reveal key={solution.slug} delay={i * 0.06} className="h-full" role="listitem">
 							<Link
 								href={`/solutions#${solution.slug}`}
-								role="listitem"
 								className={CARD}
 							>
 								<svg

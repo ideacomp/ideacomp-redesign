@@ -17,14 +17,17 @@ export function Reveal({
 	children,
 	className,
 	delay = 0,
+	role,
 }: {
 	children: ReactNode;
 	className?: string;
 	delay?: number;
+	role?: string;
 }) {
 	return (
 		<motion.div
 			className={className}
+			role={role}
 			initial="hidden"
 			whileInView="shown"
 			viewport={{ once: true, margin: "-80px" }}

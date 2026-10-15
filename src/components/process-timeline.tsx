@@ -54,7 +54,7 @@ function TimelineStep({ step }: { step: ProcessStep }) {
 		>
 			<span
 				className={`font-mono text-sm transition-colors motion-safe:duration-500 ${
-					isActive ? "text-signal" : "text-foreground/40"
+					isActive ? "text-signal" : "text-muted-foreground"
 				}`}
 			>
 				{step.step}

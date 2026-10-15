@@ -79,10 +79,10 @@ const Footer = () => {
 				</div>
 
 				<div className="mt-12 flex flex-col items-center gap-3 border-t border-border pt-8 sm:flex-row sm:justify-between">
-					<p className="text-xs text-foreground/40">
+					<p className="text-xs text-muted-foreground">
 						&copy; {currentYear} Ideacomp s.r.o. {dict.footer.allRightsReserved}
 					</p>
-					<div className="flex items-center gap-4 text-xs text-foreground/40">
+					<div className="flex items-center gap-4 text-xs text-muted-foreground">
 						{legalLinks.map((link) => (
 							<Link key={link.key} href={link.href} className="hover:text-foreground">
 								{dict.footer.legal[link.key]}

@@ -350,7 +350,7 @@ function PayloadPanel({ form }: { form: ContactFormApi }) {
 								isActive ? "bg-signal/10" : ""
 							)}
 						>
-							<span className={cn("truncate", isActive ? "text-signal" : "text-foreground/40")}>
+							<span className={cn("truncate", isActive ? "text-signal" : "text-muted-foreground")}>
 								{row.label}
 							</span>
 							<span
@@ -376,12 +376,12 @@ function PayloadPanel({ form }: { form: ContactFormApi }) {
 				{status === "success" && reference ? (
 					<>
 						<div className="grid grid-cols-[5.5rem_minmax(0,1fr)] gap-4 px-4 py-2.5">
-							<span className="text-foreground/40">ref</span>
+							<span className="text-muted-foreground">ref</span>
 							<span className="text-signal">{reference}</span>
 						</div>
 						{submittedAt ? (
 							<div className="grid grid-cols-[5.5rem_minmax(0,1fr)] gap-4 px-4 py-2.5">
-								<span className="text-foreground/40">{copy.receivedAt}</span>
+								<span className="text-muted-foreground">{copy.receivedAt}</span>
 								<span className="text-foreground/90">
 									{submittedAt.toLocaleString(locale === "cs" ? "cs-CZ" : "en-GB")}
 								</span>

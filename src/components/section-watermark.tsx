@@ -124,11 +124,15 @@ const SectionWatermark = ({
 					// where they started: off the bottom edge the word crosses real
 					// content, so it has to give way to whatever is printed on top of it.
 					"text-foreground/[0.04] dark:text-foreground/[0.06]",
+					// Drawn as generated content, not a text node: it is decoration at
+					// 4–6% ink, and as real text it failed every contrast audit (axe
+					// checks text even under aria-hidden). Screen readers already skip
+					// it via the wrapper's aria-hidden.
+					"before:content-[attr(data-word)]",
 					className,
 				)}
-			>
-				{word}
-			</span>
+				data-word={word}
+			/>
 		</div>
 	</div>
 );
