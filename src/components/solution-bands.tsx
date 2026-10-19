@@ -50,10 +50,10 @@ export const SolutionBands = ({ solutions }: { solutions: Solution[] }) => {
 						<div className="mx-auto grid max-w-6xl items-center gap-12 max-lg:gap-6 lg:grid-cols-2">
 							{/* Phone heading: above the video. */}
 							<div className="flex items-center gap-3 lg:hidden">
-								<solution.icon className="size-7 shrink-0 text-signal" aria-hidden="true" />
+								<solution.icon className="size-5 shrink-0 text-signal" aria-hidden="true" />
 								<h2
 									id={`${solution.slug}-heading`}
-									className="font-display text-3xl leading-tight font-semibold tracking-[-0.02em] text-balance text-foreground"
+									className="eyebrow-heading text-balance text-foreground"
 								>
 									{solution.title}
 								</h2>
@@ -96,7 +96,8 @@ export const SolutionBands = ({ solutions }: { solutions: Solution[] }) => {
 										className="size-8 text-signal transition-transform motion-safe:duration-300 motion-safe:group-hover:scale-110"
 										aria-hidden="true"
 									/>
-									<h2 className="mt-4 font-display text-3xl font-semibold tracking-[-0.02em] text-foreground sm:text-4xl">
+									{/* the Home capability cards' title treatment, as in the tour */}
+									<h2 className="eyebrow-heading mt-4 text-foreground">
 										{solution.title}
 									</h2>
 								</div>

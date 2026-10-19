@@ -289,15 +289,21 @@ const SolutionsTour = ({ solutions }: { solutions: Solution[] }) => {
 								<span className="flex items-center gap-3">
 									<solution.icon
 										className={cn(
-											"size-5 shrink-0 transition-colors motion-safe:duration-300",
-											isActive ? "text-signal" : "text-foreground/40 group-hover:text-foreground/70",
+											"size-5 shrink-0 transition-[color,opacity] motion-safe:duration-300",
+											// Dimmed with opacity on the whole icon, not an alpha colour: with
+											// an alpha stroke every place a line crosses another (the brain is
+											// full of them) drew twice and showed through darker.
+											isActive ? "text-signal" : "text-foreground opacity-40 group-hover:opacity-70",
 										)}
 										aria-hidden="true"
 									/>
 									<span
 										className={cn(
-											"font-display text-[1.625rem] leading-tight font-semibold tracking-[-0.01em] text-balance transition-colors motion-safe:duration-300",
-											isActive ? "text-foreground" : "text-foreground/55 group-hover:text-foreground/85",
+											// `.eyebrow-heading`, the Home capability cards' title treatment:
+											// the same six services read in the same face in both places.
+											"eyebrow-heading text-balance transition-colors motion-safe:duration-300",
+											// 70%, not 55%: at 14px the lighter ink fell to ~3.6:1 on the paper
+											isActive ? "text-foreground" : "text-foreground/70 group-hover:text-foreground",
 										)}
 									>
 										{solution.title}
