@@ -156,6 +156,13 @@ const PanelVideo = ({
 			if (runRef.current) el.play().catch(() => {});
 		};
 		el.addEventListener("loadedmetadata", onReady, { once: true });
+		// Kick the load now instead of waiting for loadedmetadata: iOS Safari
+		// never fetches metadata on its own for a video that started out as
+		// preload="none", so a panel the visitor was already looking at sat on
+		// its poster until a scroll re-ran the play effect. play() itself
+		// starts the fetch there.
+		el.load();
+		if (runRef.current) el.play().catch(() => {});
 		return () => el.removeEventListener("loadedmetadata", onReady);
 	}, [src, armed]);
 
