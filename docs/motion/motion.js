@@ -12,6 +12,23 @@ const out = (p) => 1 - Math.pow(1 - p, 5);
 const inOut = (p) => (p < 0.5 ? 16 * p ** 5 : 1 - Math.pow(-2 * p + 2, 5) / 2);
 const $ = (id) => document.getElementById(id);
 
+/* The ground. "paper" (flat #eef3f8, client's pick 2026-10-19) is the default:
+   the /solutions section is painted the same colour, so the panel has no
+   edge. ?theme=field renders the old blue brand field. The class goes on
+   <html> so motion.css can restyle the open-field furniture before any scene
+   script runs; triangles() and makeLines() read THEME for their own colours. */
+const THEME = new URLSearchParams(location.search).get("theme") === "field" ? "field" : "paper";
+if (THEME === "paper") document.documentElement.classList.add("paper");
+/* The cards: white by default (client's pick 2026-10-19), ?cards=dark for the
+   graphite set. motion.css `.cards-light` swaps the card tokens. */
+const CARDS = new URLSearchParams(location.search).get("cards") === "dark" ? "dark" : "light";
+document.documentElement.classList.add("cards-" + CARDS);
+/* Wire colours per ground: white on the blue field; on paper a quiet ink
+   track with the lit run and the packet in brand blue. */
+const WIRE = THEME === "paper"
+	? { base: "rgba(11,26,46,.16)", lit: "#0a7fd6", pkt: "#0a7fd6", glow: "rgba(0,140,255,.55)" }
+	: { base: "rgba(255,255,255,.3)", lit: "#fff", pkt: "#fff", glow: "#fff" };
+
 const CHECK =
 	'<svg viewBox="0 0 24 24"><path d="M5 12.5 L10 17 L19 7" fill="none" stroke="#00a3ff" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"/></svg>';
 
@@ -21,7 +38,10 @@ function triangles(host, list) {
 		.map(
 			(t) =>
 				`<span style="left:${t.x}%;top:${t.y}%;width:${t.s}px;background:${
-					t.tone === "light" ? `rgba(255,255,255,${t.a})` : `rgba(0,10,40,${t.a})`
+					// On paper white triangles vanish; all of them become a faint brand tint.
+						THEME === "paper"
+							? `rgba(0,110,200,${t.a * 0.45})`
+							: t.tone === "light" ? `rgba(255,255,255,${t.a})` : `rgba(0,10,40,${t.a})`
 				}" data-r="${t.r}" data-dx="${t.dx}" data-dy="${t.dy}" data-ph="${t.ph}"></span>`,
 		)
 		.join("");
@@ -77,13 +97,13 @@ function node(el, t, [a, b], reset) {
 	const badge = el.querySelector(".badge");
 	if (running) {
 		badge.innerHTML = `<span class="spin" style="transform:rotate(${(t - a) * 540}deg)"></span>`;
-		badge.style.borderColor = "#1f2a38";
+		badge.style.borderColor = "var(--track)";
 	} else if (done) {
 		badge.innerHTML = CHECK;
-		badge.style.borderColor = "#2f78b4";
+		badge.style.borderColor = "var(--done)";
 	} else {
 		badge.innerHTML = "";
-		badge.style.borderColor = "#2c3a4b";
+		badge.style.borderColor = "var(--line)";
 	}
 	badge.style.opacity = 1 - reset;
 	// Idle cards sit back on the field; working and finished ones are solid.
@@ -104,7 +124,9 @@ const back = (p) => 1 + 2.4 * Math.pow(p - 1, 3) + 1.4 * Math.pow(p - 1, 2);
 
 /** Masked line: rises in on `pin` 0→1, leaves upward on `pout` 0→1. */
 function mask(el, pin, pout) {
-	el.style.transform = `translateY(${(1 - out(pin)) * 110 - inOut(pout) * 110}%)`;
+	// 130%, not 110%: the clip box reaches 0.16em above the line for Czech
+	// accents, and at 110% a sliver of descenders stayed visible on the way out.
+	el.style.transform = `translateY(${(1 - out(pin)) * 130 - inOut(pout) * 130}%)`;
 }
 
 /** Camera from keyframes [t, x, y, scale]. Consecutive keys ease into each
@@ -151,12 +173,12 @@ function makeLines(svg, list, prefix) {
 	const TAIL = 0.16; // tail length as a fraction of the wire
 	svg.insertAdjacentHTML("beforeend", list.map(([a, b], i) => `
 		<defs><linearGradient id="${prefix}g${i}" gradientUnits="userSpaceOnUse">
-			<stop offset="0" stop-color="#fff" stop-opacity="0"/><stop offset="1" stop-color="#fff" stop-opacity=".85"/>
+			<stop offset="0" stop-color="${WIRE.pkt}" stop-opacity="0"/><stop offset="1" stop-color="${WIRE.pkt}" stop-opacity=".85"/>
 		</linearGradient></defs>
-		<line id="${prefix}b${i}" x1="${a.x}" y1="${a.y}" x2="${b.x}" y2="${b.y}" stroke="rgba(255,255,255,.3)" stroke-width="5"/>
-		<line id="${prefix}l${i}" x1="${a.x}" y1="${a.y}" x2="${a.x}" y2="${a.y}" stroke="#fff" stroke-width="5"/>
+		<line id="${prefix}b${i}" x1="${a.x}" y1="${a.y}" x2="${b.x}" y2="${b.y}" stroke="${WIRE.base}" stroke-width="5"/>
+		<line id="${prefix}l${i}" x1="${a.x}" y1="${a.y}" x2="${a.x}" y2="${a.y}" stroke="${WIRE.lit}" stroke-width="5"/>
 		<line id="${prefix}t${i}" stroke="url(#${prefix}g${i})" stroke-width="12" stroke-linecap="round"/>
-		<circle id="${prefix}p${i}" r="12" fill="#fff" style="filter:drop-shadow(0 0 14px #fff)"/>`).join(""));
+		<circle id="${prefix}p${i}" r="12" fill="${WIRE.pkt}" style="filter:drop-shadow(0 0 14px ${WIRE.glow})"/>`).join(""));
 	return (i, base, lit, pkt, dir = 1) => {
 		const [a, b] = list[i];
 		const at = (q) => ({ x: a.x + (b.x - a.x) * q, y: a.y + (b.y - a.y) * q });

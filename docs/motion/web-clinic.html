@@ -114,6 +114,13 @@
   .pills{position:absolute;z-index:5;display:flex;gap:12px}
   .pill{font-family:var(--sans);font-weight:500;font-size:26px;color:#fff;border:2px solid rgba(255,255,255,.6);border-radius:999px;padding:8px 18px;
     background:rgba(0,20,50,.32);white-space:nowrap}
+
+  /* On the paper ground: pencil, scan and pills in ink; a softer
+     shadow, since the heavy one was tuned against deep blue. */
+  .paper #frame{box-shadow:0 40px 80px -30px rgba(10,30,60,.32),0 0 0 1px rgba(10,30,60,.1)}
+  .paper #skg path{stroke:#0b1a2e}
+  .paper #scan{background:#0a7fd6;box-shadow:0 0 24px 6px rgba(0,163,255,.45),0 0 70px 18px rgba(0,163,255,.25)}
+  .paper .pill{color:#0b1a2e;border-color:rgba(11,26,46,.22);background:#fff}
 </style></head>
 <body>
 <div class="field"></div>
@@ -209,8 +216,10 @@ $("times").innerHTML = TIMES.map((x, i) => `<div class="tm${i === 3 ? " off" : "
 /* ---------- layouts: [x, y, w, fontSize, opacity]; photo/sticky/services use w,h ---------- */
 const F = {
   desk: { r: [210, 214, 1180, 700], rad: 14, bar: 52, phone: 0 },
-  tab: { r: [480, 196, 640, 760], rad: 22, bar: 52, phone: 0 },
-  ph: { r: [610, 184, 380, 776], rad: 44, bar: 76, phone: 1 },
+  // Tablet and phone stand on the chapter ticks' baseline (1003), as the
+  // phone does in the mobile piece; higher, they crowded the caption.
+  tab: { r: [480, 243, 640, 760], rad: 22, bar: 52, phone: 0 },
+  ph: { r: [610, 227, 380, 776], rad: 44, bar: 76, phone: 1 },
 };
 const B = {
   desk: { logo: [40, 23, 0, 22, 1], links: [430, 32, 0, 16, 1], navbtn: [1002, 19, 0, 15, 1], burger: [1120, 26, 0, 0, 0],
@@ -330,7 +339,8 @@ function draw(t) {
 
   /* ---- 2: the real site; two plain-language facts under it ---- */
   const pl = $("pills");
-  pl.style.left = "210px"; pl.style.top = 214 + 700 + 26 + "px";
+  // Right-aligned under the site: on the left they ran into the chapter ticks.
+  pl.style.left = "auto"; pl.style.right = 1600 - 1390 + "px"; pl.style.top = 214 + 700 + 26 + "px";
   [...pl.children].forEach((c, i) => {
     const p = back(span(t, 6.6 + i * 0.35, 7.1 + i * 0.35));
     c.style.opacity = clamp(p * 2) * (1 - span(t, 10.4, 10.8));

@@ -238,7 +238,7 @@ const SolutionsTour = ({ solutions }: { solutions: Solution[] }) => {
 	return (
 		<section
 			ref={sectionRef}
-			className="dark relative scroll-mt-16 overflow-hidden bg-background px-4 py-20 sm:px-6 lg:px-8"
+			className="surface-paper relative scroll-mt-16 overflow-hidden px-4 py-20 sm:px-6 lg:px-8"
 			aria-label={dict.common.jumpToSolutionLabel}
 		>
 			<div
@@ -340,9 +340,11 @@ const SolutionsTour = ({ solutions }: { solutions: Solution[] }) => {
 								inert={!isActive}
 							>
 								<h2 className="sr-only">{solution.title}</h2>
-								<div className="relative aspect-[3/2] overflow-hidden rounded-xl border border-border bg-card shadow-[0_40px_80px_-40px_rgb(0_0_0/0.85)]">
+								{/* No frame: the video is rendered on the section's own colour. */}
+								<div className="relative aspect-[3/2]">
 									{solution.video ? (
 										<PanelVideo
+											className="video-feather"
 											src={solution.video.src}
 											poster={solution.video.poster}
 											label={solution.video.label}

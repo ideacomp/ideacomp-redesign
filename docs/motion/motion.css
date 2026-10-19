@@ -2,20 +2,25 @@
 
 /* Shared stylesheet for the /solutions motion panels (docs/motion/*.html).
  *
- * The ground is the /solutions HERO, not the old panel graphite: the same
- * brand field (#003b7b deep end opening to #00a3ff, which is what
- * `.surface-signal` actually paints) with the same translucent triangles. The
- * panel sits in the graphite orbit section, so it reads as a window back onto
- * the hero rather than as a darker rectangle on a dark page.
+ * The ground is "cool paper", flat #eef3f8 (client's pick, 2026-10-19), and
+ * the /solutions section is painted the same colour (`.surface-paper` in
+ * globals.css): flat on flat, the panel has no visible frame. The `.paper`
+ * block at the bottom restyles everything that sits on the open ground; the
+ * old blue brand field (#003b7b → #00a3ff) is still here as ?theme=field.
  *
- * Content lives on graphite cards — the page's own `--card` — so everything
- * inside a card follows the same accent rules as the rest of the dark site:
- * #00a3ff is the accent there. On the open field itself the accent is white,
- * as `.surface-signal` does it, because blue on blue is mush.
+ * Content lives on graphite cards — the page's dark `--card` — so everything
+ * inside a card follows the dark site's accent rules: #00a3ff is the accent
+ * there. On the open paper the accent is the deeper --accent-paper.
  *
- * Sized for the delivered card, not the canvas: the orbit shows this at 408
- * CSS px, a 3.9x downscale from 1600. A 60px name lands at ~15px; nothing that
- * has to be read is under 20px here.
+ * Layout grid, shared by all six pieces (1600×1067 canvas): caption at
+ * left 96 / top 70; multi-part content spans 96–1504, a single hero object is
+ * centred; content starts ≥ 230 and ends ≤ 940 so it clears the caption and
+ * the chapter ticks (bottom 64); a phone or tablet stands on the ticks'
+ * baseline (1003). Camera push-ins may break the margins, never the ticks.
+ *
+ * Sized for the delivered card, not the canvas: on a phone the panel is ~358
+ * CSS px, a 4.5x downscale from 1600. Nothing that has to be read is under
+ * 20px here.
  *
  * Hex, not oklch(var(--brand-h)): this is loaded outside the app, where
  * globals.css does not exist. Keep in step with `--brand` by hand.
@@ -35,6 +40,35 @@
 	--accent: #00a3ff;
 	--accent-soft: #8ccfff;
 	--accent-dim: #2f6f9f;
+
+	/* Card-world tokens. These defaults are the dark (graphite) cards; the
+	   white cards override them in `.cards-light` at the bottom. Scenes use
+	   these instead of literals so either set renders from the same source. */
+	--surf: #0d151f;          /* wells inside a card: board columns */
+	--tile: #18222e;          /* items inside a card: tickets, pods, queue rows */
+	--tile-edge: #26354a;
+	--track: #1f2a38;         /* progress tracks, chart grid */
+	--done: #2f78b4;          /* a finished node's border */
+	--mute-fill: #3d4f63;
+	--av: #2a3b50;
+	--av-ring: rgba(255, 255, 255, 0.9);
+	--port: #5e7590;
+	--chart-line: #f2f6fb;
+	--phone-card: #0b1220;
+	--pod-new: #0f3a63;
+	--pod-new-edge: var(--accent);
+	--pod-new-ink: #fff;
+	--pod-edge: #2f6f9f;
+	/* State colours. On graphite both are white pills; on white the story
+	   needs colour to carry tension: alert red, resolved green. */
+	--alert: #fff;
+	--alert-ink: #04203a;
+	--positive: #f2f6fb;
+	--positive-ink: #04203a;
+	--chip: #fff;
+	--chip-ink: #04203a;
+	--card-shadow: 0 30px 60px -20px rgba(0, 10, 30, 0.6);
+	--on-ring: rgba(255, 255, 255, 0.18);
 
 	--mono: "Spline Sans Mono", monospace;
 	/* Anything a non-technical viewer is meant to *read* inside a card uses the
@@ -127,13 +161,13 @@ svg#wires { position: absolute; inset: 0; width: 1600px; height: 1067px; z-index
 	padding: 26px 28px;
 	display: flex;
 	flex-direction: column;
-	box-shadow: 0 30px 60px -20px rgba(0, 10, 30, 0.6);
+	box-shadow: var(--card-shadow);
 }
 .card.on {
 	border-color: var(--accent);
-	box-shadow: 0 0 0 6px rgba(255, 255, 255, 0.18), 0 30px 70px -16px rgba(0, 10, 30, 0.7);
+	box-shadow: 0 0 0 6px var(--on-ring), var(--card-shadow);
 }
-.card.done { border-color: #2f78b4; }
+.card.done { border-color: var(--done); }
 
 .hdr { display: flex; align-items: center; justify-content: space-between; }
 .kind {
@@ -143,7 +177,7 @@ svg#wires { position: absolute; inset: 0; width: 1600px; height: 1067px; z-index
 	text-transform: uppercase;
 	color: var(--ink-mid);
 }
-.badge { width: 34px; height: 34px; border-radius: 50%; border: 3px solid #2c3a4b; position: relative; }
+.badge { width: 34px; height: 34px; border-radius: 50%; border: 3px solid var(--line); position: relative; }
 .badge .spin {
 	position: absolute; inset: -3px; border-radius: 50%;
 	border: 3px solid transparent; border-top-color: var(--accent); border-right-color: var(--accent);
@@ -180,7 +214,7 @@ svg#wires { position: absolute; inset: 0; width: 1600px; height: 1067px; z-index
 /* Wires attach to the measured centre of these. */
 .port {
 	position: absolute; width: 20px; height: 20px; border-radius: 50%;
-	background: var(--card); border: 3px solid #5e7590; z-index: 3;
+	background: var(--card); border: 3px solid var(--port); z-index: 3;
 }
 .port.l { left: -11px; top: 50%; margin-top: -10px; }
 .port.r { right: -11px; top: 50%; margin-top: -10px; }
@@ -204,7 +238,11 @@ svg#wires { position: absolute; inset: 0; width: 1600px; height: 1067px; z-index
 #scene-wires { position: absolute; inset: 0; width: 1600px; height: 1067px; }
 
 /* Masked line: the span rises into its own clip box. */
-.mask { overflow: hidden; display: block; padding-bottom: 0.06em; }
+/* The clip box reaches past the glyphs on two sides: above the cap height,
+   where Czech capitals carry their accents (Á, Č, Š, Ž), and to the right,
+   where the caron of a final ď / ť overhangs its advance width. Flush, it cut
+   both off. */
+.mask { overflow: hidden; display: block; padding: 0.16em 0.14em 0.06em 0; margin: -0.16em -0.14em 0 0; }
 .mask > span { display: block; will-change: transform; }
 
 /* Captions — one per scene, stacked in the same spot, outside the camera. */
@@ -233,3 +271,65 @@ svg#wires { position: absolute; inset: 0; width: 1600px; height: 1067px; z-index
 }
 
 .caret { display: inline-block; width: 5px; height: 1em; background: var(--accent); vertical-align: -0.14em; margin-left: 4px; }
+
+/* ---- the "cool paper" ground (the default; see the header) ----
+   The panel and the /solutions section share one flat colour, so the video
+   has no visible edge. Everything that sat white on the blue field turns to
+   ink; cards keep their graphite, which now reads as real product UI. */
+.paper {
+	/* Ink for anything on the open paper ground. -mid is 6.2:1 on #eef3f8,
+	   accent 4.6:1, the payoff's quiet half 3.9:1 at 170px. */
+	--ink-paper: #0b1a2e;
+	--ink-paper-mid: #4a5b70;
+	--accent-paper: #0a6fc2;
+}
+.paper body { background: #eef3f8; color: #0b1a2e; }
+.paper .field { background: #eef3f8; }
+/* No triangles on paper: any shape the panel's edge cuts through draws that
+   edge as a straight line, and the frame comes back. */
+.paper .tris { display: none; }
+.paper .cap .mask > span,
+.paper #payoff .mask > span { color: #0b1a2e; }
+.paper #payoff .mask > span s { color: rgba(11, 26, 46, 0.62); }
+.paper .chapters i { background: rgba(11, 26, 46, 0.12); }
+.paper .chapters i b { background: var(--accent-paper); }
+
+/* ---- white cards on the paper (the default; client's pick 2026-10-19) ----
+   "We build on clean design." Cards go white with a hairline and a soft,
+   wide shadow; the tension the dark cards used to carry moves into colour:
+   alert red for the problem, green once it is solved. ?cards=dark restores
+   the graphite set (backed up 2026-10-19). The phone app in the mobile piece
+   keeps its own dark theme — it is a basement boiler room. */
+.cards-light {
+	--card: #ffffff;
+	--line: #dbe3ec;
+	--ink-hi: #0b1a2e;
+	--ink-mid: #556578;       /* 5.9:1 on white */
+	--ink-lo: #8392a4;
+	--accent-soft: #0a6fc2;   /* accent as text: 5.1:1 on white */
+	--accent-dim: #9cc9ec;
+
+	--surf: #f3f6f9;
+	--tile: #ffffff;
+	--tile-edge: #dbe3ec;
+	--track: #e5ebf1;
+	--done: #8fc2ea;
+	--mute-fill: #c3cdd8;
+	--av: #e5ebf1;
+	--av-ring: rgba(0, 163, 255, 0.22);
+	--port: #b4c1cf;
+	--chart-line: #0a6fc2;
+	--phone-card: #ffffff;
+	--pod-new: #e8f5fe;
+	--pod-new-edge: #00a3ff;
+	--pod-new-ink: #0a6fc2;
+	--pod-edge: #c3cdd8;
+	--alert: #d93a3a;         /* white text on it: 4.6:1 */
+	--alert-ink: #ffffff;
+	--positive: #12805a;      /* white text on it: 4.9:1 */
+	--positive-ink: #ffffff;
+	--chip: #0b1a2e;
+	--chip-ink: #ffffff;
+	--card-shadow: 0 1px 2px rgba(11, 26, 46, 0.06), 0 22px 44px -22px rgba(11, 26, 46, 0.26);
+	--on-ring: rgba(0, 163, 255, 0.16);
+}

@@ -21,35 +21,38 @@
      the report and the payoff can't disagree. */
 
   #night{position:absolute;inset:0;background:rgba(0,6,22,.64);opacity:0}
+  /* On the paper ground any overlay would tint the panel away from the page
+     around it and bring the frame back; the clock and caption carry the night. */
+  .paper #night{display:none}
 
-  #dash{left:120px;top:236px;width:1360px;height:610px;padding:34px 40px;transform-origin:0 0}
+  #dash{left:96px;top:236px;width:1408px;height:610px;padding:34px 40px;transform-origin:0 0}
   #dash .name{font-size:62px}
   #dclock{position:absolute;right:40px;top:26px;font-family:var(--display);font-weight:600;font-size:104px;
     line-height:1;color:var(--ink-hi);font-variant-numeric:tabular-nums}
   #chart{position:absolute;left:40px;top:176px;width:860px;height:390px}
-  .side{position:absolute;left:960px;top:176px;width:360px}
+  .side{position:absolute;left:1000px;top:176px;width:360px}
   .side .k{font-family:var(--mono);font-size:20px;letter-spacing:.16em;text-transform:uppercase;color:var(--ink-mid)}
   #val{font-family:var(--display);font-weight:600;font-size:200px;line-height:.86;color:var(--ink-hi);
     font-variant-numeric:tabular-nums;margin-top:10px}
   #state{display:inline-flex;align-items:center;gap:12px;margin-top:22px;height:56px;padding:0 22px;border-radius:999px;
     border:2px solid var(--line);font-family:var(--mono);font-size:22px;letter-spacing:.16em;text-transform:uppercase;color:var(--ink-mid)}
-  #state i{width:14px;height:14px;border-radius:50%;background:#3d4f63}
+  #state i{width:14px;height:14px;border-radius:50%;background:var(--mute-fill)}
   #src{font-family:var(--mono);font-size:23px;line-height:1.5;color:var(--ink-mid);margin-top:22px}
   #src b{font-weight:500;color:var(--ink-hi)}
 
-  #alert{left:560px;top:290px;width:420px;height:250px;padding:26px 30px;z-index:4}
+  #alert{left:560px;top:384px;width:420px;height:250px;padding:26px 30px;z-index:4}
   .tag{display:inline-block;font-family:var(--mono);font-size:18px;letter-spacing:.16em;text-transform:uppercase;
-    background:#fff;color:#04203a;border-radius:6px;padding:4px 12px;font-weight:500}
+    background:var(--alert);color:var(--alert-ink);border-radius:6px;padding:4px 12px;font-weight:500}
   #alert .tag{align-self:flex-start}
   #alert .name{font-size:58px;margin-top:14px}
   #alert .kv{font-family:var(--sans);font-size:29px;color:var(--ink-mid);margin-top:10px;line-height:1.45}
   #alert .kv b{font-weight:500;color:var(--ink-hi)}
 
-  #rb{left:740px;top:230px;width:760px;height:490px;padding:30px 36px;transform-origin:0 0;z-index:4}
+  #rb{left:744px;top:230px;width:760px;height:490px;padding:30px 36px;z-index:4}
   #rb .name{font-size:62px;margin-top:6px}
   .steps{display:flex;flex-direction:column;gap:26px;margin-top:34px}
   .st{display:flex;align-items:center;gap:20px;font-family:var(--sans);font-weight:500;font-size:38px;color:var(--ink-mid)}
-  .st .ic{width:40px;height:40px;border-radius:50%;border:3px solid #2c3a4b;position:relative;flex:none}
+  .st .ic{width:40px;height:40px;border-radius:50%;border:3px solid var(--line);position:relative;flex:none}
   .st .ic .spin{position:absolute;inset:-3px;border-radius:50%;border:3px solid transparent;
     border-top-color:var(--accent);border-right-color:var(--accent)}
   .st .ic svg{position:absolute;inset:4px;width:26px;height:26px}
@@ -57,7 +60,7 @@
   .st.lit{color:var(--ink-hi)}
 
   #phone{left:1050px;top:690px;width:450px;height:250px;padding:24px 28px;border-radius:34px;
-    background:#0b1220;z-index:6}
+    background:var(--phone-card);z-index:6}
   #phone .top{display:flex;justify-content:space-between;font-family:var(--mono);font-size:18px;
     letter-spacing:.14em;text-transform:uppercase;color:var(--ink-mid)}
   #phone .name{font-size:46px;margin-top:10px}
@@ -74,7 +77,11 @@
   .kvs .mask > span{display:flex;font-family:var(--sans);font-weight:500;font-size:38px;color:var(--ink-hi)}
   .kvs .mask > span em{font-style:normal;color:var(--ink-mid);width:290px;flex:none}
   .kvs .mask > span b{font-weight:400}
-  #stamp{position:absolute;right:44px;bottom:40px;font-size:22px;padding:8px 18px}
+  #stamp{position:absolute;right:44px;bottom:40px;font-size:22px;padding:8px 18px;background:var(--positive);color:var(--positive-ink)}
+  #chart g{stroke:var(--track)}
+  #cline{stroke:var(--chart-line)}
+  #cdot{fill:var(--chart-line)}
+  .cards-light #cdot{filter:none!important}
 </style></head>
 <body>
 <div class="field"></div>
@@ -188,8 +195,10 @@ const WINDOW = 8, NPTS = 161, YMAX = 50;
 /* ---------- camera ---------- */
 const camAt = camera([
   [0, 0, 0, 1], [5.6, 0, 0, 1.025],
-  [7.0, ...focus({ x: 800, y: 545 }, { x: 990, y: 470 }, 1.3)],
-  [10.3, ...focus({ x: 800, y: 545 }, { x: 990, y: 470 }, 1.3)],
+  // A gentle push on the dashboard's centre: at 1.3 it cropped the panel
+  // title mid-word and ran the panel under the chapter ticks.
+  [7.0, ...focus({ x: 800, y: 575 }, { x: 800, y: 541 }, 1.1)],
+  [10.3, ...focus({ x: 800, y: 575 }, { x: 800, y: 541 }, 1.1)],
   [11.3, 0, 0, 1], [17.6, 0, 0, 1.025], [18.4, 0, 0, 1], [22.3, 0, 0, 1.03], [26, 0, 0, 1],
 ]);
 
@@ -206,9 +215,6 @@ $("r-con").textContent = `${hms(clockAt(CONTAIN))} · ${TTC}`;
 $("pay0").textContent = hm(clockAt(DETECT));
 $("pay1").textContent = TTC;
 
-const ALERT_R = { x: 560, y: 290, w: 420, h: 250 };
-const RB_R = { x: 740, y: 230, w: 760, h: 490 };
-const REP_R = { x: 300, y: 250, w: 1000, h: 530 };
 
 /* ---------- the frame ---------- */
 function draw(t) {
@@ -224,10 +230,22 @@ function draw(t) {
   /* ---- dashboard ---- */
   const dIn = out(span(t, 0.8, 1.7));
   const shift = inOut(span(t, 10.6, 11.5));
-  const dOut = inOut(span(t, 17.6, 18.2));
+  const dOut = inOut(span(t, 17.75, 18.1));
   const dash = $("dash");
-  dash.style.opacity = dIn * (1 - 0.5 * shift) * (1 - dOut);
-  dash.style.transform = `translate(${-200 * shift}px, ${(1 - dIn) * 40 + 30 * shift}px) scale(${1 - 0.2 * shift})`;
+  // Behind the runbook it stays solid and only its content dims: a
+  // translucent card goes grey on the paper ground.
+  dash.style.opacity = dIn * (1 - dOut);
+  // Its content goes first at the night's end, so nothing shows through the
+  // cards in front while they all fade.
+  // The clock and the live count sit where the runbook will land: they clear
+  // before it arrives, or they show through it while it fades in.
+  const under = 1 - span(t, 10.6, 10.95);
+  [...dash.children].forEach((c) => {
+    const k = c.id === "dclock" || c.classList.contains("side") ? under : 1;
+    c.style.opacity = (1 - 0.6 * shift) * k * (1 - span(t, 17.6, 17.8));
+  });
+  // Steps back behind the runbook, keeping its left edge on the 96px margin.
+  dash.style.transform = `translate(0px, ${(1 - dIn) * 40 + 30 * shift}px) scale(${(1 - 0.2 * shift) * (1 - 0.03 * dOut)})`;
   $("dclock").textContent = hms(clockAt(t));
 
   // chart: an 8s history window that scrolls; new data enters on the right
@@ -249,27 +267,33 @@ function draw(t) {
   const st = $("state");
   $("statel").textContent = alerting ? tr("attack", "útok") : contained ? tr("stopped", "zastaveno") : tr("all calm", "vše v klidu");
   const pulse = alerting ? 0.5 + 0.5 * Math.sin(t * 7) : 0;
-  st.style.background = alerting ? "#fff" : "transparent";
-  st.style.color = alerting ? "#04203a" : contained ? "var(--accent-soft)" : "var(--ink-mid)";
-  st.style.borderColor = alerting ? "#fff" : contained ? "var(--accent)" : "var(--line)";
-  st.style.boxShadow = alerting ? `0 0 0 ${6 + 10 * pulse}px rgba(255,255,255,${0.25 * (1 - pulse)})` : "none";
-  st.querySelector("i").style.background = alerting ? "#04203a" : contained ? "var(--accent)" : "#3d4f63";
+  st.style.background = alerting ? "var(--alert)" : "transparent";
+  st.style.color = alerting ? "var(--alert-ink)" : contained ? "var(--accent-soft)" : "var(--ink-mid)";
+  st.style.borderColor = alerting ? "var(--alert)" : contained ? "var(--accent)" : "var(--line)";
+  // the pulse ring takes the alert colour: white on graphite, red on white
+  st.style.boxShadow = alerting
+    ? `0 0 0 ${6 + 10 * pulse}px color-mix(in srgb, var(--alert) ${25 * (1 - pulse)}%, transparent)` : "none";
+  st.querySelector("i").style.background = alerting ? "var(--alert-ink)" : contained ? "var(--accent)" : "var(--mute-fill)";
   $("src").style.opacity = out(span(t, 6.6, 7.2));
 
   /* ---- alert → runbook → report ---- */
   const aIn = back(span(t, 7.1, 7.6));
   const alert = $("alert");
-  alert.style.transform = `scale(${0.85 + 0.15 * aIn})`;
-  alert.style.opacity = clamp(aIn * 2) * (1 - span(t, 10.6, 10.85));
+  // Hand-offs are plain exits and entrances, each card arriving whole in its
+  // own place. The first cut morphed one card into the next, which put an
+  // empty white box on a long trip across the screen at both hand-offs.
+  const aOut = inOut(span(t, 10.6, 10.9));
+  alert.style.transform = `scale(${(0.85 + 0.15 * aIn) * (1 - 0.04 * aOut)})`;
+  alert.style.opacity = clamp(aIn * 2) * (1 - aOut);
 
+  // the night's cards leave together, one gesture, before the morning
+  const night = inOut(span(t, 17.75, 18.1));
   const rb = $("rb");
-  const toRb = inOut(span(t, 10.6, 11.4));
-  const toRep = inOut(span(t, 17.9, 18.7));
-  if (toRep > 0) morph(rb, RB_R, REP_R, toRep);
-  else morph(rb, ALERT_R, RB_R, toRb);
-  rb.style.opacity = span(t, 10.65, 10.85) * (1 - span(t, 18.5, 18.7));
-  const rbBody = out(span(t, 11.3, 11.7)) * (1 - span(t, 17.8, 18.0));
-  [...rb.children].forEach((c) => { c.style.opacity = rbBody; });
+  const rIn = out(span(t, 11.0, 11.5));
+  // opaque almost at once, then it settles by movement: a slow fade let the
+  // dashboard's clock and count show through it
+  rb.style.opacity = span(t, 11.0, 11.12) * (1 - night);
+  rb.style.transform = `translateY(${(1 - rIn) * 24}px) scale(${1 - 0.03 * night})`;
 
   STEPS.forEach((s, i) => {
     const el = stepEls[i];
@@ -277,7 +301,7 @@ function draw(t) {
     el.classList.toggle("lit", done || run);
     const ic = el.querySelector(".ic");
     ic.innerHTML = run ? `<span class="spin" style="transform:rotate(${(t - s) * 480}deg)"></span>` : done ? CHECK : "";
-    ic.style.borderColor = done ? "#2f78b4" : run ? "#1f2a38" : "#2c3a4b";
+    ic.style.borderColor = done ? "var(--done)" : run ? "var(--track)" : "var(--line)";
     const ts = el.querySelector(".ts");
     ts.textContent = done ? hms(clockAt(s + STEP_RUN)) : "";
     ts.style.opacity = out(span(t, s + STEP_RUN, s + STEP_RUN + 0.3));
@@ -286,9 +310,8 @@ function draw(t) {
   // on-call's phone
   const ph = $("phone");
   const pIn = out(span(t, 15.6, 16.3));
-  const pOut = inOut(span(t, 17.6, 18.1));
-  ph.style.opacity = pIn * (1 - pOut);
-  ph.style.transform = `translateY(${(1 - pIn) * 120 + pOut * 60}px)`;
+  ph.style.opacity = pIn * (1 - night);
+  ph.style.transform = `translateY(${(1 - pIn) * 120}px) scale(${1 - 0.03 * night})`;
   $("ptime").textContent = hm(clockAt(Math.min(t, 17.6)));
   const tap = span(t, 16.9, 17.5);
   const rip = $("ripple");
@@ -298,15 +321,17 @@ function draw(t) {
   rip.style.opacity = tap > 0 && tap < 1 ? 0.6 * (1 - tap) : 0;
   const acked = t >= 17.05;
   $("ackl").textContent = acked ? tr("acknowledged ✓", "potvrzeno ✓") : tr("acknowledge", "potvrdit");
-  $("ack").style.background = acked ? "#f2f6fb" : "";
+  $("ack").style.background = acked ? "var(--positive)" : "";
+  $("ack").style.color = acked ? "var(--positive-ink)" : "";
   $("ack").style.transform = `scale(${1 - 0.04 * (span(t, 16.85, 16.95) - span(t, 16.95, 17.1))})`;
 
   // morning: the report
   const rep = $("rep");
-  const repIn = span(t, 18.5, 18.75);
+  // after a beat of empty paper, the report rises in whole
+  const repIn = out(span(t, 18.3, 18.8));
   const repOut = inOut(span(t, 22.0, 22.5));
   rep.style.opacity = repIn * (1 - repOut);
-  rep.style.transform = `scale(${1 - 0.05 * repOut})`;
+  rep.style.transform = `translateY(${(1 - repIn) * 24}px) scale(${1 - 0.05 * repOut})`;
   const roll = inOut(span(t, 18.6, 19.9));
   const from = clockAt(17.8), to = 7 * 3600 + 30 * 60;
   $("rclock").textContent = hm(from + (to - from) * roll);

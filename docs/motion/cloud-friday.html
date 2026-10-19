@@ -26,14 +26,14 @@
   .outl{margin-top:20px}
   .outl .mask > span{font-family:var(--mono);font-size:28px;line-height:1.55;color:var(--ink-mid)}
   .outl .mask > span b{font-weight:400;color:var(--ink-hi)}
-  #commit{left:120px;top:300px;width:330px;height:84px;padding:0 24px;flex-direction:row;align-items:center;gap:14px;z-index:3}
+  #commit{left:96px;top:300px;width:330px;height:84px;padding:0 24px;flex-direction:row;align-items:center;gap:14px;z-index:3}
   #commit .name{font-size:40px;margin:0}
 
-  .stg{top:440px;width:320px;height:270px;padding:24px 26px;z-index:3}
+  .stg{top:440px;width:328px;height:270px;padding:24px 26px;z-index:3}
   .stg .name{font-size:54px}
   .stg .det{font-family:var(--sans);font-weight:500;font-size:26px;color:var(--ink-mid);margin-top:auto}
   .stg .det b{font-weight:500;color:var(--ink-hi);font-variant-numeric:tabular-nums}
-  .pbar{height:12px;border-radius:6px;background:#1f2a38;margin-top:14px;overflow:hidden}
+  .pbar{height:12px;border-radius:6px;background:var(--track);margin-top:14px;overflow:hidden}
   .pbar i{display:block;height:100%;width:0;background:var(--accent);border-radius:6px}
   .stg .body{display:flex;flex-direction:column}
 
@@ -45,20 +45,24 @@
   .cpu .k{display:flex;justify-content:space-between;font-family:var(--sans);font-size:22px;color:var(--ink-mid)}
   .cpu .k b{font-weight:500;color:var(--ink-hi);font-variant-numeric:tabular-nums}
   .cpu .pbar{margin-top:8px}
-  .slot{position:absolute;width:98px;height:98px;border-radius:18px;border:2px dashed #26354a}
+  .slot{position:absolute;width:98px;height:98px;border-radius:18px;border:2px dashed var(--tile-edge)}
   .xmark{position:absolute;left:50%;top:50%;width:140px;height:140px;margin:-70px 0 0 -70px;opacity:0;z-index:2}
 
-  .pod{position:absolute;left:0;top:0;width:98px;height:98px;border-radius:18px;background:#18222e;border:3px solid #2f6f9f;
+  .pod{position:absolute;left:0;top:0;width:98px;height:98px;border-radius:18px;background:var(--tile);border:3px solid var(--pod-edge);
     display:flex;align-items:center;justify-content:center;font-family:var(--mono);font-size:26px;font-weight:500;color:var(--ink-mid);z-index:5}
-  .pod.v2{background:#0f3a63;border-color:var(--accent);color:#fff}
-  .pod .spin{position:absolute;inset:-9px;border-radius:25px;border:4px solid #fff;opacity:0}
+  .pod.v2{background:var(--pod-new);border-color:var(--pod-new-edge);color:var(--pod-new-ink)}
+  .pod .spin{position:absolute;inset:-9px;border-radius:25px;border:4px solid var(--chart-line);opacity:0}
+  #sl{stroke:var(--chart-line)}
+  .xmark path{stroke:var(--alert)}
 
-  #traffic{left:120px;top:730px;width:1360px;height:150px;padding:22px 30px;flex-direction:row;align-items:center;gap:40px;z-index:3}
+  #traffic{left:96px;top:730px;width:1408px;height:150px;padding:22px 30px;flex-direction:row;align-items:center;gap:40px;z-index:3}
   .tv .k{font-family:var(--mono);font-size:22px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-mid)}
   .tv .v{font-family:var(--display);font-weight:600;font-size:72px;line-height:1;color:var(--ink-hi);font-variant-numeric:tabular-nums}
   #spark{flex:1;height:100px}
   #deploy{position:absolute;right:96px;top:150px;z-index:10;font-family:var(--mono);font-size:22px;letter-spacing:.1em;color:#fff;
     border:2px solid rgba(255,255,255,.6);border-radius:999px;padding:8px 18px;background:rgba(0,20,50,.35);opacity:0;font-variant-numeric:tabular-nums}
+  .paper #hud{color:var(--ink-paper-mid)}
+  .paper #deploy{color:var(--ink-paper);background:#fff;border-color:rgba(11,26,46,.18)}
 </style></head>
 <body>
 <div class="field"></div>
@@ -77,25 +81,25 @@
   </div>
   <div class="card" id="commit"><span class="kind" data-cs="nová verze">new version</span><span class="name">v2</span><span class="port r"></span></div>
 
-  <div class="card stg" id="g0" style="left:120px"><div class="hdr"><span class="kind" data-cs="kontrola 1">check 1</span><span class="badge"></span></div>
+  <div class="card stg" id="g0" style="left:96px"><div class="hdr"><span class="kind" data-cs="kontrola 1">check 1</span><span class="badge"></span></div>
     <div class="name" data-cs="Sestavení">Build</div><div class="body"><div class="det" id="d0" data-cs="balíček <b>připraven</b>">package <b>ready</b></div><div class="pbar"><i id="p0"></i></div></div>
     <span class="port r"></span></div>
-  <div class="card stg" id="g1" style="left:470px"><div class="hdr"><span class="kind" data-cs="kontrola 2">check 2</span><span class="badge"></span></div>
+  <div class="card stg" id="g1" style="left:456px"><div class="hdr"><span class="kind" data-cs="kontrola 2">check 2</span><span class="badge"></span></div>
     <div class="name" data-cs="Testy">Tests</div><div class="body"><div class="det"><b id="tcount">0</b> <span data-cs="/ 412 v pořádku">/ 412 passed</span></div><div class="pbar"><i id="p1"></i></div></div>
     <span class="port l"></span><span class="port r"></span></div>
-  <div class="card stg" id="g2" style="left:820px"><div class="hdr"><span class="kind" data-cs="kontrola 3">check 3</span><span class="badge"></span></div>
+  <div class="card stg" id="g2" style="left:816px"><div class="hdr"><span class="kind" data-cs="kontrola 3">check 3</span><span class="badge"></span></div>
     <div class="name" data-cs="Bezpečnost">Security</div><div class="body"><div class="det" data-cs="<b>0</b> nalezených chyb"><b>0</b> problems found</div><div class="pbar"><i id="p2"></i></div></div>
     <span class="port l"></span><span class="port r"></span></div>
-  <div class="card stg" id="g3" style="left:1170px"><div class="hdr"><span class="kind" data-cs="krok 4">step 4</span><span class="badge"></span></div>
+  <div class="card stg" id="g3" style="left:1176px"><div class="hdr"><span class="kind" data-cs="krok 4">step 4</span><span class="badge"></span></div>
     <div class="name" data-cs="Spuštění">Release</div><div class="body"><div class="det" data-cs="server <b>po serveru</b>">server <b>by server</b></div><div class="pbar"><i id="p3"></i></div></div>
     <span class="port l"></span></div>
 
-  <div class="card node" id="n0" style="left:120px"><div class="hdr"><span class="kind" data-cs="datové centrum">data centre</span></div><div class="name">Server 1</div>
+  <div class="card node" id="n0" style="left:96px"><div class="hdr"><span class="kind" data-cs="datové centrum">data centre</span></div><div class="name">Server 1</div>
     <span class="nst" data-cs="běží">running</span><div class="cpu"><div class="k"><span data-cs="zátěž">load</span><b>48%</b></div><div class="pbar"><i style="width:48%"></i></div></div></div>
   <div class="card node" id="n1" style="left:605px"><div class="hdr"><span class="kind" data-cs="datové centrum">data centre</span></div><div class="name">Server 2</div>
     <span class="nst" data-cs="běží">running</span><div class="cpu"><div class="k"><span data-cs="zátěž">load</span><b>48%</b></div><div class="pbar"><i style="width:48%"></i></div></div>
     <svg class="xmark" viewBox="0 0 140 140"><path d="M30 30 L110 110 M110 30 L30 110" stroke="#fff" stroke-width="12" stroke-linecap="round"/></svg></div>
-  <div class="card node" id="n2" style="left:1090px"><div class="hdr"><span class="kind" data-cs="datové centrum">data centre</span></div><div class="name">Server 3</div>
+  <div class="card node" id="n2" style="left:1114px"><div class="hdr"><span class="kind" data-cs="datové centrum">data centre</span></div><div class="name">Server 3</div>
     <span class="nst" data-cs="běží">running</span><div class="cpu"><div class="k"><span data-cs="zátěž">load</span><b>48%</b></div><div class="pbar"><i style="width:48%"></i></div></div></div>
   <div class="card node" id="n3" style="left:605px"><div class="hdr"><span class="kind" data-cs="nový, sám">new, automatic</span></div><div class="name">Server 4</div>
     <span class="nst" data-cs="běží">running</span><div class="cpu"><div class="k"><span data-cs="zátěž">load</span><b>6%</b></div><div class="pbar"><i style="width:6%"></i></div></div></div>
@@ -138,15 +142,15 @@ const lerp = (a, b, p) => a + (b - a) * p;
 /* ---------- pipeline ---------- */
 const GATES = [[6.6, 7.7], [8.0, 9.5], [9.8, 10.6], [10.9, 15.9]];   // gate 4 runs for the whole rollout
 const TERM_R = { x: 300, y: 330, w: 1000, h: 280 };
-const COMMIT_R = { x: 120, y: 300, w: 330, h: 84 };
+const COMMIT_R = { x: 96, y: 300, w: 330, h: 84 };
 const portC = (id, side) => { const r = $(id).querySelector(".port." + side).getBoundingClientRect(); return { x: r.x + r.width / 2, y: r.y + r.height / 2 }; };
 const gateWires = makeLines($("scene-wires"), [
-  [{ x: 285, y: 384 }, { x: 285, y: 440 }],
+  [{ x: 260, y: 384 }, { x: 260, y: 440 }],
   [portC("g0", "r"), portC("g1", "l")], [portC("g1", "r"), portC("g2", "l")], [portC("g2", "r"), portC("g3", "l")],
 ], "g");
 
 /* ---------- cluster ---------- */
-const NX = [120, 605, 1090], NY = 250;
+const NX = [96, 605, 1114], NY = 250;
 const SLOT = (n, s) => ({ x: NX[n] + 26 + (s % 3) * 118, y: NY + 120 + Math.floor(s / 3) * 118 });
 $("slots").innerHTML = [0, 1, 2].flatMap((n) => [...Array(6)].map((_, s) => {
   const p = SLOT(n, s); return `<span class="slot" data-n="${n}" style="left:${p.x}px;top:${p.y}px"></span>`; })).join("");
@@ -170,7 +174,8 @@ const CMD = "git push origin main";
 
 const camAt = camera([
   [0, 0, 0, 1], [5.2, 0, 0, 1.03], [5.8, 0, 0, 1], [10.6, 0, 0, 1.02], [11.2, 0, 0, 1], [17.4, 0, 0, 1.02],
-  [18.2, ...focus({ x: 800, y: 520 }, { x: 800, y: 470 }, 1.1)], [20.6, ...focus({ x: 800, y: 520 }, { x: 800, y: 470 }, 1.1)],
+  // framed so the traffic strip stays clear of the chapter ticks
+  [18.2, ...focus({ x: 800, y: 489 }, { x: 800, y: 470 }, 1.1)], [20.6, ...focus({ x: 800, y: 489 }, { x: 800, y: 470 }, 1.1)],
   [21.4, 0, 0, 1], [24.0, 0, 0, 1.02], [28, 0, 0, 1],
 ]);
 
@@ -231,14 +236,15 @@ function draw(t) {
   });
   const n1 = $("n1");
   n1.style.borderStyle = dead > 0 ? "dashed" : "solid";
-  n1.style.borderColor = dead > 0 ? "#fff" : "";
+  n1.style.borderColor = dead > 0 ? "var(--alert)" : "";
   n1.querySelector(".xmark").style.opacity = dead;
-  [...n1.children].forEach((c) => { if (!c.classList.contains("xmark")) c.style.opacity = 1 - 0.6 * dead; });
+  // The dead node's content dims; its cross and its "down" chip must not.
+  [...n1.children].forEach((c) => { if (!c.classList.contains("xmark") && !c.classList.contains("nst")) c.style.opacity = 1 - 0.6 * dead; });
   const st1 = n1.querySelector(".nst");
   st1.textContent = dead > 0 ? tr("down", "výpadek") : tr("running", "běží");
-  st1.style.background = dead > 0 ? "#fff" : "transparent";
-  st1.style.color = dead > 0 ? "#04203a" : "";
-  st1.style.borderColor = dead > 0 ? "#fff" : "";
+  st1.style.background = dead > 0 ? "var(--alert)" : "transparent";
+  st1.style.color = dead > 0 ? "var(--alert-ink)" : "";
+  st1.style.borderColor = dead > 0 ? "var(--alert)" : "";
   const n3 = $("n3");
   n3.style.opacity = fresh * (1 - cOut);
   n3.style.transform = `translateY(${(1 - fresh) * -60}px)`;
@@ -274,7 +280,9 @@ function draw(t) {
       const to = SLOT(mv[0], mv[1]);
       x = lerp(home.x, to.x, p);
       y = lerp(home.y, to.y, p) - Math.sin(Math.PI * p) * 80;
-      if (t >= 18.2 && t < s0) { el.style.filter = "grayscale(1) brightness(.6)"; } else el.style.filter = "";
+      // stranded on the dead node: drained of colour (darkened on graphite;
+      // on white, darkening turned them a muddy grey, so they fade instead)
+      if (t >= 18.2 && t < s0) { el.style.filter = CARDS === "light" ? "grayscale(1) opacity(.5)" : "grayscale(1) brightness(.6)"; } else el.style.filter = "";
       if (p > 0 && t < s0 + 1.0) { spin = 1; rot = (t - s0) * 600; }
       vis = Math.max(vis, cIn(mv[0]) * (t >= s0 ? 1 : 0));
     }

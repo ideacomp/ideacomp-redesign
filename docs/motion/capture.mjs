@@ -45,7 +45,15 @@ const OUT_H = 800;
 const argv = process.argv.slice(2);
 const li = argv.indexOf("--lang");
 const lang = li >= 0 ? argv.splice(li, 2)[1] : "en";
-const suffix = lang === "en" ? "" : `-${lang}`;
+// The paper ground is the default; `--theme field` renders the old blue
+// field to <slug>[-cs]-field.mp4 for comparison.
+const ti = argv.indexOf("--theme");
+const theme = ti >= 0 ? argv.splice(ti, 2)[1] : "paper";
+// White cards are the default; `--cards dark` renders the graphite set (the
+// 2026-10-19 backup) to <slug>[-cs]-darkcards.mp4.
+const ci = argv.indexOf("--cards");
+const cards = ci >= 0 ? argv.splice(ci, 2)[1] : "light";
+const suffix = (lang === "en" ? "" : `-${lang}`) + (theme === "paper" ? "" : `-${theme}`) + (cards === "light" ? "" : `-${cards}cards`);
 const [slug, flag, list] = argv;
 const scene = SCENES[slug];
 if (!scene) {
@@ -60,7 +68,7 @@ page.on("pageerror", (err) => {
 	console.error(`${scene.html}: ${err.message}`);
 	process.exit(1);
 });
-await page.goto(`file://${here}${scene.html}?lang=${lang}`, { waitUntil: "networkidle" });
+await page.goto(`file://${here}${scene.html}?lang=${lang}&theme=${theme}&cards=${cards}`, { waitUntil: "networkidle" });
 await page.evaluate(() => document.fonts.ready);
 const duration = await page.evaluate(() => window.DURATION);
 
@@ -98,9 +106,15 @@ const scale = `scale=${OUT_W}:${OUT_H}:flags=lanczos`;
 execFileSync("ffmpeg", [
 	"-y", "-loglevel", "error",
 	"-framerate", String(FPS), "-i", `${frames}%04d.png`,
-	"-vf", scale,
+	// Full-range BT.709, tagged as such. The paper ground has to decode to the
+	// section's exact #eef3f8 or the panel's edge shows. Measured in Chrome:
+	// untagged (BT.601 matrix, read back as 709) gave #eff5f9, tagged
+	// limited-range 709 #f1f4f9, full-range 709 #eef4f8 — one step off, the
+	// closest 8-bit 4:2:0 gets.
+	"-vf", `${scale}:out_color_matrix=bt709:out_range=pc`,
 	"-c:v", "libx264", "-preset", "slow", "-crf", "22", "-tune", "animation",
-	"-pix_fmt", "yuv420p", "-movflags", "+faststart", "-an",
+	"-pix_fmt", "yuv420p", "-colorspace", "bt709", "-color_primaries", "bt709", "-color_trc", "iec61966-2-1", "-color_range", "pc",
+	"-movflags", "+faststart", "-an",
 	`${out}${slug}${suffix}.mp4`,
 ]);
 execFileSync("ffmpeg", [

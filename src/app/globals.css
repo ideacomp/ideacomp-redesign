@@ -275,6 +275,24 @@
 	 * tracking are load-bearing rather than decorative — they are the only thing
 	 * marking these as titles. Raised with the client and confirmed as intended.
 	 * Poppins only ships 400 here, so do not reach for a bolder weight. */
+	/* The /solutions videos are rendered on this exact flat colour ("cool paper",
+	 * docs/motion/motion.css `.paper`, client's pick 2026-10-19), and the
+	 * sections that show them are painted with it too — flat on flat, the video
+	 * has no edge. Change one, re-render the other. */
+	.surface-paper {
+		background-color: #eef3f8;
+	}
+
+	/* A safety net on the panel's edge, not a look: 8-bit video decodes the
+	 * paper one step off (#eef4f8), and a card shadow can reach the edge in a
+	 * push-in. A 2.5% fade hides both; nothing that has to be read is there. */
+	.video-feather {
+		mask-image:
+			linear-gradient(90deg, transparent, #000 2.5%, #000 97.5%, transparent),
+			linear-gradient(transparent, #000 2.5%, #000 97.5%, transparent);
+		mask-composite: intersect;
+	}
+
 	.eyebrow-heading {
 		font-family: var(--font-label), ui-sans-serif, system-ui, sans-serif;
 		font-weight: 400;

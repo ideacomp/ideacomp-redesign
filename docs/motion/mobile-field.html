@@ -27,6 +27,7 @@
     --amb: oklch(0.8 0.15 75); --amb-ink: oklch(0.22 0.04 75); --ok: oklch(0.78 0.15 150); --warn: oklch(0.82 0.13 85)}
   .ph{position:absolute;width:340px;height:702px;border-radius:54px;background:#000;border:5px solid oklch(0.35 0.01 240);overflow:hidden;
     z-index:4;box-shadow:0 50px 90px -30px rgba(0,8,24,.75)}
+  .paper .ph{box-shadow:0 40px 80px -30px rgba(10,30,60,.38),0 0 0 1px rgba(10,30,60,.12)}
   .scr{position:absolute;left:0;top:0;width:390px;height:795px;transform:scale(.8462);transform-origin:0 0;background:var(--bg);overflow:hidden;
     font-family:-apple-system,"SF Pro Text",system-ui,sans-serif;color:var(--lab)}
   .and .scr{font-family:Roboto,sans-serif}
@@ -123,12 +124,16 @@
   #loc .v{font-family:var(--display);font-weight:600;font-size:68px;line-height:1;color:#fff}
   #loc .sig{display:flex;align-items:flex-end;gap:7px;height:44px;margin-top:8px}
   #loc .sig i{width:14px;border-radius:3px;background:#fff}
-  #outbox{left:1040px;top:430px;width:440px;height:400px;padding:26px 28px;z-index:3}
+  .paper .plat{color:var(--ink-paper);background:#fff;border-color:rgba(11,26,46,.18)}
+  .paper #loc .k{color:var(--ink-paper-mid)}
+  .paper #loc .v{color:var(--ink-paper)}
+  .paper #loc .sig i{background:var(--ink-paper)}
+  #outbox{left:1064px;top:450px;width:440px;height:480px;padding:26px 28px;z-index:3}
   #outbox .name{font-size:46px}
-  .q{position:absolute;left:28px;right:28px;height:58px;border-radius:12px;background:#18222e;border:2px solid #2a3b50;
-    display:flex;align-items:center;gap:12px;padding:0 16px;font-family:var(--sans);font-weight:500;font-size:25px;color:var(--ink-hi);white-space:nowrap}
+  .q{position:absolute;left:28px;right:28px;height:50px;border-radius:12px;background:var(--tile);border:2px solid var(--tile-edge);
+    display:flex;align-items:center;gap:12px;padding:0 16px;font-family:var(--sans);font-weight:500;font-size:24px;color:var(--ink-hi);white-space:nowrap}
   .q i{width:12px;height:12px;border-radius:50%;background:var(--accent);flex:none}
-  #office{left:1040px;top:196px;width:440px;height:200px;padding:24px 28px;z-index:3}
+  #office{left:1064px;top:217px;width:440px;height:200px;padding:24px 28px;z-index:3}
   #office .name{font-size:44px}
   #ostate{position:absolute;right:28px;top:24px;font-family:var(--mono);font-size:18px;letter-spacing:.12em;text-transform:uppercase;
     border-radius:8px;padding:5px 11px;border:2px solid var(--line);color:var(--ink-mid)}
@@ -256,21 +261,39 @@ const SIG_LEN = sigPath.getTotalLength();
 sigPath.style.strokeDasharray = SIG_LEN;
 
 /* ---------- positions ---------- */
-const POS = { i: { x: 300, y: 250 }, a: { x: 960, y: 250 }, field: { x: 630, y: 200 } };
-// In the field the phone grows by this much, so the app reads on a small card.
-const FIELD_SCALE = 1.25;
+// Scene 1 shows both phones at S1 so their labels clear the caption. In the
+// field the phone grows to FIELD_SCALE so the app reads on a small card; at
+// field.y its bottom edge sits on the chapter ticks' baseline (1003). 1.25 ran
+// it off the bottom of the frame.
+const S1 = 0.9;
+const FIELD_SCALE = 1.12;
+const POS = { i: { x: 300, y: 290 }, a: { x: 960, y: 290 }, field: { x: 630, y: 1003 - 702 * 1.12 } };
 // taps in screen (390-pt) coordinates: [time, x, y]
 const TAPS = [[8.3, 195, 455], [11.4, 31, 243], [12.3, 31, 305], [13.4, 195, 579], [14.5, 31, 367], [15.1, 31, 429], [15.7, 195, 734]];
 const CHECK_T = [11.45, 12.35, 14.55, 15.15];
 
 /* outbox rows, in plain words */
-const CHANGES = [[tr("✓ valve pressure OK", "✓ tlak ventilu v pořádku"), 11.5], [tr("✓ leak test passed", "✓ těsnost v pořádku"), 12.4],
-  [tr("photo of the gauge", "fotka manometru"), 13.75], [tr("customer signature", "podpis zákazníka"), 17.0]];
+// Every action on the phone lands here a beat after it happens — all four
+// checks, the photo and the signature, in the order they are done. (The first
+// cut queued only two of the four checks, so the last two ticks never showed
+// up.) No ✓ on the rows: a row is a change waiting to send, and the tick
+// belongs to the phone's checklist.
+const CHANGES = [
+  [tr("valve pressure OK", "tlak ventilu v pořádku"), CHECK_T[0] + 0.05],
+  [tr("leak test OK", "těsnost v pořádku"), CHECK_T[1] + 0.05],
+  [tr("photo of the gauge", "fotka manometru"), 13.75],
+  [tr("flue gas OK", "spaliny v pořádku"), CHECK_T[2] + 0.05],
+  [tr("safety label OK", "štítek nalepen"), CHECK_T[3] + 0.05],
+  [tr("customer signature", "podpis zákazníka"), 17.0],
+];
+const LAST = CHANGES.length - 1;
 $("qs").innerHTML = CHANGES.map(([n]) => `<div class="q"><i></i>${n}</div>`).join("");
 const qEls = [...$("qs").children];
-const Q_Y = (k) => 120 + k * 66;
-const SYNC = (k) => 19.9 + k * 0.6;
-const syncLines = makeLines($("scene-wires"), CHANGES.map((_, k) => [{ x: 1260, y: 430 + Q_Y(k) + 29 }, { x: 1260, y: 396 }]), "s");
+const Q_Y = (k) => 124 + k * 56;
+const SYNC = (k) => 19.7 + k * 0.4;   // six to send, all gone by ~22.2, before the scene ends at 23.4
+const syncLines = makeLines($("scene-wires"), CHANGES.map((_, k) => [{ x: 1284, y: 450 + Q_Y(k) + 25 }, { x: 1284, y: 417 }]), "s");
+// Czech counts: 1 čeká, 2–4 čekají, 5+ čeká
+const waiting = (n) => tr(`${n} waiting to send`, `${n} ${n >= 2 && n <= 4 ? "čekají" : "čeká"} na odeslání`);
 
 triangles($("tris"), TRIS);
 const caps = [...document.querySelectorAll(".cap .mask > span")];
@@ -300,15 +323,16 @@ function draw(t) {
   PI.style.left = lerp(POS.i.x, POS.field.x, toField) + "px";
   PI.style.top = lerp(POS.i.y, POS.field.y, toField) + "px";
   PI.style.transformOrigin = "50% 0";
-  PI.style.transform = `translateY(${(1 - ri) * 300}px) scale(${(1 + (FIELD_SCALE - 1) * toField) * (1 - 0.04 * end)})`;
+  PI.style.transform = `translateY(${(1 - ri) * 300}px) scale(${lerp(S1, FIELD_SCALE, toField) * (1 - 0.04 * end)})`;
   PI.style.opacity = clamp(ri * 2) * (1 - end);
   const pa = $("pa");
   Object.assign(pa.style, { left: POS.a.x + "px", top: POS.a.y + "px" });
-  pa.style.transform = `translate(${leave * 560}px, ${(1 - ra) * 300}px) rotate(${leave * 8}deg)`;
+  pa.style.transformOrigin = "50% 0";
+  pa.style.transform = `translate(${leave * 560}px, ${(1 - ra) * 300}px) rotate(${leave * 8}deg) scale(${S1})`;
   pa.style.opacity = clamp(ra * 2) * (1 - leave);
   const li = $("li"), la = $("la");
-  Object.assign(li.style, { left: POS.i.x + 170 + "px", top: "186px" });
-  Object.assign(la.style, { left: POS.a.x + 170 + "px", top: "186px" });
+  Object.assign(li.style, { left: POS.i.x + 170 + "px", top: "226px" });
+  Object.assign(la.style, { left: POS.a.x + 170 + "px", top: "226px" });
   [li, la].forEach((el, k) => {
     const q = out(span(t, 1.6 + k * 0.2, 2.1 + k * 0.2));
     el.style.opacity = q * (1 - leave);
@@ -373,25 +397,31 @@ function draw(t) {
     q.style.top = Q_Y(k) + "px";
     q.style.opacity = clamp(inQ * 2) * (1 - gone);
     q.style.transform = `translate(${(1 - clamp(inQ)) * -120}px, ${-gone * 30}px) scale(${0.8 + 0.2 * inQ})`;
-    if (t >= s && t < SYNC(k) + 0.5) queued++;
-    syncLines(k, span(t, 19.6, 19.9) * (1 - span(t, 23.0, 23.3)), out(span(t, SYNC(k), SYNC(k) + 0.25)) * (t < 23.0 ? 1 : 0),
+    // counted out as the row fades past half-way, so the title and the list agree
+    if (t >= s && t < SYNC(k) + 0.25) queued++;
+    // Wires go as the card closes up, or they'd hang below it.
+    const wireOut = span(t, SYNC(LAST) + 0.4, SYNC(LAST) + 0.7);
+    syncLines(k, span(t, 19.4, 19.7) * (1 - wireOut), out(span(t, SYNC(k), SYNC(k) + 0.25)) * (1 - wireOut),
       glide(span(t, SYNC(k) + 0.05, SYNC(k) + 0.65)), 1);
   });
-  const allSent = t >= SYNC(3) + 0.5;
-  $("qn").textContent = allSent ? tr("All sent", "Vše odesláno") : tr(`${queued} waiting to send`, `${queued} čeká na odeslání`);
+  const allSent = t >= SYNC(LAST) + 0.25;
+  // Once the queue is empty the card closes up to its header, instead of
+  // holding 400px of nothing under "All sent".
+  ob.style.height = lerp(480, 134, inOut(span(t, SYNC(LAST) + 0.45, SYNC(LAST) + 1.05))) + "px";
+  $("qn").textContent = allSent ? tr("All sent", "Vše odesláno") : waiting(queued);
 
   /* ---- 4: office + customer ---- */
   const of = $("office");
   const oIn = out(span(t, 19.2, 19.7));
   of.style.opacity = oIn * (1 - end);
   of.style.transform = `translateY(${(1 - oIn) * -30}px)`;
-  const doneJob = t >= SYNC(3) + 0.6;
+  const doneJob = t >= SYNC(LAST) + 0.6;
   const os = $("ostate");
   os.textContent = doneJob ? tr("done ✓", "hotovo ✓") : tr("in progress", "probíhá");
-  os.style.background = doneJob ? "#fff" : "transparent";
-  os.style.color = doneJob ? "#04203a" : "var(--ink-mid)";
-  os.style.borderColor = doneJob ? "#fff" : "var(--line)";
-  $("mail").style.opacity = out(span(t, SYNC(3) + 0.9, SYNC(3) + 1.3));
+  os.style.background = doneJob ? "var(--positive)" : "transparent";
+  os.style.color = doneJob ? "var(--positive-ink)" : "var(--ink-mid)";
+  os.style.borderColor = doneJob ? "var(--positive)" : "var(--line)";
+  $("mail").style.opacity = out(span(t, SYNC(LAST) + 0.9, SYNC(LAST) + 1.3));
 
   /* ---- payoff ---- */
   pay.forEach((s, i) => mask(s, span(t, 23.95 + i * 0.25, 24.6 + i * 0.25), span(t, 27.2 + i * 0.1, 27.7 + i * 0.1)));
