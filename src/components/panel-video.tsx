@@ -19,6 +19,10 @@ interface PanelVideoProps {
 	 *  tour, which advances on `onEnded`). */
 	loop?: boolean;
 	onEnded?: () => void;
+	/** The first panel on the page: its src is in the server HTML, so the
+	 *  browser starts fetching while the page loads instead of after
+	 *  hydration. On a throttled phone that was ~2.5 s of the 3.5 s start. */
+	eager?: boolean;
 	/** Hands the element to a parent that draws its own progress from it. */
 	videoRef?: (el: HTMLVideoElement | null) => void;
 	className?: string;
@@ -59,10 +63,13 @@ const PanelVideo = ({
 	onEnded,
 	videoRef,
 	className,
+	eager = false,
 }: PanelVideoProps) => {
 	const { dict } = useLocale();
 	const ref = useRef<HTMLVideoElement | null>(null);
 	const [onScreen, setOnScreen] = useState(false);
+	// Within ~1.5 screens of the viewport: close enough to start downloading.
+	const [near, setNear] = useState(false);
 	const [reduced, setReduced] = useState(true);
 	const [tabVisible, setTabVisible] = useState(true);
 	// null = the viewer hasn't touched the controls; then reduced motion decides.
@@ -98,11 +105,20 @@ const PanelVideo = ({
 	useEffect(() => {
 		const el = ref.current;
 		if (!el) return;
-		const observer = new IntersectionObserver(([entry]) => setOnScreen(entry.isIntersecting), {
-			threshold: 0.25,
+		// Plays from the first visible pixel. At 25% the poster sat there
+		// first and the start felt late, most of all on a phone.
+		const visible = new IntersectionObserver(([entry]) => setOnScreen(entry.isIntersecting), {
+			threshold: 0,
 		});
-		observer.observe(el);
-		return () => observer.disconnect();
+		const approach = new IntersectionObserver(([entry]) => setNear(entry.isIntersecting), {
+			rootMargin: "150% 0px",
+		});
+		visible.observe(el);
+		approach.observe(el);
+		return () => {
+			visible.disconnect();
+			approach.disconnect();
+		};
 	}, []);
 
 	useEffect(() => {
@@ -115,10 +131,23 @@ const PanelVideo = ({
 	const runRef = useRef(run);
 	runRef.current = run;
 
+	// Loading is armed once the panel is near the viewport and wanted (the
+	// tour only wants its active slot), and stays armed. Until then the video
+	// has no src at all: six panels each fetching up front, and the ones
+	// scrolled past still downloading, split a phone's bandwidth until the one
+	// on screen stalled — 9 stalls in one run on a throttled 3G profile.
+	const [armed, setArmed] = useState(eager);
+	// Rendered once and never changed, so React never touches the attribute
+	// again: language switches still go through the imperative swap below.
+	const [initialSrc] = useState(eager ? src : undefined);
+	useEffect(() => {
+		if (near && playing) setArmed(true);
+	}, [near, playing]);
+
 	// Load / swap the source, keeping the current second across the swap.
 	useEffect(() => {
 		const el = ref.current;
-		if (!el) return;
+		if (!el || !armed) return;
 		if (el.getAttribute("src") === src) return;
 		const resumeAt = el.getAttribute("src") ? el.currentTime : 0;
 		el.setAttribute("src", src);
@@ -128,7 +157,7 @@ const PanelVideo = ({
 		};
 		el.addEventListener("loadedmetadata", onReady, { once: true });
 		return () => el.removeEventListener("loadedmetadata", onReady);
-	}, [src]);
+	}, [src, armed]);
 
 	// A new key means a fresh run of this panel.
 	const firstKey = useRef(true);
@@ -164,11 +193,12 @@ const PanelVideo = ({
 		<>
 			<video
 				ref={setRef}
+				src={initialSrc}
 				poster={shownPoster}
 				muted
 				loop={loop}
 				playsInline
-				preload="metadata"
+				preload={armed ? "auto" : "none"}
 				aria-label={label}
 				onEnded={onEnded}
 				className={cn("h-full w-full object-cover", className)}

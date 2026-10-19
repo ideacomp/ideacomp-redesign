@@ -351,6 +351,7 @@ const SolutionsTour = ({ solutions }: { solutions: Solution[] }) => {
 									{solution.video ? (
 										<PanelVideo
 											className="video-feather"
+											eager={i === 0}
 											src={solution.video.src}
 											poster={solution.video.poster}
 											label={solution.video.label}

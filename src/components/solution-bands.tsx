@@ -72,6 +72,7 @@ export const SolutionBands = ({ solutions }: { solutions: Solution[] }) => {
 											poster={solution.video.poster}
 											label={solution.video.label}
 											playing
+											eager={index === 0}
 											className="video-feather absolute inset-0"
 										/>
 									</div>
