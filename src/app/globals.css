@@ -303,6 +303,21 @@
 	}
 }
 
+/* The Home hero's entrance. CSS, not motion/react: a JS entrance held the
+ * copy at opacity 0 until hydration, and on a phone that was 1.1 s of blank
+ * hero (the subtitle is the page's LCP element). A CSS animation starts with
+ * the first paint. Plain @keyframes outside @theme so Tailwind keeps it; the
+ * reduced-motion block below cuts it to an instant. */
+@keyframes hero-rise {
+	from {
+		opacity: 0;
+		transform: translateY(24px);
+	}
+}
+.hero-rise {
+	animation: hero-rise 0.7s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
 @media (prefers-reduced-motion: reduce) {
 	*,
 	*::before,

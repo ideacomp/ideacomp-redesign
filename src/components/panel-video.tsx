@@ -23,6 +23,13 @@ interface PanelVideoProps {
 	 *  browser starts fetching while the page loads instead of after
 	 *  hydration. On a throttled phone that was ~2.5 s of the 3.5 s start. */
 	eager?: boolean;
+	/** Arm the download without playing — the tour sets this on the tab under
+	 *  the pointer and on the slot that plays next, so a switch has data. */
+	prefetch?: boolean;
+	/** Second to start (and restart) from. Each piece opens on a beat of bare
+	 *  paper before its caption rises; a viewer who just picked it shouldn't
+	 *  sit through that. A loop still wraps to 0, where the seam is. */
+	startAt?: number;
 	/** Hands the element to a parent that draws its own progress from it. */
 	videoRef?: (el: HTMLVideoElement | null) => void;
 	className?: string;
@@ -64,6 +71,8 @@ const PanelVideo = ({
 	videoRef,
 	className,
 	eager = false,
+	prefetch = false,
+	startAt = 0,
 }: PanelVideoProps) => {
 	const { dict } = useLocale();
 	const ref = useRef<HTMLVideoElement | null>(null);
@@ -141,8 +150,23 @@ const PanelVideo = ({
 	// again: language switches still go through the imperative swap below.
 	const [initialSrc] = useState(eager ? src : undefined);
 	useEffect(() => {
-		if (near && playing) setArmed(true);
-	}, [near, playing]);
+		if (near && (playing || prefetch)) setArmed(true);
+	}, [near, playing, prefetch]);
+
+	// The opening seek, for whichever load comes first: the eager one in the
+	// server HTML or the one armed below.
+	const startAtRef = useRef(startAt);
+	startAtRef.current = startAt;
+	useEffect(() => {
+		const el = ref.current;
+		if (!el || !startAt) return;
+		const seek = () => {
+			if (el.currentTime < startAtRef.current) el.currentTime = startAtRef.current;
+		};
+		if (el.readyState >= 1) seek();
+		else el.addEventListener("loadedmetadata", seek, { once: true });
+		return () => el.removeEventListener("loadedmetadata", seek);
+	}, [armed, startAt]);
 
 	// Load / swap the source, keeping the current second across the swap.
 	useEffect(() => {
@@ -175,7 +199,7 @@ const PanelVideo = ({
 		}
 		const el = ref.current;
 		if (!el) return;
-		el.currentTime = 0;
+		el.currentTime = startAtRef.current;
 		setUserPaused(null);
 	}, [restartKey]);
 
@@ -191,7 +215,7 @@ const PanelVideo = ({
 	const restart = () => {
 		const el = ref.current;
 		if (!el) return;
-		el.currentTime = 0;
+		el.currentTime = startAtRef.current;
 		setUserPaused(false);
 		if (playing && onScreen && tabVisible) el.play().catch(() => {});
 	};

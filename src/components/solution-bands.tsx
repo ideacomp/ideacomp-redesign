@@ -3,7 +3,7 @@
 import FramedImage from "@/components/framed-image";
 import PanelVideo from "@/components/panel-video";
 import { Reveal } from "@/components/reveal";
-import { CheckCircle, type Solution } from "@/lib/sitemap";
+import { CheckCircle, VIDEO_LEAD, type Solution } from "@/lib/sitemap";
 import { cn } from "@/lib/utils";
 
 /**
@@ -73,6 +73,7 @@ export const SolutionBands = ({ solutions }: { solutions: Solution[] }) => {
 											label={solution.video.label}
 											playing
 											eager={index === 0}
+											startAt={VIDEO_LEAD[solution.slug] ?? 0}
 											className="video-feather absolute inset-0"
 										/>
 									</div>

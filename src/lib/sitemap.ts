@@ -266,6 +266,19 @@ export interface Solution {
 	};
 }
 
+/** Seconds of bare paper at the start of each motion piece, before its first
+ *  caption starts to rise — taken from the CAPS timings in docs/motion/*.html
+ *  (× the piece's pace), less a 50 ms lead-in. Players start here. Re-check
+ *  after changing a piece's opening. */
+export const VIDEO_LEAD: Record<string, number> = {
+	"ai-ml": 0.27,
+	cybersecurity: 0.55,
+	"web-development": 0.35,
+	outsourcing: 0.35,
+	"mobile-development": 0.35,
+	"cloud-devops": 0.35,
+};
+
 export const solutionsData: Record<Locale, Solution[]> = {
 	en: [
 		{

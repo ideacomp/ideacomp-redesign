@@ -5,7 +5,7 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import { motion, useReducedMotion } from "motion/react";
 import PanelVideo from "@/components/panel-video";
 import SolutionBands from "@/components/solution-bands";
-import { CheckCircle, type Solution } from "@/lib/sitemap";
+import { CheckCircle, VIDEO_LEAD, type Solution } from "@/lib/sitemap";
 import { useLocale } from "@/lib/i18n/locale-context";
 import { cn } from "@/lib/utils";
 
@@ -23,8 +23,9 @@ const DESKTOP = "(min-width: 1100px)";
  *  run of it instead — the videos are stories with an ending. */
 const AUTOPLAY_MS = 7000;
 
-/** The house easing, as used everywhere else on the site. */
-const TRANSITION = { duration: 0.6, ease: [0.16, 1, 0.3, 1] } as const;
+/** The panel cross-fade: the house easing at half its 0.6 s duration. A
+ *  viewer who clicks a tab is waiting for the video; 0.6 s read as lag. */
+const PANEL_TRANSITION = { duration: 0.3, ease: [0.16, 1, 0.3, 1] } as const;
 
 /**
  * The six solutions as a guided tour: a vertical list on the left, the active
@@ -63,6 +64,8 @@ const SolutionsTour = ({ solutions }: { solutions: Solution[] }) => {
 	// even when the same tab is chosen again.
 	const [cycle, setCycle] = useState(0);
 	const [held, setHeld] = useState(false);
+	// The tab under the pointer or keyboard focus; its video is prefetched.
+	const [intent, setIntent] = useState(-1);
 	const [onScreen, setOnScreen] = useState(true);
 	const [tabVisible, setTabVisible] = useState(true);
 	const [isDesktop, setIsDesktop] = useState(false);
@@ -274,6 +277,9 @@ const SolutionsTour = ({ solutions }: { solutions: Solution[] }) => {
 								aria-controls={solution.slug}
 								tabIndex={isActive ? 0 : -1}
 								onClick={() => select(i)}
+								// Intent: start fetching on the way to the click.
+								onPointerEnter={() => setIntent(i)}
+								onFocus={() => setIntent(i)}
 								className="group relative border-t border-border py-5 text-left outline-none focus-visible:ring-[3px] focus-visible:ring-ring/50"
 							>
 								{/* Progress rides the tab's own top rule, so the list's
@@ -341,7 +347,7 @@ const SolutionsTour = ({ solutions }: { solutions: Solution[] }) => {
 								className="[grid-area:1/1] scroll-mt-28"
 								initial={false}
 								animate={{ opacity: isActive ? 1 : 0, y: isActive ? 0 : 12 }}
-								transition={TRANSITION}
+								transition={PANEL_TRANSITION}
 								aria-hidden={!isActive}
 								inert={!isActive}
 							>
@@ -352,6 +358,8 @@ const SolutionsTour = ({ solutions }: { solutions: Solution[] }) => {
 										<PanelVideo
 											className="video-feather"
 											eager={i === 0}
+											prefetch={i === intent || i === (index + 1) % count}
+											startAt={VIDEO_LEAD[solution.slug] ?? 0}
 											src={solution.video.src}
 											poster={solution.video.poster}
 											label={solution.video.label}

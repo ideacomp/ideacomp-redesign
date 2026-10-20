@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
-import { motion, useReducedMotion } from "motion/react";
+import { useReducedMotion } from "motion/react";
 import { processSteps, content } from "@/lib/sitemap";
 import Header from "@/components/header";
 import Footer from "@/components/footer";
@@ -24,11 +24,6 @@ import { CtaSection } from "@/components/cta-section";
 import { ProcessTimeline } from "@/components/process-timeline";
 import { Button } from "@/components/ui/button";
 import { useLocale } from "@/lib/i18n/locale-context";
-
-const heroItem = {
-	hidden: { opacity: 0, y: 24 },
-	shown: { opacity: 1, y: 0 },
-};
 
 const Home = () => {
 	const { dict, locale } = useLocale();
@@ -70,12 +65,8 @@ const Home = () => {
 				    The item never shrinks below its content, so tall copy grows the
 				    section rather than being clipped by the `overflow-hidden`. */}
 				<div className="relative mx-auto flex w-full max-w-6xl flex-1 flex-col justify-center">
-					<motion.div
-						className="flex items-center gap-4"
-						initial="hidden"
-						animate="shown"
-						variants={heroItem}
-						transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
+					<div
+						className="hero-rise flex items-center gap-4"
 					>
 						<span className="h-px w-16 bg-signal sm:w-24" aria-hidden="true" />
 						{/* Ink levels through this hero run higher than the site's dark
@@ -84,18 +75,15 @@ const Home = () => {
 						<span className="font-mono text-xs tracking-[0.15em] uppercase text-foreground/75">
 							{pageContent.hero.tagline}
 						</span>
-					</motion.div>
+					</div>
 
 					{/* Two-line stack with a deliberate jump in scale and weight. Both
 					    lines type, in sequence, so the whole headline reads as one
 					    machine writing it out. */}
-					<motion.h1
+					<h1
 						id="hero-heading"
-						className="mt-8 font-display text-foreground"
-						initial="hidden"
-						animate="shown"
-						variants={heroItem}
-						transition={{ duration: 0.7, delay: 0.08, ease: [0.16, 1, 0.3, 1] }}
+						className="hero-rise mt-8 font-display text-foreground"
+						style={{ animationDelay: "0.08s" }}
 					>
 						{/* Plain text until mounted, so the server and the first client
 						    render always agree — `useReducedMotion` resolves to null during
@@ -135,24 +123,18 @@ const Home = () => {
 							)}
 							<span className="text-signal">.</span>
 						</span>
-					</motion.h1>
+					</h1>
 
-					<motion.p
-						className="mt-8 max-w-2xl text-lg leading-relaxed text-foreground/70 sm:text-xl"
-						initial="hidden"
-						animate="shown"
-						variants={heroItem}
-						transition={{ duration: 0.7, delay: 0.18, ease: [0.16, 1, 0.3, 1] }}
+					<p
+						className="hero-rise mt-8 max-w-2xl text-lg leading-relaxed text-foreground/70 sm:text-xl"
+						style={{ animationDelay: "0.18s" }}
 					>
 						{pageContent.hero.subtitle}
-					</motion.p>
+					</p>
 
-					<motion.div
-						className="mt-10 flex flex-col gap-4 sm:flex-row"
-						initial="hidden"
-						animate="shown"
-						variants={heroItem}
-						transition={{ duration: 0.7, delay: 0.26, ease: [0.16, 1, 0.3, 1] }}
+					<div
+						className="hero-rise mt-10 flex flex-col gap-4 sm:flex-row"
+						style={{ animationDelay: "0.26s" }}
 					>
 						<Button asChild variant="signal" size="lg">
 							<Link href={pageContent.hero.ctaPrimary.href}>
@@ -163,16 +145,13 @@ const Home = () => {
 						<Button asChild variant="outline" size="lg">
 							<Link href={pageContent.hero.ctaSecondary.href}>{dict.common.getInTouch}</Link>
 						</Button>
-					</motion.div>
+					</div>
 
 					{/* Hairline datasheet row. Real facts, deliberately not dressed up as
 					    a proof band — there are no client numbers worth claiming yet. */}
-					<motion.dl
-						className="mt-14 flex max-w-2xl flex-wrap gap-x-12 gap-y-6"
-						initial="hidden"
-						animate="shown"
-						variants={heroItem}
-						transition={{ duration: 0.7, delay: 0.34, ease: [0.16, 1, 0.3, 1] }}
+					<dl
+						className="hero-rise mt-14 flex max-w-2xl flex-wrap gap-x-12 gap-y-6"
+						style={{ animationDelay: "0.34s" }}
 					>
 						{pageContent.hero.specs.map((spec) => (
 							<div key={spec.label} className="border-t border-border pt-3">
@@ -184,7 +163,7 @@ const Home = () => {
 								</dd>
 							</div>
 						))}
-					</motion.dl>
+					</dl>
 				</div>
 
 				<div className="relative mx-auto mt-16 w-full max-w-6xl">
